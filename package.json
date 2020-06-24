@@ -6,6 +6,7 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
+    "@types/classnames": "^2.2.10",
     "@types/jest": "^24.9.1",
     "@types/node": "^12.12.47",
     "@types/react": "^16.9.41",
@@ -15,6 +16,7 @@
     "@types/react-router-dom": "^5.1.5",
     "@types/redux": "^3.6.0",
     "airtable": "^0.8.1",
+    "classnames": "^2.2.6",
     "node-sass": "^4.14.1",
     "primeflex": "^1.3.0",
     "primeicons": "^4.0.0",
@@ -31,6 +33,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "start-quiet": "BROWSER=none react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
