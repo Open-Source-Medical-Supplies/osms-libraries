@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { getProjects } from '../../services/app.service';
 
-export const CategoryLibrary = () => {
+const CategoryLibrary = () => {
 
   useEffect(() => {
     (async() => {
@@ -15,3 +15,5 @@ export const CategoryLibrary = () => {
         </p>
     )
 }
+
+export default CategoryLibrary;

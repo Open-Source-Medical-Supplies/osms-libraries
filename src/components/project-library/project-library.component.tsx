@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const ProjectLibrary = () => {
+const ProjectLibrary = () => {
 
     return (
         <p>
@@ -8,3 +8,5 @@ export const ProjectLibrary = () => {
         </p>
     )
 }
+
+export default ProjectLibrary;
