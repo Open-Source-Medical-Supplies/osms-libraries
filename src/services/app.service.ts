@@ -6,8 +6,8 @@ import { notEmpty } from "../shared/utility/general.utility";
 import get from 'lodash.get';
 
 const getCategories = async (): Promise<{
-	records: BasicObject<any>;
-	_records: BasicObject<any>;
+	records: Category[];
+	_records: Category[];
 }> => {
 	const records = (
 		await AirtableHelpers.callATbase(AirtableCalls.getCategories)
@@ -16,8 +16,8 @@ const getCategories = async (): Promise<{
 };
 
 const getProjects = async (): Promise<{
-	records: BasicObject<any>;
-	_records: BasicObject<any>;
+	records: Project[];
+	_records: Project[];
 }> => {
 	const records = (
 		await AirtableHelpers.callATbase(AirtableCalls.getProjects)
