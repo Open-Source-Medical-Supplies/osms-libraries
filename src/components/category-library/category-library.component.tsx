@@ -1,13 +1,18 @@
 import React, { useEffect } from 'react';
-import { getProjects } from '../../services/app.service';
+import { fetchData } from '../../services/app.service';
 
 const CategoryLibrary = () => {
 
   useEffect(() => {
     (async() => {
-      const a = await getProjects();
+      fetchData(
+        ['getCategories', 'getLinks'],
+        "['CategoryName'][0]",
+        'category',
+        () => {}
+      );
     })()
-  }, [])
+  }, []);
 
     return (
         <p>
