@@ -29,6 +29,7 @@ const getCrossLinks = (projects: Project[]) => projects.reduce((acc: BasicObject
 }, {});
 
 export type ProjectType = typeof RawMap & Project;
+export type CrossLinks = ReturnType<typeof Project['getCrossLinks']>
 
 export class Project extends DataConverter {
   static getCrossLinks = getCrossLinks;
