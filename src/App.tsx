@@ -1,11 +1,16 @@
-import React, { Suspense, useEffect } from "react";
+import "primeflex/primeflex.css";
+import 'primeicons/primeicons.css';
+import 'primereact/resources/primereact.min.css';
+import 'primereact/resources/themes/nova-light/theme.css';
+import React, { Suspense } from "react";
 import { useDispatch } from "react-redux";
 import { Redirect, Route, Switch } from "react-router";
 import { BrowserRouter } from "react-router-dom";
 import "./App.css";
 import CategoryLibrary from "./components/category-library/category-library.component";
 import ProjectLibrary from "./components/project-library/project-library.component";
-import { CHECK_MOBILE } from "./redux/actions/check-mobile.action";
+import { CHECK_MOBILE } from "./redux/check-mobile.reducer";
+import './shared/css/_prime.scss';
 
 /* '20-06-28 * Can't get working due to bad path names after build + hosting */
 // const LazyCategoryLib = React.lazy(() =>
@@ -14,14 +19,10 @@ import { CHECK_MOBILE } from "./redux/actions/check-mobile.action";
 // const LazyProjectLib = React.lazy(() =>
 // 	import("./components/project-library/project-library.component")
 // );
-const dispatch = useDispatch();
 
 function App() {
-
-  useEffect(() => {
-    // may move / change to constantly check, but seems overkill
-    dispatch({type: CHECK_MOBILE});
-  }, [])
+  const dispatch = useDispatch();
+  dispatch({type: CHECK_MOBILE});
 
 	return (
 		<BrowserRouter basename="/libraries">

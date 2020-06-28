@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import React from 'react';
 import { ProjectType } from '../../../classes/project.class';
-import TileCard from '../tile-card';
+// import TileCard from '../tile-card';
 
 /**
  * 
@@ -47,7 +47,7 @@ const ProjectCard = ({
   
   return (
     <div key={categoryName} className={sizing}>
-      <TileCard displayName={categoryName} imageURL={imageURL} actions={[{fn: selectCard}]} className={highlight}/>
+      {/* <TileCard displayName={categoryName} imageURL={imageURL} actions={[{fn: selectCard}]} className={highlight}/> */}
     </div>
   );
 }
