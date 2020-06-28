@@ -16,7 +16,7 @@ declare module 'primereact/components/utils/DomHandler' {
   function addMultipleClasses(element: HTMLElement, className: string): void;
   function addClass(element: HTMLElement, className: string): void;
   function removeClass(element: HTMLElement, className: string): void;
-  function hasClass(element: HTMLElement, className: string): void;
+  function hasClass(element: Element | HTMLElement, className: string): boolean;
   function find(element: HTMLElement, selector: string): HTMLElement[] | [];
   function findSingle(element: HTMLElement, selector: string): HTMLElement | null;
   function getHeight(el: HTMLElement): number;
