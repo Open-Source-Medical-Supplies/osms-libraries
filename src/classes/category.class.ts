@@ -2,23 +2,35 @@ import { BasicObject } from "../types/shared.type";
 import { DataConverter } from "./data-converter.class";
 
 const RawMap = {
-  "Display Name" : 'name',
-  "web-name" : 'key',
-  "CoverImage" : 'imageURL',
-  "Medical Supply Category": 'categoryKey',
-  "CategoryName": 'categoryName',
-  "Disclaimer": 'disclaimer',
-  "The Problem": 'problem',
-  "Current Global Resources": 'currentGlobalResources',
-  "Engineering Requirements": 'engReqs',
   "Assembly/Fabrication Requirements": 'fabReqs',
+  "CategoryName": 'categoryName',
+  "CoverImage": 'imageURL',
+  "Current Global Resources": 'currentGlobalResources',
+  "Disclaimer": 'disclaimer',
+  "Disclaimer Designs": 'designDisclaimers',
+  "Display Name": 'name',
+  "Engineering Requirements": 'engReqs',
+  "Medical Supply Category": 'categoryKey',
   "Resources": 'resources',
-  "Disclaimer Designs": 'designDisclaimers'
+  "The Problem": 'problem',
+  "web-name": 'key'
 };
+
+const CardSections = [
+	['disclaimer', 'Disclaimer'],
+	['problem', 'The Problem'],
+	['currentGlobalResources', 'Current Global Resources'],
+	['engReqs', 'Engineering Requirements'],
+	['fabReqs', 'Assembly/Fabrication Requirements'],
+	['resources', 'Resources'],
+	['designDisclaimers', 'Disclaimer Designs']
+];
 
 export type CategoryType = typeof RawMap & Category;
 
 export class Category extends DataConverter {
+  static CardSections = CardSections;
+
   constructor(data: BasicObject<any>) {
     super(data, RawMap);
   }

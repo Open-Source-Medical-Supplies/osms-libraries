@@ -2,27 +2,37 @@ import { BasicObject } from "../types/shared.type";
 import { DataConverter } from "./data-converter.class";
 
 const RawMap = {
-  "Base ID": 'baseID',
-  "Full Project Name": 'name',
-  "Display Name": 'displayName',
-  "Reviewed By": 'reviewedBy',
-  "Medical Status":'medicalStatus',
-  "Description": 'description',
-  "Link": 'externalLink',
-  "Hyperlink Text": 'hyperLinkText',
   "Attribution Organization": 'attributionOrg',
-  "Creator": 'creator',
-  "OSMS Notes": 'osmsNotes',
-  "Use Case": 'useCase',
   "Audience": 'audience',
-  "General Skills/Tools": 'generalSkillsTools',
+  "Base ID": 'baseID',
+  "Creator": 'creator',
+  "Description": 'description',
   "Difficulty": 'difficulty',
-  "Project Type": 'projectType'
+  "Display Name": 'displayName',
+  "Full Project Name": 'name',
+  "General Skills/Tools": 'generalSkillsTools',
+  "HeaderImage": 'imageURL',
+  "Hyperlink Text": 'hyperLinkText',
+  "Link": 'externalLink',
+  "Medical Status": 'medicalStatus',
+  "OSMS Notes": 'osmsNotes',
+  "Project Type": 'projectType',
+  "Reviewed By": 'reviewedBy',
+  "Use Case": 'useCase',
+  "web-name": 'webName'
 };
+
+const getCrossLinks = (projects: Project[]) => projects.reduce((acc: BasicObject<Project[]>, project) => {
+  const name = project.webName; // 'web-name' here used to match against Project.categoryKey
+  acc[name] ? acc[name].push(project) : acc[name] = [project];
+  return acc;
+}, {});
 
 export type ProjectType = typeof RawMap & Project;
 
 export class Project extends DataConverter {
+  static getCrossLinks = getCrossLinks;
+
   constructor(data: BasicObject<any>) {
     super(data, RawMap);
   }

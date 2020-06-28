@@ -2,11 +2,11 @@ import { BasicObject } from "../types/shared.type";
 import { DataConverter } from "./data-converter.class";
 
 const RawMap = {
-  name: "Full Project Name",
-  idealCaption: "Ideal Material Name",
-  imageURL: "Image",
-  detail: "Detail",
-  fn: "Function"
+  'Detail': 'detail',
+  'Full Project Name': 'name',
+  'Function': 'fn',
+  'Ideal Material Name': 'idealCaption',
+  'Image': 'imageURL'
 };
 
 export type MaterialType = typeof RawMap & Material;
