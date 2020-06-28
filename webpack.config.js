@@ -12,6 +12,8 @@ module.exports = {
       "primeicons": "primeicons",
       "primereact": "primereact",
       "react-markdown": "ReactMarkdown",
-      "classnames": "classNames"
+      "classnames": "classNames",
+      "react-redux": "ReactRedux",
+      "redux": "Redux"
     }
   };
