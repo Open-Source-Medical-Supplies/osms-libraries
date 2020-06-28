@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
 import App from "./App";
-import "./index.css";
+import "./index.scss";
 import { rootReducer } from "./redux/reducers/root.reducer";
 
 const store = createStore(rootReducer);
@@ -13,4 +13,4 @@ const Index = (
 	</Provider>
 );
 
-ReactDOM.render(Index, document.getElementById("root"));
+ReactDOM.render(Index, document.getElementById("osms-lib"));
