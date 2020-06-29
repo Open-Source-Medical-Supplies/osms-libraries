@@ -1,4 +1,5 @@
 import React from 'react';
+import { BasicObject } from '../../types/shared.type';
 
 export const OpenExternalSafely = '_blank noopener noreferrer nofollow';
 
@@ -76,3 +77,17 @@ export const noFalsePositives = (objects: {[k: string]: {[k: string]: any}} | {[
 }
 
 export const createUUID = () => Math.round(Math.random() * 10000);
+
+export const isPartialObject = (base: BasicObject<any>, test: BasicObject<any>) => {
+  for (const k in base) {
+    // if a key from the base object is not in test => isPartial
+    if (!test.hasOwnProperty(k)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+export const timeNow = (): number => {
+  return new Date().getTime();
+}
