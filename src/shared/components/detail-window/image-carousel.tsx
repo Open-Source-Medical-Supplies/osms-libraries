@@ -1,11 +1,11 @@
 import { Carousel } from "primereact/carousel";
 import React from "react";
-import TileCard from "../tile-card";
-import { CrossLinks, ProjectType } from "../../../classes/project.class";
-import { CategoryType } from "../../../classes/category.class";
+import { CategoryInfoType } from "../../../classes/category-info.class";
+import { ProjectType } from "../../../classes/project.class";
 import { openExternal } from "../../utility/general.utility";
+import TileCard from "../tile-card";
 
-const ImageCarousel = ({ links }: { links: CrossLinks[] }) => {
+const ImageCarousel = ({ links }: { links: ProjectType[] }) => {
   const responsiveOptions = [
     {
       breakpoint: "1024px",
@@ -25,7 +25,7 @@ const ImageCarousel = ({ links }: { links: CrossLinks[] }) => {
   ];
 
   
-  const cardTemplate = (data: ProjectType | CategoryType) => {
+  const cardTemplate = (data: ProjectType | CategoryInfoType) => {
     const {
       name, imageURL, externalLink, baseID
     } = data;

@@ -11,16 +11,16 @@ const RawMap = {
 
 export type MaterialType = typeof RawMap & Material;
 
-export class Material extends DataConverter {
-  constructor(data: BasicObject<any>) {
-    super(data, RawMap);
+export class Material extends DataConverter<typeof RawMap> {
+  static toCarousel(mat: MaterialType) {
+    return {
+			header: mat.idealCaption || '',
+			subHeader: mat.detail || '',
+			imageURL: mat.imageURL || '',
+		};
   }
 
-  toCarousel() {
-    return {
-			header: this.idealCaption || '',
-			subHeader: this.detail || '',
-			imageURL: this.imageURL || '',
-		};
+  constructor(data: BasicObject<any>) {
+    super(data, RawMap);
   }
 }

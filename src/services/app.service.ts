@@ -1,17 +1,17 @@
-import { AirtableCalls, AirtableHelpers, AirtableCallKeys } from "./airtable";
-import { BasicObject } from "../types/shared.type";
-import { Project } from "../classes/project.class";
-import { Category } from "../classes/category.class";
-import { notEmpty } from "../shared/utility/general.utility";
 import get from 'lodash.get';
+import { CategoryInfo } from "../classes/category-info.class";
+import { Project } from "../classes/project.class";
+import { notEmpty } from "../shared/utility/general.utility";
+import { BasicObject } from "../types/shared.type";
+import { AirtableCalls, AirtableHelpers } from "./airtable";
 
 const getCategories = async (): Promise<{
-	records: Category[];
-	_records: Category[];
+	records: CategoryInfo[];
+	_records: CategoryInfo[];
 }> => {
 	const records = (
 		await AirtableHelpers.callATbase(AirtableCalls.getCategories)
-	).map((r: any) => new Category(r));
+	).map((r: any) => new CategoryInfo(r));
 	return { records, _records: records };
 };
 
@@ -70,11 +70,11 @@ const AppServices = {
 }
 type AppServiceKeys = keyof typeof AppServices;
 
-export const fetchData = async (
+export const fetchData = async<T extends Function>(
   callKeys: AppServiceKeys[],
   selector: string,
   splitOn: 'category' | 'project',
-  setState: Function
+  setState: T
 ): Promise<void> => {
   Promise
   .all(callKeys.map((k: AppServiceKeys) => AppServices[k]()) as Promise<any>[])
@@ -85,11 +85,11 @@ export const fetchData = async (
 			if (!param) {
         setState(flatRes)
 			} else {
-        const selectedCard = res[0]._records.find((r: any) => get(r, selector) === param) || {};
+        const selected = res[0]._records.find((r: any) => get(r, selector) === param) || {};
 				setState({
 					...flatRes,
-					selectedCard,
-					visible: notEmpty(selectedCard)
+					selected,
+					visible: notEmpty(selected)
 				});
 			}
 		},

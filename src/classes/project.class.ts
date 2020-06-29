@@ -22,7 +22,7 @@ const RawMap = {
   "web-name": 'webName'
 };
 
-const getCrossLinks = (projects: Project[]) => projects.reduce((acc: BasicObject<Project[]>, project) => {
+const getCrossLinks = (projects: ProjectType[]) => projects.reduce((acc: BasicObject<ProjectType[]>, project) => {
   const name = project.webName; // 'web-name' here used to match against Project.categoryKey
   acc[name] ? acc[name].push(project) : acc[name] = [project];
   return acc;
@@ -31,7 +31,7 @@ const getCrossLinks = (projects: Project[]) => projects.reduce((acc: BasicObject
 export type ProjectType = typeof RawMap & Project;
 export type CrossLinks = ReturnType<typeof Project['getCrossLinks']>
 
-export class Project extends DataConverter {
+export class Project extends DataConverter<typeof RawMap> {
   static getCrossLinks = getCrossLinks;
 
   constructor(data: BasicObject<any>) {

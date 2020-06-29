@@ -4,7 +4,7 @@ import { DataConverter } from "./data-converter.class";
 const RawMap = {
   "Assembly/Fabrication Requirements": 'fabReqs',
   "CategoryName": 'categoryName',
-  "CoverImage": 'imageURL',
+  "Image": 'imageURL',
   "Current Global Resources": 'currentGlobalResources',
   "Disclaimer": 'disclaimer',
   "Disclaimer Designs": 'designDisclaimers',
@@ -26,9 +26,10 @@ const CardSections = [
 	['designDisclaimers', 'Disclaimer Designs']
 ];
 
-export type CategoryType = typeof RawMap & Category;
+export type CategoryInfoType = typeof RawMap & CategoryInfo;
 
-export class Category extends DataConverter {
+export class CategoryInfo extends DataConverter<typeof RawMap> {
+  // used by the Category Library
   static CardSections = CardSections;
 
   constructor(data: BasicObject<any>) {

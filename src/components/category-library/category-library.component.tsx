@@ -11,44 +11,42 @@ import SearchBar from '../../shared/components/search-bar';
 const StateDefault: {
   _records: [], // immutable
   records: [],
-  selectedCategory: undefined | ProjectType,
+  selected: undefined | ProjectType,
   visible: false,
   projectsByCategory: CrossLinks,
-  selectedProjects: CrossLinks[]
+  selectedProjects: ProjectType[]
 } = {
 _records: [], // immutable
 records: [],
-selectedCategory: undefined,
+selected: undefined,
 visible: false,
 projectsByCategory: {},
 selectedProjects: []
 };
 
 const CategoryLibrary: React.FC = () => {
-  
   const isMobile = useSelector((state: RootState) => state.checkMobile);
-  console.log(isMobile);
-
+  let [state, baseSetState] = useState(StateDefault);
+  const setState = (props: Partial<typeof StateDefault>) => baseSetState({...state, ...props});
+  
   useEffect(() => {
     (async() => {
-      fetchData(
+      fetchData<typeof setState>(
         ['getCategories', 'getLinks'],
         "['CategoryName'][0]",
         'category',
-        () => {}
+        setState
         );
       })()
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  let [state, baseSetState] = useState(StateDefault);
-  const setState = (props: Partial<typeof StateDefault>) => baseSetState({...state, ...props});
-  const hide = () => setState({selectedCategory: undefined, visible: false});
+  const hide = () => setState({selected: undefined, visible: false});
   
   useEffect(() => {
-    if (!state.selectedCategory) { return; }
-    const {categoryKey} = state.selectedCategory;
+    if (!state.selected) { return; }
+    const {categoryKey} = state.selected;
     setState({selectedProjects: state.projectsByCategory[categoryKey]});
-  }, [state.selectedCategory]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [state.selected]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const leftFlex = `${state.visible ? 1 : 6} 0 ${state.visible ? '20%' : '100%'}`;
   const rightFlex = `${state.visible ? 5 : 0} 0 ${isMobile ? '0%' : '80%'}`;
@@ -62,11 +60,11 @@ const CategoryLibrary: React.FC = () => {
           isMobile={isMobile}
           records={state.records}
           cardChange={setState}
-          selectedCard={state.selectedCategory as ProjectType} />
+          selected={state.selected as ProjectType} />
       </div>
       <div id='app__detail-window' style={{ flex: rightFlex, maxWidth: '79vw' }}>
         <DetailWindow visible={state.visible} onHide={hide} className='p-sidebar-lg'>
-          <FullCard selectedCard={state.selectedCategory as ProjectType} links={state.selectedProjects} />
+          <FullCard selected={state.selected as ProjectType} links={state.selectedProjects} />
         </DetailWindow>
       </div>
     </div>

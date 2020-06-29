@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
+import { CategoryInfo, CategoryInfoType } from '../../../classes/category-info.class';
+import { ProjectType } from '../../../classes/project.class';
 import ImageCarousel from './image-carousel';
-import { ProjectType, CrossLinks } from '../../../classes/project.class';
-import { CategoryType, Category } from '../../../classes/category.class';
 
 const urlRegexMatch = new RegExp(/\[\d+\]/);
 /**
@@ -28,12 +28,14 @@ const fixURLS = (md: string) => {
 }
 
 const FullCard = ({
-  selectedCard, links
+  selected, links
 }: {
-  selectedCard: ProjectType | CategoryType; 
-  links: CrossLinks[];
+  selected: ProjectType | CategoryInfoType; 
+  links: ProjectType[];
 }) => {
-  const {categoryName, imageURL} = selectedCard;
+  if (!selected) return <div></div>;
+
+  const {categoryName, imageURL} = selected;
   
   const headerImage = (
     typeof imageURL !== 'string' ?
@@ -56,7 +58,7 @@ const FullCard = ({
         {headerImage}
         <h1>{categoryName}</h1>
         {
-          Array.from(Category.CardSections, ([key, label]) => selectedCard[key] ? markdownSection(label, selectedCard[key]) : null)
+          Array.from(CategoryInfo.CardSections, ([key, label]) => selected[key] ? markdownSection(label, selected[key]) : null)
         }
         {links ? <ImageCarousel links={links}/> : null}
       </div>

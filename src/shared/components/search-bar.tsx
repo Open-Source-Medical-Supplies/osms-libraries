@@ -1,9 +1,9 @@
 import { InputText } from 'primereact/inputtext';
 import React, { useEffect, useState } from 'react';
-import { CategoryType } from '../../classes/category.class';
+import { CategoryInfoType } from '../../classes/category-info.class';
 import { ProjectType } from '../../classes/project.class';
 
-const SearchBar = ({setState, _records}: {setState: Function, _records: Array<ProjectType | CategoryType>}) => {
+const SearchBar = ({setState, _records}: {setState: Function, _records: Array<ProjectType | CategoryInfoType>}) => {
   const [searchState, setSearchState] = useState('');
   const onInputChange = (e: any) => setSearchState((e.target as HTMLInputElement).value); // PrimeReact is not typed well here it seems.
   

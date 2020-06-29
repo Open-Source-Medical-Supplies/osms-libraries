@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import React from 'react';
 import { ProjectType } from '../../../classes/project.class';
-import { CategoryType } from "../../../classes/category.class";
+import { CategoryInfoType } from "../../../classes/category-info.class";
 import TileCard from "../tile-card";
 // import TileCard from '../tile-card';
 
@@ -22,16 +22,16 @@ const updateQueryParam = (param: string) => {
 }
 
 const ProjectCard = ({
-  data, setCard, selectedCard, isMobile
+  data, setCard, selected, isMobile
 }: {
-  data: ProjectType, setCard: Function, selectedCard: ProjectType | CategoryType, isMobile: boolean
-}) =>{
+  data: ProjectType | CategoryInfoType, setCard: Function, selected: ProjectType | CategoryInfoType, isMobile: boolean
+}) => {
   const { categoryName, imageURL } = data;
-  const selectedName = selectedCard.categoryName ? selectedCard['CategoryName'][0] : '';
+  const selectedName = selected && selected.categoryName ? selected.categoryName[0] : '';
 
   const selectCard = () => {
     updateQueryParam(categoryName)
-    setCard({selectedCard: data, visible: true})
+    setCard({selected: data, visible: true});
   };
   
   const highlight = classNames({
