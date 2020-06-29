@@ -1,10 +1,10 @@
 import { BasicObject } from "../types/shared.type";
-import { valueOf } from "../types/general.type";
+import { valueof } from "../types/general.type";
 
 const parseImageUrl = (img: Array<{thumbnails: {large: {url: string}}}>) => img[0].thumbnails.large.url;
 
 export class DataConverter<T> implements BasicObject<any> {
-  [k: string]: Partial<valueOf<T>>;
+  [k: string]: Partial<valueof<T>>;
   raw: any = {}; // May be a better way than using any here, but makes it cleaner elsewhere
 
   static parseImageUrl = parseImageUrl;
