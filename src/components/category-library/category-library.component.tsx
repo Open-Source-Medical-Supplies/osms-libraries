@@ -5,7 +5,7 @@ import { RootState } from "../../redux/root.reducer";
 import { fetchData } from '../../services/app.service';
 import CardContainer from '../../shared/components/card-container/card-container';
 import DetailWindow from '../../shared/components/detail-window/detail-window';
-import FullCard from '../../shared/components/detail-window/full-card';
+import CategoryFullCard from './category-full-card';
 import SearchBar from '../../shared/components/search-bar';
 
 const StateDefault: {
@@ -16,12 +16,12 @@ const StateDefault: {
   projectsByCategory: CrossLinks,
   selectedProjects: ProjectType[]
 } = {
-_records: [], // immutable
-records: [],
-selected: undefined,
-visible: false,
-projectsByCategory: {},
-selectedProjects: []
+  _records: [], // immutable
+  records: [],
+  selected: undefined,
+  visible: false,
+  projectsByCategory: {},
+  selectedProjects: []
 };
 
 const CategoryLibrary: React.FC = () => {
@@ -64,7 +64,7 @@ const CategoryLibrary: React.FC = () => {
       </div>
       <div id='app__detail-window' style={{ flex: rightFlex, maxWidth: '79vw' }}>
         <DetailWindow visible={state.visible} onHide={hide} className='p-sidebar-lg'>
-          <FullCard selected={state.selected as ProjectType} links={state.selectedProjects} />
+          <CategoryFullCard selected={state.selected as ProjectType} links={state.selectedProjects} />
         </DetailWindow>
       </div>
     </div>
