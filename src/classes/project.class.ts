@@ -1,25 +1,25 @@
 import { BasicObject } from "../types/shared.type";
 import { DataConverter } from "./data-converter.class";
 
-enum RawMap {
-  "Attribution Organization" = 'attributionOrg',
-  "Audience" = 'audience',
-  "Base ID" = 'baseID',
-  "Creator" = 'creator',
-  "Description" = 'description',
-  "Difficulty" = 'difficulty',
-  "Display Name" = 'displayName',
-  "Full Project Name" = 'name',
-  "General Skills/Tools" = 'generalSkillsTools',
-  "HeaderImage" = 'imageURL',
-  "Hyperlink Text" = 'hyperLinkText',
-  "Link" = 'externalLink',
-  "Medical Status" = 'medicalStatus',
-  "OSMS Notes" = 'osmsNotes',
-  "Project Type" = 'projectType',
-  "Reviewed By" = 'reviewedBy',
-  "Use Case" = 'useCase',
-  "web-name" = 'webName'
+const RawMap = {
+  "Attribution Organization": 'attributionOrg',
+  "Audience": 'audience',
+  "Base ID": 'baseID',
+  "Creator": 'creator',
+  "Description": 'description',
+  "Difficulty": 'difficulty',
+  "Display Name": 'displayName',
+  "Full Project Name": 'name',
+  "General Skills/Tools": 'generalSkillsTools',
+  "HeaderImage": 'imageURL',
+  "Hyperlink Text": 'hyperLinkText',
+  "Link": 'externalLink',
+  "Medical Status": 'medicalStatus',
+  "OSMS Notes": 'osmsNotes',
+  "Project Type": 'projectType',
+  "Reviewed By": 'reviewedBy',
+  "Use Case": 'useCase',
+  "web-name": 'webName'
 };
 
 const getCrossLinks = (projects: ProjectType[]) => projects.reduce((acc: BasicObject<ProjectType[]>, project) => {

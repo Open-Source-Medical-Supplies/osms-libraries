@@ -1,10 +1,10 @@
 import { BasicObject } from "../types/shared.type";
 import { DataConverter } from "./data-converter.class";
 
-enum RawMap {
-  "CoverImage" = 'imageURL',
-  "Display Name" = 'name',
-  "web-name" = 'key'
+const RawMap = {
+  "CoverImage": 'imageURL',
+  "Display Name": 'name',
+  "web-name": 'key'
 };
 
 export type CategorySupplyType = typeof RawMap & CategorySupply;

@@ -1,12 +1,12 @@
 import { BasicObject } from "../types/shared.type";
 import { DataConverter } from "./data-converter.class";
 
-enum RawMap {
-  'Detail' = 'detail',
-  'Full Project Name' = 'name',
-  'Function' = 'fn',
-  'Ideal Material Name' = 'idealCaption',
-  'Image' = 'imageURL'
+const RawMap = {
+  'Detail': 'detail',
+  'Full Project Name': 'name',
+  'Function': 'fn',
+  'Ideal Material Name': 'idealCaption',
+  'Image': 'imageURL'
 };
 
 export type MaterialType = typeof RawMap & Material;
