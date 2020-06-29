@@ -1,3 +1,0 @@
-// database calls
-
-export {};

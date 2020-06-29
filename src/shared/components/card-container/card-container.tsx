@@ -1,24 +1,28 @@
 import React from 'react';
-import ProjectCard from './card';
+import { CategoryInfoType } from '../../../classes/category-info.class';
+import { ProjectType } from '../../../classes/project.class';
 import { BasicObject } from '../../../types/shared.type';
-import { Card } from '../../../types/card.type';
+import ProjectCard from './card';
 
 const CardContainer = ({
-  records, cardChange, selectedCard, isMobile
+  records, cardChange, selected, isMobile
 }: {
-  records: BasicObject<any>, cardChange: Function, selectedCard: Card, isMobile: boolean
+  records: BasicObject<any>;
+  cardChange: Function;
+  selected: ProjectType | CategoryInfoType;
+  isMobile: boolean;
 }) => {
   return (
     <div  id='app__card-container' className='p-grid'>
       {
-        records.reduce((acc: JSX.Element[], fields: any) => {
+        records.reduce((acc: JSX.Element[], fields: CategoryInfoType) => {
             acc.push(
-              // <ProjectCard
-              //   key={fields['Medical Supply Category']}
-              //   data={fields}
-              //   isMobile={isMobile}
-              //   setCard={cardChange}
-              //   selectedCard={selectedCard}/>
+              <ProjectCard
+                key={fields.categoryKey}
+                data={fields}
+                isMobile={isMobile}
+                setCard={cardChange}
+                selected={selected}/>
             ); 
           return acc;
         }, [])

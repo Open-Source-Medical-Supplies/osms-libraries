@@ -9,9 +9,10 @@ const VIEWS = {
   DEFAULT_VIEW: 'Default View'
 };
 
-interface AirtableData {
+export interface AirtableData {
   all: () => Promise<any[]>
 }
+export type AirtableCallKeys = keyof typeof AirtableCalls;
 
 async function getCategories(): Promise<AirtableData> {
   return base('Category Information').select({ view: VIEWS.GRID_VIEW });
@@ -37,7 +38,7 @@ export const AirtableCalls = {
 }
 
 const callATbase = async (
-  apiCall: typeof AirtableCalls[keyof typeof AirtableCalls]
+  apiCall: typeof AirtableCalls[AirtableCallKeys]
 ): Promise<any[]> => {
   return await apiCall().then(
     // data is an AT object

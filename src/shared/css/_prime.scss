@@ -1,0 +1,8 @@
+// prime overrides / customization
+.p-datascroller-list {
+  list-style: none;
+}
+
+.p-sidebar:not(.p-sidebar-active) {
+  display: none;
+}
