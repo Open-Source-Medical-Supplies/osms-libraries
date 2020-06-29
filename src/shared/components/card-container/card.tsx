@@ -24,7 +24,7 @@ const ProjectCard = ({
   const selectedName = selected && selected.categoryName ? selected.categoryName[0] : '';
 
   const selectCard = () => {
-    updateQueryParam(categoryName)
+    updateQueryParam(categoryName);
     setCard({selected: data, visible: true});
   };
   
