@@ -5,12 +5,8 @@ import { ProjectType } from '../../../classes/project.class';
 import ImageCarousel from './image-carousel';
 
 const urlRegexMatch = new RegExp(/\[\d+\]/);
-/**
- * Airtable sends MD Links similar to -> 'some url text[1] [1]: https://example.com'
- * @param {string} md 
- * @returns {string}
- */
-const fixURLS = (md: string) => {
+// Airtable sends MD Links similar to -> 'some url text[1] [1]: https://example.com'
+const fixURLS = (md: string): string => {
   if (urlRegexMatch.test(md)) {
     const urlArr = md.split(urlRegexMatch);
     const mid = Math.round(urlArr.length / 2);

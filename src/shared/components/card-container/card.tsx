@@ -3,14 +3,8 @@ import React from 'react';
 import { ProjectType } from '../../../classes/project.class';
 import { CategoryInfoType } from "../../../classes/category-info.class";
 import TileCard from "../tile-card";
-// import TileCard from '../tile-card';
 
-/**
- * 
- * @param {string} param 
- * @returns void
- */
-const updateQueryParam = (param: string) => {
+const updateQueryParam = (param: string): void => {
   // update url w/o page reload
   if (!param) return;
   if (window.history && window.history.pushState) {
