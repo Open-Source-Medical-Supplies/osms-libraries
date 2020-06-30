@@ -91,9 +91,10 @@ export const isPartialObject = (base: BasicObject<any>, test: BasicObject<any>) 
 export const timeNow = (): number => {
   return new Date().getTime();
 }
+
 const urlRegexMatch = new RegExp(/\[\d+\]/);
 // Airtable sends MD Links similar to -> 'some url text[1] [1]: https://example.com'
-export const fixMDurls = (md: string): string => {
+export const fixMdUrls = (md: string): string => {
   if (urlRegexMatch.test(md)) {
     const urlArr = md.split(urlRegexMatch);
     const mid = Math.round(urlArr.length / 2);

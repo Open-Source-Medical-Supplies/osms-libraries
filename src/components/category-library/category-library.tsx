@@ -5,13 +5,14 @@ import { RootState } from "../../redux/root.reducer";
 import { fetchData } from '../../services/app.service';
 import CardContainer from '../../shared/components/card-container/card-container';
 import DetailWindow from '../../shared/components/detail-window/detail-window';
-import CategoryFullCard from './category-full-card';
+import CategoryLibFullCard from './category-library.full-card';
 import SearchBar from '../../shared/components/search-bar';
+import { CategoryInfoType } from '../../classes/category-info.class';
 
 const StateDefault: {
   _records: [], // immutable
   records: [],
-  selected: undefined | ProjectType,
+  selected: undefined | CategoryInfoType,
   visible: false,
   projectsByCategory: CrossLinks,
   selectedProjects: ProjectType[]
@@ -60,11 +61,11 @@ const CategoryLibrary: React.FC = () => {
           isMobile={isMobile}
           records={state.records}
           cardChange={setState}
-          selected={state.selected as ProjectType} />
+          selected={state.selected as CategoryInfoType} />
       </div>
       <div id='app__detail-window' style={{ flex: rightFlex, maxWidth: '79vw' }}>
         <DetailWindow visible={state.visible} onHide={hide} className='p-sidebar-lg'>
-          <CategoryFullCard selected={state.selected as ProjectType} links={state.selectedProjects} />
+          <CategoryLibFullCard selected={state.selected as CategoryInfoType} links={state.selectedProjects} />
         </DetailWindow>
       </div>
     </div>

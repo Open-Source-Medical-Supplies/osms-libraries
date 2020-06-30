@@ -1,0 +1,201 @@
+@import './shared/css/reset';
+@import './shared/css/full-card';
+
+@import './shared/css/mixins';
+@import './shared/css/variables';
+
+@import './shared/css/fonts/primeicons/fonts/export';
+
+#projects-gallery {
+  background-color: $bg;
+}
+
+#app__ {
+  &filter-menu > div {
+    height: calc(100vh - 150px);
+    overflow-y: auto;
+    padding-bottom: 20px;
+  }
+  &card-container {
+    height: calc(100vh - 150px);
+    overflow-y: auto;
+  }  
+  &detail-window-container {
+    height: calc(100vh - 150px);
+    & > div.p-sidebar {
+      height: 100%;
+    }
+  }
+}
+
+@mixin tileCardFonts($header: 21px, $subHeader: 16.38px, $headerWeight: 700, $subHeaderWeight: 700) {
+  .tile-card {
+    &__header {
+      font-size: $header;
+      font-weight: $headerWeight;
+      text-align: center;
+    }
+    
+    &__sub-header {
+      font-size: $subHeader;
+      font-weight: $subHeaderWeight;
+    }
+  }
+}
+
+.action-card {
+  @include tileCardFonts();
+}
+
+div.fullcard-carousel-cards {
+  @include tileCardFonts(12px);
+
+  margin: 0 0.5rem;
+  box-shadow: none;
+}
+
+.centered-image {
+  // be sure to add a height attr to the element;
+  object-fit: scale-down;
+  object-position: center;
+  width: 100%;
+}
+
+.center-flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card-selected {
+  box-shadow: inset 0px 0px 0px 2px $primary !important;
+}
+
+.card-header{
+  &__image {
+    height: 150px;
+  }
+  &__no-image {
+    height: 152px;
+  }
+}
+
+.close-button {
+  padding: 0.5rem;
+  background: $primary;
+  border-radius: 4px;
+  position: absolute;
+  top: 0.5rem;
+  right: 1rem;
+  z-index: 10000;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.5;
+  }
+  span {
+    color: white;
+  }
+}
+
+.clamp-1 {
+  @include clamp-n(1);
+}
+
+.divider-1 {
+  margin-bottom: 1rem;
+}
+
+.sticky-top-0 {
+  top: 0;
+  position: sticky;
+  position: -webkit-sticky;
+}
+
+.p-sidebar-right {
+  position: sticky;
+  position: -webkit-sticky;
+  height: 100vh;
+  width: calc(100% - 0.5rem) !important;
+  margin-left: 0.5rem !important;
+}
+
+.p-card img {
+  margin-top: 2px;
+}
+
+.p-tree {
+  max-height: 80vh;
+  overflow: auto;
+}
+
+.attribute-list-panel {
+  div.p-panel-content {
+    padding: 0;
+  }
+}
+
+div.p-grid, .p-dataview.p-component.p-dataview-grid {
+  width: 100%;
+}
+
+.category-list-card {
+  img.card-header__image, div.card-header__no-image {
+    height: 75px;
+  }
+}
+
+.button-no-style {
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.filter-panel {
+  &.p-panel .p-panel-content {
+    padding: 0;
+    border: none;
+
+    .p-tree {
+      border: none;
+    }
+  }
+
+  .p-toggleable-content {
+    max-height: 40vh;
+    overflow-y: auto;
+  }
+}
+
+.p-panel .p-dataview-content {
+  padding: 0.571em 0 !important;
+}
+
+div.p-dataview.p-component.p-dataview-grid > div.p-dataview-content {
+  border: none;
+  background-color: transparent;
+}
+
+.highlight-child > div {
+  background-color: #007ad9;
+  border-color: #007ad9;
+  color: #ffffff;
+}
+
+.search-bar-wrapper {
+  display: flex;
+
+  #search-bar-container {
+    margin-right: 0.5rem;
+    height: 31px;
+    width: 100%;
+
+    #searchBar {
+      height: 32.6px;
+    }
+  }
+}
+
+.margin-z-auto {
+  margin: 0 auto !important;
+}

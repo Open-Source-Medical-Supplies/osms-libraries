@@ -10,18 +10,24 @@ export interface TileCardAction {
 export type TileCardActions = TileCardAction[];
 
 const TileCard = ({
-  displayName, imageURL, actions, className = '', buttonIcon = 'eye'
+  displayName,
+  imageURL,
+  actions = undefined,
+  className = '',
+  buttonIcon = 'eye',
+  children = undefined
 }: {
   displayName: string;
   imageURL: string;
-  actions: TileCardActions;
+  actions?: TileCardActions;
   className?: string;
   buttonIcon?: string;
+  children?: React.ReactNode;
 }) => {
   const headerImage = (
     typeof imageURL !== 'string' ?
-      <div className='center-flex' style={{height: '150px'}}>No image available</div> :
-      <img className='centered-image' alt={displayName} src={imageURL} style={{ height: '150px' }}/>
+      <div className='center-flex card-header__no-image'>No image available</div> :
+      <img className='centered-image card-header__image' alt={displayName} src={imageURL}/>
   )
 
   const footer = (
@@ -42,7 +48,7 @@ const TileCard = ({
 
   return (
     <Card header={headerImage} footer={footer} className={className}>
-      <h4 className='clamp-1' style={{textAlign: 'center'}}> {displayName} </h4>
+      { children || <h4 className='clamp-1' style={{textAlign: 'center'}}> {displayName} </h4> }
     </Card>
   );
 }
