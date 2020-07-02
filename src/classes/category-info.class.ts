@@ -26,11 +26,23 @@ const CardSections = [
 	['designDisclaimers', 'Disclaimer Designs']
 ];
 
-export type CategoryInfoType = typeof RawMap & CategoryInfo;
-
-export class CategoryInfo extends DataConverter<typeof RawMap> {
+export class CategoryInfo extends DataConverter {
   // used by the Category Library
+
   static CardSections = CardSections;
+
+  fabReqs!: string;
+  categoryName!: string;
+  imageURL!: string;
+  currentGlobalResources!: string;
+  disclaimer!: string;
+  designDisclaimers!: string;
+  name!: string;
+  engReqs!: string;
+  categoryKey!: string;
+  resources!: string;
+  problem!: string;
+  key!: string;
 
   constructor(data: BasicObject<any>) {
     super(data, RawMap);

@@ -2,7 +2,7 @@ import { Button } from "primereact/button";
 import React from "react";
 import ReactMarkdown from "react-markdown";
 import { Material, MaterialType } from "../../classes/material.class";
-import { ProjectType } from "../../classes/project.class";
+import { Project } from "../../classes/project.class";
 import ImageCarousel from "../../shared/components/detail-window/image-carousel";
 import { MarkdownSection } from "../../shared/components/markdown-section";
 import TileCard from "../../shared/components/tile-card";
@@ -15,9 +15,11 @@ const ProjectFullCard = ({
 	selected,
 	materials,
 }: {
-	selected: ProjectType;
+	selected: Project;
 	materials: MaterialType[];
 }) => {
+  if (!selected) return <div></div>;
+
 	const {
 		name,
 		displayName,
@@ -74,7 +76,7 @@ const ProjectFullCard = ({
   const ICCardTemplate = (data: Material) => {
     const {idealCaption, imageURL, detail} = data;
     return (
-      <TileCard displayName={idealCaption} imageURL={imageURL} className={'fullcard-carousel-cards'} >
+      <TileCard mainText={idealCaption} imageURL={imageURL} className={'fullcard-carousel-cards'} >
         <div className='tile-card__header clamp-1'> {idealCaption} </div>
         { detail ? <ReactMarkdown source={detail}/> : null }
       </TileCard>

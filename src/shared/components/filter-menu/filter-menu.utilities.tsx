@@ -1,24 +1,25 @@
-import { allNotEmpty, MAPPER, notEmpty } from "../../shared/utilities";
 import { FilterState, PrimeAttr } from "./filter-menu.interface";
+import { Project } from "../../../classes/project.class";
+import { notEmpty, allNotEmpty } from "../../utility/general.utility";
 
-interface Record {
+interface FilerDatum {
   key?: string;
   parentKey?: string;
   icon?: string;
-  children?: Record[];
+  children?: FilerDatum[];
 }
-type Records = Record[];
+type FitlerData = FilerDatum[];
 type Filters = {
   categories: {};
   attributes: string[];
   searchBar: string;
 };
 
-const buildTree = (data: Record, acc: any = {}) => {
+const buildTree = (data: FilerDatum, acc: any = {}) => {
   const { key, parentKey } = data;
   if (parentKey) {
     if (acc[parentKey]) {
-      (acc[parentKey].children as Record[]).push(data);
+      (acc[parentKey].children as FilerDatum[]).push(data);
     } else {
       acc[parentKey] = { children: [data] };
     }
@@ -40,19 +41,19 @@ const buildTree = (data: Record, acc: any = {}) => {
   return acc;
 };
 
-export const parseRecords = (records: Records) => {
-  const mappedRecords = (records.reduce((acc, record) => {
+export const parseFilterData = (filterData: FitlerData) => {
+  const mappedRecords = (filterData.reduce((acc, record) => {
     if (record.icon) {
       record.icon = "pi " + record.icon;
     }
     buildTree(record, acc);
     return acc;
-  }, {}) as unknown) as { [key: string]: Record };
+  }, {}) as unknown) as { [key: string]: FilerDatum };
 
   return Object.keys(mappedRecords).map((nodeKey) => mappedRecords[nodeKey]);
 };
 
-export const flattenRecords = (records: Records) => {
+export const flattenRecords = (records: FitlerData) => {
   return records.reduce((acc: any, val) => {
     if (val && val.key) {
       const vk = val.key;
@@ -113,7 +114,7 @@ const checkAttributes = (attrs: string[], projectJSON: any, flatNodes: any) => {
 
 const checkSearchString = (
   target: string,
-  projectJSON: ReturnType<typeof MAPPER.ProjectToJSON>
+  projectJSON: Project
 ) => {
   if (target.length) {
     const { name, displayName } = projectJSON;
@@ -127,7 +128,7 @@ const checkSearchString = (
 
 const checkCategories = (
   cats: any,
-  projectJSON: ReturnType<typeof MAPPER.ProjectToJSON>
+  projectJSON: Project
 ) => {
   if (Object.keys(cats).length) {
     return cats[projectJSON.displayName];
@@ -192,8 +193,8 @@ const getFilterLevels = ({
 
 export const filterBy = (
   filterState: FilterState,
-  _records: Records,
-  records: Records
+  _records: Project[],
+  records: Project[]
 ) => {
   const filters = combineFilters(filterState);
 
@@ -201,12 +202,10 @@ export const filterBy = (
     const filterLevel = filteringLevel(filters, filterState);
     const recordsBase = filterLevel.stricter ? records : _records;
 
-    return recordsBase.reduce((acc: Records, project) => {
-      const projectJSON = MAPPER.ProjectToJSON(project);
-
-      const checkAttrs = checkAttributes(filters.attributes, projectJSON, filterState.flatNodes);
-      const checkText = checkSearchString(filters.searchBar, projectJSON);
-      const checkCats = checkCategories(filters.categories, projectJSON);
+    return recordsBase.reduce((acc: Project[], project: Project) => {
+      const checkAttrs = checkAttributes(filters.attributes, project, filterState.flatNodes);
+      const checkText = checkSearchString(filters.searchBar, project);
+      const checkCats = checkCategories(filters.categories, project);
 
       const projectMatches = getFilterLevels({checkAttrs, checkText, checkCats})[filterLevel.numFilters];
 

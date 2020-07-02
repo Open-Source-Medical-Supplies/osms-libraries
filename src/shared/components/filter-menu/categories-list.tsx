@@ -2,8 +2,8 @@ import classNames from "classnames";
 import { DataView } from 'primereact/dataview';
 import { Panel } from 'primereact/panel';
 import React, { useEffect, useState } from "react";
-import TileCard from "../../shared/components/tile-card";
-import { empty, MAPPER, notEmpty } from "../../shared/utilities";
+import { empty, notEmpty } from "../../utility/general.utility";
+import TileCard from "../tile-card";
 
 /* eslint-disable react-hooks/exhaustive-deps */
 type MouseEvent = React.MouseEvent<HTMLElement>;
@@ -18,8 +18,6 @@ const CategoriesList = (
   }
 ) => {
   const [toggleState, setToggleState] = useState<{[k: string]: boolean}>({});
-
-  categories = categories.map((c: any) => MAPPER.CategoryToJSON(c));
 
   useEffect(() => {
     // ensure deactivated toggles on selection-clear
@@ -68,9 +66,9 @@ const CategoriesList = (
     return (
       <TileCard
         actionOnCard={true}
-        action={(e: MouseEvent) => handleClick(e, o.name)}
+        actions={[{fn: (e: MouseEvent) => handleClick(e, o.name)}]}
         className={classes}
-        header={o.name}
+        mainText={o.name}
         imageURL={o.imageURL}></TileCard>
     );
   };

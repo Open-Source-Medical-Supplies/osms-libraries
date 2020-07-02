@@ -1,18 +1,18 @@
 import { DataView } from 'primereact/dataview';
 import React from 'react';
-import { CategoryInfoType } from '../../../classes/category-info.class';
-import { ProjectType } from '../../../classes/project.class';
+import { CategoryInfo } from '../../../classes/category-info.class';
+import { Project } from '../../../classes/project.class';
 import ProjectCard from './card';
 
 interface CardContainerType {
-  records: Array<ProjectType | CategoryInfoType>;
+  records: Array<Project | CategoryInfo>;
   cardChange: Function;
-  selected: ProjectType | CategoryInfoType;
+  selected: Project | CategoryInfo;
   isMobile: boolean;
 }
 
 const CardContainer = ({records, cardChange, selected, isMobile}: CardContainerType) => {
-  const MappedCard = (data: ProjectType | CategoryInfoType) => (
+  const MappedCard = (data: Project | CategoryInfo) => (
     <ProjectCard
       key={data.categoryKey}
       data={data}

@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import React from 'react';
-import { ProjectType } from '../../../classes/project.class';
-import { CategoryInfoType } from "../../../classes/category-info.class";
+import { Project } from '../../../classes/project.class';
+import { CategoryInfo } from "../../../classes/category-info.class";
 import TileCard from "../tile-card";
 
 const updateQueryParam = (param: string): void => {
@@ -18,7 +18,7 @@ const updateQueryParam = (param: string): void => {
 const ProjectCard = ({
   data, setCard, selected, isMobile
 }: {
-  data: ProjectType | CategoryInfoType, setCard: Function, selected: ProjectType | CategoryInfoType, isMobile: boolean
+  data: Project | CategoryInfo, setCard: Function, selected: Project | CategoryInfo, isMobile: boolean
 }) => {
   const { categoryName, imageURL } = data;
   const selectedName = selected && selected.categoryName ? selected.categoryName[0] : '';
@@ -43,7 +43,7 @@ const ProjectCard = ({
   
   return (
     <div key={categoryName} className={sizing}>
-      <TileCard displayName={categoryName} imageURL={imageURL} actions={[{fn: selectCard}]} className={highlight}/>
+      <TileCard mainText={categoryName} imageURL={imageURL} actions={[{fn: selectCard}]} className={highlight}/>
     </div>
   );
 }

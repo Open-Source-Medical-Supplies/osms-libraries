@@ -7,10 +7,14 @@ const RawMap = {
   "web-name": 'key'
 };
 
-export type CategorySupplyType = typeof RawMap & CategorySupply;
 
-export class CategorySupply extends DataConverter<typeof RawMap> {
+export class CategorySupply extends DataConverter {
   // Used by the Projects library
+  
+  imageURL: string | undefined;
+  name: string | undefined;
+  key: string | undefined;
+  
   constructor(data: BasicObject<any>) {
     super(data, RawMap);
   }

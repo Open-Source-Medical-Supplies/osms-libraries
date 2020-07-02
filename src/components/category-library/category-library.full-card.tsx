@@ -1,6 +1,6 @@
 import React from 'react';
-import { CategoryInfo, CategoryInfoType } from '../../classes/category-info.class';
-import { ProjectType } from '../../classes/project.class';
+import { CategoryInfo } from '../../classes/category-info.class';
+import { Project } from '../../classes/project.class';
 import ImageCarousel from '../../shared/components/detail-window/image-carousel';
 import { MarkdownSection } from '../../shared/components/markdown-section';
 import TileCard from '../../shared/components/tile-card';
@@ -9,8 +9,8 @@ import { openExternal } from '../../shared/utility/general.utility';
 const CategoryLibFullCard = ({
   selected, links
 }: {
-  selected: ProjectType | CategoryInfoType; 
-  links: ProjectType[];
+  selected: Project | CategoryInfo; 
+  links: Project[];
 }) => {
   if (!selected) return <div></div>;
 
@@ -22,7 +22,7 @@ const CategoryLibFullCard = ({
       <img className='centered-image' alt={categoryName} src={imageURL} style={{ height: '250px' }}/>
   )
 
-  const ICCardTemplate = (data: ProjectType) => {
+  const ICCardTemplate = (data: Project) => {
     const { name, imageURL, externalLink, baseID } = data;
 
     const actions = [
@@ -40,7 +40,7 @@ const CategoryLibFullCard = ({
 
     return (
       <TileCard
-        displayName={name}
+        mainText={name}
         imageURL={imageURL}
         buttonIcon='external-link'
         actions={actions}/>
@@ -56,7 +56,7 @@ const CategoryLibFullCard = ({
           CategoryInfo.CardSections,
           ([key, label]) => selected[key] ? MarkdownSection(label, selected[key]) : null
         )}
-        {ImageCarousel<ProjectType>({
+        {ImageCarousel<Project>({
           links: links,
           cardTemplate: ICCardTemplate
         })}

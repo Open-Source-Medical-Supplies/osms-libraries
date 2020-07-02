@@ -16,23 +16,41 @@ const RawMap = {
   "Link": 'externalLink',
   "Medical Status": 'medicalStatus',
   "OSMS Notes": 'osmsNotes',
-  "Project Type": 'projectType',
+  "Project Type": 'Project',
   "Reviewed By": 'reviewedBy',
   "Use Case": 'useCase',
   "web-name": 'webName'
 };
 
-const getCrossLinks = (projects: ProjectType[]) => projects.reduce((acc: BasicObject<ProjectType[]>, project) => {
+const getCrossLinks = (projects: Project[]) => projects.reduce((acc: BasicObject<Project[]>, project) => {
   const name = project.webName; // 'web-name' here used to match against Project.categoryKey
   acc[name] ? acc[name].push(project) : acc[name] = [project];
   return acc;
 }, {});
 
-export type ProjectType = typeof RawMap & Project;
 export type CrossLinks = ReturnType<typeof Project['getCrossLinks']>
 
-export class Project extends DataConverter<typeof RawMap> {
+export class Project extends DataConverter {
   static getCrossLinks = getCrossLinks;
+
+  attributionOrg!: string;
+  audience!: string;
+  baseID!: string;
+  creator!: string;
+  description!: string;
+  difficulty!: string;
+  displayName!: string;
+  name!: string;
+  generalSkillsTools!: string;
+  imageURL!: string;
+  hyperLinkText!: string;
+  externalLink!: string;
+  medicalStatus!: string;
+  osmsNotes!: string;
+  Project!: string;
+  reviewedBy!: string;
+  useCase!: string;
+  webName!: string;
 
   constructor(data: BasicObject<any>) {
     super(data, RawMap);

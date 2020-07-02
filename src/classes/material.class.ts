@@ -11,7 +11,13 @@ const RawMap = {
 
 export type MaterialType = typeof RawMap & Material;
 
-export class Material extends DataConverter<typeof RawMap> {
+export class Material extends DataConverter {
+  detail!: string;
+  name!: string;
+  fn!: string;
+  idealCaption!: string;
+  imageURL!: string;
+
   constructor(data: BasicObject<any>) {
     super(data, RawMap);
   }

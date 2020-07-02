@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { parseCategories, parseFilterMenu } from '../../service/filter-menu.service';
 import AttributesList from './attributes-list';
 import CategoriesList from './categories-list';
 import { filterBy } from './filter-menu.utilities';
 import { SearchBar } from './search-bar';
 import { FilterState } from './filter-menu.interface';
 import ClearFilters from './clear-filers';
-import { CategoryComparator, createUUID } from '../../shared/utilities';
+import { CategoryComparator, createUUID } from '../../utility/general.utility';
+import { parseFilterMenu, parseCategories } from '../../../services/filter-menu.service';
 
 /* eslint-disable react-hooks/exhaustive-deps */
 

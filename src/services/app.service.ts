@@ -22,7 +22,6 @@ const getProjects = async (): Promise<{
 	const records = (
 		await AirtableHelpers.callATbase(AirtableCalls.getProjects)
 	).map((r: any) => new Project(r));
-	debugger;
 	return { records, _records: records };
 };
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { CategorySupplyType } from '../../classes/category-supply.class';
+import { CategorySupply } from '../../classes/category-supply.class';
 import { MaterialType } from '../../classes/material.class';
-import { ProjectType } from '../../classes/project.class';
+import { Project } from '../../classes/project.class';
 import { fetchData } from '../../services/app.service';
 import { BasicObject } from '../../types/shared.type';
 import CardContainer from "../../shared/components/card-container/card-container";
@@ -14,9 +14,9 @@ import FilterMenu from "../../shared/components/filter-menu/filter-menu";
 const StateDefault: {
   _records: [], // immutable
   records: [],
-  selected: undefined | ProjectType,
+  selected: undefined | Project,
   visible: false,
-  categories: BasicObject<CategorySupplyType>,
+  categories: BasicObject<CategorySupply>,
   materials: BasicObject<MaterialType[]>,
   selectedMaterials: MaterialType[]
 } = {
@@ -64,11 +64,11 @@ const ProjectLibrary = () => {let [state, baseSetState] = useState(StateDefault)
         isMobile={isMobile}
         records={state.records}
         cardChange={setState}
-        selected={state.selected as ProjectType} />
+        selected={state.selected as Project} />
      </div>
      <div id='app__detail-window-container' style={{display: 'flex', flex: state.visible ? 2 : 0}}>
        <DetailWindow visible={state.visible} onHide={hide} className='p-sidebar-md'>
-         <ProjectFullCard selected={state.selected as ProjectType} materials={state.selectedMaterials}/>
+         <ProjectFullCard selected={state.selected as Project} materials={state.selectedMaterials}/>
        </DetailWindow>
      </div>
     </div>
