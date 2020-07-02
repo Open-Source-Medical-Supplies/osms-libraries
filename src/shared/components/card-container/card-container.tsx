@@ -12,14 +12,15 @@ interface CardContainerType {
 }
 
 const CardContainer = ({records, cardChange, selected, isMobile}: CardContainerType) => {
-  const MappedCard = (data: Project | CategoryInfo) => (
-    <ProjectCard
-      key={data.categoryKey}
+  const MappedCard = (data: Project | CategoryInfo) => {
+    const key = data instanceof Project ? data.baseID :  data.categoryKey;
+   return <ProjectCard
+      key={key}
       data={data}
       isMobile={isMobile}
       setCard={cardChange}
       selected={selected}/>
-  );
+};
 
   return records.length ?
     <DataView value={records} layout='grid' itemTemplate={MappedCard} /> :

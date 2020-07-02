@@ -3,7 +3,7 @@ import DataConverter from "./data-converter";
 
 const RawMap = {
   "Assembly/Fabrication Requirements": 'fabReqs',
-  "CategoryName": 'categoryName',
+  "CategoryName": 'displayName',
   "Image": 'imageURL',
   "Current Global Resources": 'currentGlobalResources',
   "Disclaimer": 'disclaimer',
@@ -26,13 +26,13 @@ const CardSections = [
 	['designDisclaimers', 'Disclaimer Designs']
 ];
 
-export class CategoryInfo  {
+export class CategoryInfo {
   // used by the Category Library
 
   static CardSections = CardSections;
 
   fabReqs!: string;
-  categoryName!: string;
+  displayName!: string;
   imageURL!: string;
   currentGlobalResources!: string;
   disclaimer!: string;
@@ -43,6 +43,7 @@ export class CategoryInfo  {
   resources!: string;
   problem!: string;
   key!: string;
+  raw: BasicObject<any> = {};
 
   constructor(data: BasicObject<any>) {
     DataConverter.format(this, data, RawMap);

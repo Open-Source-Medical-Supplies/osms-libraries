@@ -3,7 +3,7 @@ import DataConverter from "./data-converter";
 
 const RawMap = {
   "Attribution Organization": 'attributionOrg',
-  "Audience": 'audience',
+  "Audience": 'audience', 
   "Base ID": 'baseID',
   "Creator": 'creator',
   "Description": 'description',
@@ -30,7 +30,7 @@ const getCrossLinks = (projects: Project[]) => projects.reduce((acc: BasicObject
 
 export type CrossLinks = ReturnType<typeof Project['getCrossLinks']>
 
-export class Project  {
+export class Project {
   static getCrossLinks = getCrossLinks;
 
   attributionOrg!: string;
@@ -51,6 +51,7 @@ export class Project  {
   reviewedBy!: string;
   useCase!: string;
   webName!: string;
+  raw: BasicObject<any> = {};
 
   constructor(data: BasicObject<any>) {
     DataConverter.format(this, data, RawMap);

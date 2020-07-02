@@ -28,7 +28,10 @@ const StateDefault: {
 const CategoryLibrary: React.FC = () => {
   const isMobile = useSelector((state: RootState) => state.checkMobile);
   let [state, baseSetState] = useState(StateDefault);
-  const setState = (props: Partial<typeof StateDefault>) => baseSetState({...state, ...props});
+  const setState = (props: Partial<typeof StateDefault>) => {
+    console.log(props)
+    baseSetState({...state, ...props})
+  };
   
   useEffect(() => {
     (async() => {

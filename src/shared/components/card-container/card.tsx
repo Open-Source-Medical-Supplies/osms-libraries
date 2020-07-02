@@ -20,16 +20,16 @@ const ProjectCard = ({
 }: {
   data: Project | CategoryInfo, setCard: Function, selected: Project | CategoryInfo, isMobile: boolean
 }) => {
-  const { categoryName, imageURL } = data;
-  const selectedName = selected && selected.categoryName ? selected.categoryName[0] : '';
+  const { displayName, imageURL } = data;
+  const selectedName = selected && selected.displayName ? selected.displayName[0] : '';
 
   const selectCard = () => {
-    updateQueryParam(categoryName);
+    updateQueryParam(displayName);
     setCard({selected: data, visible: true});
   };
   
   const highlight = classNames({
-    "card-selected": !!selectedName && selectedName === categoryName
+    "card-selected": !!selectedName && selectedName === displayName
   });
 
   let sizing;
@@ -42,8 +42,8 @@ const ProjectCard = ({
   }
   
   return (
-    <div key={categoryName} className={sizing}>
-      <TileCard mainText={categoryName} imageURL={imageURL} actions={[{fn: selectCard}]} className={highlight}/>
+  <div key={displayName} className={sizing}>
+    <TileCard mainText={displayName} imageURL={imageURL} actions={[{fn: selectCard}]} className={highlight}/>
     </div>
   );
 }

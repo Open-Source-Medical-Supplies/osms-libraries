@@ -5,6 +5,7 @@ import ImageCarousel from '../../shared/components/detail-window/image-carousel'
 import { MarkdownSection } from '../../shared/components/markdown-section';
 import TileCard from '../../shared/components/tile-card';
 import { openExternal } from '../../shared/utility/general.utility';
+import { Indexable } from '../../types/shared.type';
 
 const CategoryLibFullCard = ({
   selected, links
@@ -14,12 +15,12 @@ const CategoryLibFullCard = ({
 }) => {
   if (!selected) return <div></div>;
 
-  const {categoryName, imageURL} = selected;
+  const {displayName, imageURL} = selected;
   
   const headerImage = (
     typeof imageURL !== 'string' ?
       <div className='center-flex' style={{height: '150px'}}>No image available</div> :
-      <img className='centered-image' alt={categoryName} src={imageURL} style={{ height: '250px' }}/>
+      <img className='centered-image' alt={displayName} src={imageURL} style={{ height: '250px' }}/>
   )
 
   const ICCardTemplate = (data: Project) => {
@@ -51,10 +52,10 @@ const CategoryLibFullCard = ({
     <div className="full-card">
       <div className="full-card__content">
         {headerImage}
-        <h1>{categoryName}</h1>
+        <h1>{displayName}</h1>
         {Array.from(
           CategoryInfo.CardSections,
-          ([key, label]) => selected[key] ? MarkdownSection(label, selected[key]) : null
+          ([key, label]) => (selected as Indexable)[key] ? MarkdownSection(label, (selected as Indexable)[key]) : null
         )}
         {ImageCarousel<Project>({
           links: links,

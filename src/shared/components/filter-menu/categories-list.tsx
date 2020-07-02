@@ -64,7 +64,6 @@ const CategoriesList = (
       'category-list-card p-col-6',
       { 'highlight-child': toggleState[o.name] }
     );
-    debugger
     return (
       <TileCard
         actionOnCard={true}

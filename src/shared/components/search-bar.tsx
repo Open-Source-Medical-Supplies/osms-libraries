@@ -9,8 +9,8 @@ const SearchBar = ({setState, _records}: {setState: Function, _records: Array<Pr
   
   useEffect(() => {
     const filteredRecords = !searchState.length ? _records : _records.filter(record => {
-      const { categoryName } = record;
-      return categoryName.toLowerCase().includes(searchState.toLowerCase())
+      const { displayName } = record;
+      return displayName.toLowerCase().includes(searchState.toLowerCase())
     });
     setState({records: filteredRecords});
   }, [searchState]); // eslint-disable-line react-hooks/exhaustive-deps

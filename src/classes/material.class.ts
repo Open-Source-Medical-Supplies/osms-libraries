@@ -17,6 +17,7 @@ export class Material {
   fn!: string;
   idealCaption!: string;
   imageURL!: string;
+  raw: BasicObject<any> = {};
 
   constructor(data: BasicObject<any>) {
     DataConverter.format(this, data, RawMap);

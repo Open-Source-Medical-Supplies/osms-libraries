@@ -1,9 +1,15 @@
 import { InputText } from 'primereact/inputtext';
 import React, { useEffect, useState, useCallback } from 'react';
+import { SetFilterFn } from './filter-menu';
 
-export const SearchBar = ({searchBarText, setFilterState}) => {
+export const SearchBar = ({
+  searchBarText, setFilterState
+}: {
+  searchBarText: string;
+  setFilterState: SetFilterFn;
+}) => {
   const [searchState, setSearchState] = useState('');
-  const onInputChange = e => setSearchState(e.target.value);
+  const onInputChange = (e: any) => setSearchState(e.target.value);
   
   const update = useCallback(() => {
     setFilterState({
@@ -12,7 +18,7 @@ export const SearchBar = ({searchBarText, setFilterState}) => {
         searchBar: searchBarText || ''
       }
     }
-  )}, [searchState]); 
+  )}, [searchState]); // eslint-disable-line react-hooks/exhaustive-deps
   
   useEffect(() => update(), [ searchState, update ]);
   useEffect(() => {

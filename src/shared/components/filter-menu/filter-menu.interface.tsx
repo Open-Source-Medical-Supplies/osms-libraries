@@ -1,22 +1,19 @@
+import { FilterNodes, FilterNodeData } from "../../../types/filter-node.type";
+
+export interface PreviousFilterState {
+  nodeFilters?: FilterNodeData;
+  categoriesFilters?: {};
+  searchBar?: string;
+}
+
 export interface FilterState {
-  nodes: [], // attributes
-  flatNodes: {},
-  nodeFilters: PrimeAttr,
-  categories: [],
-  categoriesFilters: {},
-  filters: {},
-  searchBar: '',
-  previousFilters: {
-    nodeFilters?: {},
-    categoriesFilters?: {},
-    searchBar?: ''
-  },
+  nodes: FilterNodes; // attributes
+  flatNodes: {};
+  nodeFilters: FilterNodeData;
+  categories: [];
+  categoriesFilters: {};
+  filters: {};
+  searchBar: string;
+  previousFilters: PreviousFilterState;
   isFiltering: boolean;
 };
-
-export interface PrimeAttr {
-  [key: string]: {
-    checked: boolean;
-    partialChecked: boolean
-  }
-}

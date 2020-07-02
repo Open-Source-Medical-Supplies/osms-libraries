@@ -12,11 +12,6 @@ export const parseFilterMenu = async () => {
 export const parseCategories = async (): Promise<{categories: CategorySupply[]}> => {
   const categories = (
     await AirtableHelpers.callATbase(AirtableCalls.getCategorySupply)
-  ).map(c => {
-    const t = new CategorySupply(c);
-    debugger
-    return t;
-  });
-  debugger
+  ).map(c => new CategorySupply(c));
   return ({ categories });
 };

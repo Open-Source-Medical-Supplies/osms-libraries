@@ -1,6 +1,7 @@
-import { FilterState, PrimeAttr } from "./filter-menu.interface";
 import { Project } from "../../../classes/project.class";
-import { notEmpty, allNotEmpty } from "../../utility/general.utility";
+import { allNotEmpty, notEmpty } from "../../utility/general.utility";
+import { FilterState } from "./filter-menu.interface";
+import { FilterNodeData } from "../../../types/filter-node.type";
 
 interface FilerDatum {
   key?: string;
@@ -136,11 +137,11 @@ const checkCategories = (
   return false;
 };
 
-const deepCheckAttributes = (attrs: string[], primeAttrs: PrimeAttr) => {
+const deepCheckAttributes = (attrs: string[], primeAttrs: FilterNodeData) => {
   return notEmpty(attrs) && noFalsePositives(primeAttrs);
 };
 
-const noFalsePositives = (attrs: PrimeAttr) => {
+const noFalsePositives = (attrs: FilterNodeData) => {
   let check = false;
   for (const k in attrs) {
     const { checked, partialChecked } = attrs[k];
