@@ -1,4 +1,5 @@
-import { parseFilterData, flattenRecords } from "../shared/components/filter-menu/filter-menu.utilities";
+import { CategorySupply } from "../classes/category-supply.class";
+import { flattenRecords, parseFilterData } from "../shared/components/filter-menu/filter-menu.utilities";
 import { AirtableCalls, AirtableHelpers } from "./airtable";
 
 export const parseFilterMenu = async () => {
@@ -8,8 +9,14 @@ export const parseFilterMenu = async () => {
   return ({ nodes, flatNodes });
 };
 
-export const parseCategories = async () => {
-  console.warn('this is redundant if you did the store properly')
-  const records = await AirtableHelpers.callATbase(AirtableCalls.getCategories) as {}[];
-  return ({ categories: records });
+export const parseCategories = async (): Promise<{categories: CategorySupply[]}> => {
+  const categories = (
+    await AirtableHelpers.callATbase(AirtableCalls.getCategorySupply)
+  ).map(c => {
+    const t = new CategorySupply(c);
+    debugger
+    return t;
+  });
+  debugger
+  return ({ categories });
 };

@@ -1,5 +1,5 @@
 import { BasicObject } from "../types/shared.type";
-import { DataConverter } from "./data-converter.class";
+import DataConverter from "./data-converter";
 
 const RawMap = {
   'Detail': 'detail',
@@ -11,7 +11,7 @@ const RawMap = {
 
 export type MaterialType = typeof RawMap & Material;
 
-export class Material extends DataConverter {
+export class Material {
   detail!: string;
   name!: string;
   fn!: string;
@@ -19,6 +19,6 @@ export class Material extends DataConverter {
   imageURL!: string;
 
   constructor(data: BasicObject<any>) {
-    super(data, RawMap);
+    DataConverter.format(this, data, RawMap);
   }
 }

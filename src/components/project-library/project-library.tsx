@@ -39,10 +39,10 @@ const ProjectLibrary = () => {let [state, baseSetState] = useState(StateDefault)
         ['getProjects', 'getBoM'],
         'Base ID',
         'category',
-        () => {}
+        setState
       );
     })()
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
   
   const hide = () => setState({selected: undefined, visible: false});
 

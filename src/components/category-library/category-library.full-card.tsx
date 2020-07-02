@@ -9,7 +9,7 @@ import { openExternal } from '../../shared/utility/general.utility';
 const CategoryLibFullCard = ({
   selected, links
 }: {
-  selected: Project | CategoryInfo; 
+  selected: CategoryInfo; 
   links: Project[];
 }) => {
   if (!selected) return <div></div>;

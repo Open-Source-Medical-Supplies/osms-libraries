@@ -2,6 +2,7 @@ import classNames from "classnames";
 import { DataView } from 'primereact/dataview';
 import { Panel } from 'primereact/panel';
 import React, { useEffect, useState } from "react";
+import { CategorySupply } from "../../../classes/category-supply.class";
 import { empty, notEmpty } from "../../utility/general.utility";
 import TileCard from "../tile-card";
 
@@ -58,11 +59,12 @@ const CategoriesList = (
     });
   };
 
-  const CategoryBlock = (o: any): any => {
+  const CategoryBlock = (o: CategorySupply): JSX.Element => {
     const classes = classNames(
       'category-list-card p-col-6',
       { 'highlight-child': toggleState[o.name] }
     );
+    debugger
     return (
       <TileCard
         actionOnCard={true}

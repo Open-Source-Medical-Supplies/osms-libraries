@@ -1,5 +1,5 @@
 import { BasicObject } from "../types/shared.type";
-import { DataConverter } from "./data-converter.class";
+import DataConverter from "./data-converter";
 
 const RawMap = {
   "Attribution Organization": 'attributionOrg',
@@ -30,7 +30,7 @@ const getCrossLinks = (projects: Project[]) => projects.reduce((acc: BasicObject
 
 export type CrossLinks = ReturnType<typeof Project['getCrossLinks']>
 
-export class Project extends DataConverter {
+export class Project  {
   static getCrossLinks = getCrossLinks;
 
   attributionOrg!: string;
@@ -53,6 +53,6 @@ export class Project extends DataConverter {
   webName!: string;
 
   constructor(data: BasicObject<any>) {
-    super(data, RawMap);
+    DataConverter.format(this, data, RawMap);
   }
 }

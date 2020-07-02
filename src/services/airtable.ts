@@ -14,8 +14,15 @@ export interface AirtableData {
 }
 export type AirtableCallKeys = keyof typeof AirtableCalls;
 
-async function getCategories(): Promise<AirtableData> {
+async function getCategoryInfo(): Promise<AirtableData> {
   return base('Category Information').select({ view: VIEWS.GRID_VIEW });
+}
+
+async function getCategorySupply() {
+  return base('Medical Supply Categories').select({
+    view: VIEWS.DEFAULT_GRID,
+    fields: ['web-name', 'Display Name', 'CoverImage']
+  });
 }
 
 async function getProjects(): Promise<AirtableData> {
@@ -33,7 +40,8 @@ async function getBoM(): Promise<AirtableData> {
 export const AirtableCalls = {
   getProjects,
   getFilterMenu,
-  getCategories,
+  getCategoryInfo,
+  getCategorySupply,
   getBoM
 }
 

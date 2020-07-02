@@ -1,5 +1,5 @@
 import { BasicObject } from "../types/shared.type";
-import { DataConverter } from "./data-converter.class";
+import DataConverter from "./data-converter";
 
 const RawMap = {
   "Assembly/Fabrication Requirements": 'fabReqs',
@@ -26,7 +26,7 @@ const CardSections = [
 	['designDisclaimers', 'Disclaimer Designs']
 ];
 
-export class CategoryInfo extends DataConverter {
+export class CategoryInfo  {
   // used by the Category Library
 
   static CardSections = CardSections;
@@ -45,6 +45,6 @@ export class CategoryInfo extends DataConverter {
   key!: string;
 
   constructor(data: BasicObject<any>) {
-    super(data, RawMap);
+    DataConverter.format(this, data, RawMap);
   }
 }

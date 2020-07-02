@@ -10,7 +10,7 @@ const getCategories = async (): Promise<{
 	_records: CategoryInfo[];
 }> => {
 	const records = (
-		await AirtableHelpers.callATbase(AirtableCalls.getCategories)
+		await AirtableHelpers.callATbase(AirtableCalls.getCategoryInfo)
 	).map((r: any) => new CategoryInfo(r));
 	return { records, _records: records };
 };
@@ -22,7 +22,7 @@ const getProjects = async (): Promise<{
 	const records = (
 		await AirtableHelpers.callATbase(AirtableCalls.getProjects)
 	).map((r: any) => new Project(r));
-	return { records, _records: records };
+	return {  records, _records: records };
 };
 
 const getLinks = async (): Promise<{

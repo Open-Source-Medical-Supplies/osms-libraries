@@ -1,5 +1,5 @@
 import { BasicObject } from "../types/shared.type";
-import { DataConverter } from "./data-converter.class";
+import DataConverter from "./data-converter";
 
 const RawMap = {
   "CoverImage": 'imageURL',
@@ -8,14 +8,14 @@ const RawMap = {
 };
 
 
-export class CategorySupply extends DataConverter {
+export class CategorySupply {
   // Used by the Projects library
   
-  imageURL: string | undefined;
-  name: string | undefined;
-  key: string | undefined;
+  imageURL!: string;
+  name!: string;
+  key!: string;
   
   constructor(data: BasicObject<any>) {
-    super(data, RawMap);
+    DataConverter.format(this, data, RawMap);
   }
 }
