@@ -35,16 +35,15 @@ const StateDefault: {
 const ProjectLibrary = () => {let [state, baseSetState] = useState(StateDefault);
   const isMobile = useSelector((state: RootState) => state.checkMobile);
   const setState = (props: Partial<typeof StateDefault>) => baseSetState({...state, ...props});
-    
+  const setLoadingState = (d: Partial<typeof StateDefault>) => setState({loading: false, ...d});
+
   useEffect(() => {
     (async() => {
       fetchData(
         ['getProjects', 'getBoM'],
         'Base ID',
         'category',
-        (d: Partial<typeof StateDefault>) => {
-          setState({loading: false, ...d});
-        }
+        setLoadingState
       );
     })()
   }, []); // eslint-disable-line react-hooks/exhaustive-deps

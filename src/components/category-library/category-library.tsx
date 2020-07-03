@@ -32,6 +32,7 @@ const CategoryLibrary: React.FC = () => {
   const isMobile = useSelector((state: RootState) => state.checkMobile);
   let [state, baseSetState] = useState(StateDefault);
   const setState = (props: Partial<typeof StateDefault>) => baseSetState({...state, ...props});
+  const setLoadingState = (d: Partial<typeof StateDefault>) => setState({loading: false, ...d});
   
   useEffect(() => {
     (async() => {
@@ -39,9 +40,7 @@ const CategoryLibrary: React.FC = () => {
         ['getCategories', 'getLinks'],
         "['CategoryName'][0]",
         'category',
-        (d: Partial<typeof StateDefault>) => {
-          setState({loading: false, ...d});
-        }
+        setLoadingState
         );
       })()
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
