@@ -33,7 +33,8 @@ const CategoryLibrary: React.FC = () => {
   let [state, baseSetState] = useState(StateDefault);
   const setState = (props: Partial<typeof StateDefault>) => baseSetState({...state, ...props});
   const setLoadingState = (d: Partial<typeof StateDefault>) => setState({loading: false, ...d});
-  
+  const hide = () => setState({selected: undefined, visible: false});
+
   useEffect(() => {
     (async() => {
       fetchData<typeof setState>(
@@ -44,8 +45,6 @@ const CategoryLibrary: React.FC = () => {
         );
       })()
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const hide = () => setState({selected: undefined, visible: false});
   
   useEffect(() => {
     if (!state.selected) { return; }

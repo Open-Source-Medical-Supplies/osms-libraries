@@ -36,6 +36,7 @@ const ProjectLibrary = () => {let [state, baseSetState] = useState(StateDefault)
   const isMobile = useSelector((state: RootState) => state.checkMobile);
   const setState = (props: Partial<typeof StateDefault>) => baseSetState({...state, ...props});
   const setLoadingState = (d: Partial<typeof StateDefault>) => setState({loading: false, ...d});
+  const hide = () => setState({selected: undefined, visible: false});
 
   useEffect(() => {
     (async() => {
@@ -47,8 +48,6 @@ const ProjectLibrary = () => {let [state, baseSetState] = useState(StateDefault)
       );
     })()
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
-  
-  const hide = () => setState({selected: undefined, visible: false});
 
   useEffect(() => {
     if (!state.selected) {
