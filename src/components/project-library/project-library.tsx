@@ -10,23 +10,26 @@ import ProjectFullCard from './project-library.full-card';
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/root.reducer";
 import FilterMenu from "../../shared/components/filter-menu/filter-menu";
+import Loading from '../../shared/components/loading';
 
 const StateDefault: {
-  _records: [], // immutable
-  records: [],
-  selected: undefined | Project,
-  visible: false,
-  categories: BasicObject<CategorySupply>,
-  materials: BasicObject<MaterialType[]>,
-  selectedMaterials: MaterialType[]
+  _records: []; // immutable
+  records: [];
+  selected: undefined | Project;
+  visible: false;
+  categories: BasicObject<CategorySupply>;
+  materials: BasicObject<MaterialType[]>;
+  selectedMaterials: MaterialType[];
+  loading: boolean;
 } = {
-_records: [], // 'immutable'
-records: [],
-selected: undefined,
-visible: false,
-categories: {},
-materials: {},
-selectedMaterials: []
+  _records: [], // 'immutable'
+  records: [],
+  selected: undefined,
+  visible: false,
+  categories: {},
+  materials: {},
+  selectedMaterials: [],
+  loading: true
 };
 
 const ProjectLibrary = () => {let [state, baseSetState] = useState(StateDefault);
@@ -39,7 +42,9 @@ const ProjectLibrary = () => {let [state, baseSetState] = useState(StateDefault)
         ['getProjects', 'getBoM'],
         'Base ID',
         'category',
-        setState
+        (d: Partial<typeof StateDefault>) => {
+          setState({loading: false, ...d});
+        }
       );
     })()
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -60,11 +65,13 @@ const ProjectLibrary = () => {let [state, baseSetState] = useState(StateDefault)
        <FilterMenu state={state} setState={setState}/>
      </div>
      <div id='app__card-container' style={{display: 'flex', flex: state.visible ? 2 : 4}}>
-       <CardContainer
-        isMobile={isMobile}
-        records={state.records}
-        cardChange={setState}
-        selected={state.selected as Project} />
+        <Loading loading={state.loading} >
+          <CardContainer
+            isMobile={isMobile}
+            records={state.records}
+            cardChange={setState}
+            selected={state.selected as Project} />
+        </Loading>
      </div>
      <div id='app__detail-window-container' style={{display: 'flex', flex: state.visible ? 2 : 0}}>
        <DetailWindow visible={state.visible} onHide={hide} className='p-sidebar-md'>

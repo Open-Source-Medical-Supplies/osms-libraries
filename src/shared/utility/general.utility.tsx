@@ -5,7 +5,7 @@ export const OpenExternalSafely = '_blank noopener noreferrer nofollow';
 
 export const openExternal = (link: string) => () => window.open(link, OpenExternalSafely);
 
-export const AopenExternal = (href: string, children: any) => <a href={href} target='_blank' rel='noopener noreferrer nofollow'>{children}</a>
+export const AopenExternal = (href: string, children: React.ReactNode) => <a href={href} target='_blank' rel='noopener noreferrer nofollow'>{children}</a>
 
 export const empty = (o: object): boolean => !!o && !Object.keys(o).length;
 
