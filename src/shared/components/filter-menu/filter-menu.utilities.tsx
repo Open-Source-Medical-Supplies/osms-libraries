@@ -121,7 +121,7 @@ const checkSearchString = (
     const { name, displayName } = projectJSON;
     return (
       name.toLowerCase().includes(target.toLowerCase()) ||
-      displayName.toLowerCase().includes(target.toLowerCase())
+      displayName[0].toLowerCase().includes(target.toLowerCase())
     );
   }
   return false;
@@ -132,7 +132,7 @@ const checkCategories = (
   projectJSON: Project
 ) => {
   if (Object.keys(cats).length) {
-    return cats[projectJSON.displayName];
+    return cats[projectJSON.name[0]];
   }
   return false;
 };

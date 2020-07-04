@@ -6,7 +6,8 @@ const DataConverter = {
     Object.entries(data).forEach(([atKey, val]) => {
       if (keyMap.hasOwnProperty(atKey)) {
         klass[keyMap[atKey]] = atKey.toLowerCase().includes('image') ?
-        this.parseImageUrl(val) : val;
+          this.parseImageUrl(val) :
+          val;
       } else {
         klass.raw[atKey] = val;
       }

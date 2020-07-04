@@ -9,8 +9,6 @@ const RawMap = {
   'Image': 'imageURL'
 };
 
-export type MaterialType = typeof RawMap & Material;
-
 export class Material {
   detail!: string;
   name!: string;

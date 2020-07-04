@@ -1,7 +1,7 @@
 import { Button } from "primereact/button";
 import React from "react";
 import ReactMarkdown from "react-markdown";
-import { Material, MaterialType } from "../../classes/material.class";
+import { Material } from "../../classes/material.class";
 import { Project } from "../../classes/project.class";
 import ImageCarousel from "../../shared/components/detail-window/image-carousel";
 import { MarkdownSection } from "../../shared/components/markdown-section";
@@ -16,7 +16,7 @@ const ProjectFullCard = ({
 	materials,
 }: {
 	selected: Project;
-	materials: MaterialType[];
+	materials: Material[];
 }) => {
   if (!selected) return <div></div>;
 
@@ -98,7 +98,7 @@ const ProjectFullCard = ({
 				) : null}
 				{MarkdownSection(medicalStatus, reviewedBy, "", true)}
 				{MarkdownSection("Sources", hyperLinkText)}
-        {ImageCarousel<MaterialType>({
+        {ImageCarousel<Material>({
           links: materials,
           cardTemplate: ICCardTemplate
         })}

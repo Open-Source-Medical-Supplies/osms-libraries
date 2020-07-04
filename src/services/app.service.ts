@@ -4,6 +4,7 @@ import { Project } from "../classes/project.class";
 import { notEmpty } from "../shared/utility/general.utility";
 import { BasicObject } from "../types/shared.type";
 import { AirtableCalls, AirtableHelpers } from "./airtable";
+import { Material } from '../classes/material.class';
 
 const getCategories = async (): Promise<{
 	records: CategoryInfo[];
@@ -49,7 +50,7 @@ const bomParse = (materials: any[]): {} => {
 	return materials.reduce((acc: BasicObject<string[]>, material) => {
 		const matID: string = material['Full Project Name'];
 		const mat: any[] = acc[matID] || [];
-		mat.push(material);
+		mat.push(new Material(material));
 		acc[matID] = mat; // this (mat) could be sorted, but materials should be coming in in ID order already
 		return acc;
 	}, {});

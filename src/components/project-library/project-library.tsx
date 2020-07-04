@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { CategorySupply } from '../../classes/category-supply.class';
-import { MaterialType } from '../../classes/material.class';
+import { Material } from '../../classes/material.class';
 import { Project } from '../../classes/project.class';
 import { fetchData } from '../../services/app.service';
 import { BasicObject } from '../../types/shared.type';
@@ -18,8 +18,8 @@ const StateDefault: {
   selected: undefined | Project;
   visible: false;
   categories: BasicObject<CategorySupply>;
-  materials: BasicObject<MaterialType[]>;
-  selectedMaterials: MaterialType[];
+  materials: BasicObject<Material[]>;
+  selectedMaterials: Material[];
   loading: boolean;
 } = {
   _records: [], // 'immutable'
@@ -32,7 +32,8 @@ const StateDefault: {
   loading: true
 };
 
-const ProjectLibrary = () => {let [state, baseSetState] = useState(StateDefault);
+const ProjectLibrary = () => {
+  let [state, baseSetState] = useState(StateDefault);
   const isMobile = useSelector((state: RootState) => state.checkMobile);
   const setState = (props: Partial<typeof StateDefault>) => baseSetState({...state, ...props});
   const setLoadingState = (d: Partial<typeof StateDefault>) => setState({loading: false, ...d});
