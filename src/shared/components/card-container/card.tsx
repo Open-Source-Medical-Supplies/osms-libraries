@@ -3,6 +3,9 @@ import React from 'react';
 import { Project } from '../../../classes/project.class';
 import { CategoryInfo } from "../../../classes/category-info.class";
 import TileCard from "../tile-card";
+import LIB from "../../../types/lib.enum";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/root.reducer";
 
 const updateQueryParam = (param: string): void => {
   // update url w/o page reload
@@ -18,8 +21,13 @@ const updateQueryParam = (param: string): void => {
 const ProjectCard = ({
   data, setCard, selected, isMobile
 }: {
-  data: Project | CategoryInfo, setCard: Function, selected: Project | CategoryInfo, isMobile: boolean
+  data: Project | CategoryInfo;
+  setCard: Function;
+  selected: Project | CategoryInfo;
+  isMobile: boolean;
 }) => {
+  const lib: LIB = useSelector<RootState, LIB>(({lib}) => lib)
+
   const { displayName, imageURL } = data;
   const selectedName = selected && selected.displayName ? selected.displayName[0] : '';
 
@@ -32,15 +40,15 @@ const ProjectCard = ({
     "card-selected": !!selectedName && selectedName === displayName
   });
 
-  let sizing;
+  let sizing = 'p-col-2'; // default: show all, not mobile
   if (!!selectedName) {
-    sizing = 'p-col-12';
-  } else if (isMobile) { // show all, mobile
+    // condense to share w/ fullcard
+    sizing = lib === LIB.PROJECTS ? 'p-col-6': 'p-col-12';
+  } else if (isMobile) {
+    // show all, mobile
     sizing = 'p-col-4';
-  } else { // show all, not mobile
-    sizing = 'p-col-2';
   }
-  
+
   return (
   <div key={displayName} className={sizing}>
     <TileCard mainText={displayName} imageURL={imageURL} actions={[{fn: selectCard}]} className={highlight}/>

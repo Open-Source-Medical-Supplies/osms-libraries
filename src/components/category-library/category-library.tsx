@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { CrossLinks, Project } from '../../classes/project.class';
 import { RootState } from "../../redux/root.reducer";
 import { fetchData } from '../../services/app.service';
@@ -9,6 +9,7 @@ import CategoryLibFullCard from './category-library.full-card';
 import SearchBar from '../../shared/components/search-bar';
 import { CategoryInfo } from '../../classes/category-info.class';
 import Loading from '../../shared/components/loading';
+import LIB from '../../types/lib.enum';
 
 const StateDefault: {
   _records: []; // immutable
@@ -29,8 +30,11 @@ const StateDefault: {
 };
 
 const CategoryLibrary: React.FC = () => {
-  const isMobile = useSelector((state: RootState) => state.checkMobile);
+  const dispatch = useDispatch();
+  dispatch({type: LIB.CATEGORIES});
+  
   let [state, baseSetState] = useState(StateDefault);
+  const isMobile = useSelector<RootState, boolean>(({checkMobile}) => checkMobile);
   const setState = (props: Partial<typeof StateDefault>) => baseSetState({...state, ...props});
   const setLoadingState = (d: Partial<typeof StateDefault>) => setState({loading: false, ...d});
   const hide = () => setState({selected: undefined, visible: false});

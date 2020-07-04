@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, ReactElement } from 'react';
 import { CategorySupply } from '../../classes/category-supply.class';
 import { Material } from '../../classes/material.class';
 import { Project } from '../../classes/project.class';
@@ -7,10 +7,11 @@ import { BasicObject } from '../../types/shared.type';
 import CardContainer from "../../shared/components/card-container/card-container";
 import DetailWindow from "../../shared/components/detail-window/detail-window";
 import ProjectFullCard from './project-library.full-card';
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../redux/root.reducer";
 import FilterMenu from "../../shared/components/filter-menu/filter-menu";
 import Loading from '../../shared/components/loading';
+import LIB from '../../types/lib.enum';
 
 const StateDefault: {
   _records: []; // immutable
@@ -32,9 +33,12 @@ const StateDefault: {
   loading: true
 };
 
-const ProjectLibrary = () => {
+const ProjectLibrary: React.FC = () => {
+  const dispatch = useDispatch();
+  dispatch({type: LIB.PROJECTS});
+
   let [state, baseSetState] = useState(StateDefault);
-  const isMobile = useSelector((state: RootState) => state.checkMobile);
+  const isMobile = useSelector<RootState, boolean>(({checkMobile}) => checkMobile);
   const setState = (props: Partial<typeof StateDefault>) => baseSetState({...state, ...props});
   const setLoadingState = (d: Partial<typeof StateDefault>) => setState({loading: false, ...d});
   const hide = () => setState({selected: undefined, visible: false});

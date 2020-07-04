@@ -3,7 +3,7 @@ import { Action } from 'redux';
 
 export const CHECK_MOBILE = 'checkMobile';
 
-export const checkMobileReducer = (
+const checkMobileReducer = (
   state = false,
   action: Action<typeof CHECK_MOBILE>
 ) => {
@@ -14,3 +14,5 @@ export const checkMobileReducer = (
       return state;
   }
 }
+
+export default checkMobileReducer;
