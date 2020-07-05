@@ -1,17 +1,17 @@
-import React, { useEffect, useState, ReactElement } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from "react-redux";
 import { CategorySupply } from '../../classes/category-supply.class';
 import { Material } from '../../classes/material.class';
 import { Project } from '../../classes/project.class';
+import { RootState } from "../../redux/root.reducer";
 import { fetchData } from '../../services/app.service';
-import { BasicObject } from '../../types/shared.type';
 import CardContainer from "../../shared/components/card-container/card-container";
 import DetailWindow from "../../shared/components/detail-window/detail-window";
-import ProjectFullCard from './project-library.full-card';
-import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../../redux/root.reducer";
 import FilterMenu from "../../shared/components/filter-menu/filter-menu";
 import Loading from '../../shared/components/loading';
 import LIB from '../../types/lib.enum';
+import { BasicObject } from '../../types/shared.type';
+import ProjectFullCard from './project-library.full-card';
 
 const StateDefault: {
   _records: []; // immutable
