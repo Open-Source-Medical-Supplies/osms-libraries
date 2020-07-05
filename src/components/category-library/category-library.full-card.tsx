@@ -33,8 +33,8 @@ const CategoryLibFullCard = ({
 		);
 
 	const ICCardTemplate = (data: Project) => {
-		const { displayName, imageURL, externalLink, baseID } = data;
-		const linkAcross = genLocalParam( ActiveLib.PROJECT, baseID );
+		const { displayName, imageURL, externalLink } = data;
+		const linkAcross = genLocalParam( ActiveLib.PROJECT, displayName );
 		const actions = [
 			{
 				label: "View Source",
