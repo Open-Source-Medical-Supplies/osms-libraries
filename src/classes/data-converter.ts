@@ -5,9 +5,13 @@ const DataConverter = {
   format: function(klass: any, data: BasicObject<any>, keyMap: BasicObject<string>): any {
     Object.entries(data).forEach(([atKey, val]) => {
       if (keyMap.hasOwnProperty(atKey)) {
-        klass[keyMap[atKey]] = atKey.toLowerCase().includes('image') ?
-          this.parseImageUrl(val) :
-          val;
+        if (atKey.toLowerCase().includes('image')) {
+          klass[keyMap[atKey]] = this.parseImageUrl(val);
+        } else if (Array.isArray(val) && val.length === 1) {
+          klass[keyMap[atKey]] = val[0];
+        } else {
+          klass[keyMap[atKey]] = val;
+        }
       } else {
         klass.raw[atKey] = val;
       }

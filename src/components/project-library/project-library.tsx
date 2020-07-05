@@ -35,7 +35,7 @@ const StateDefault: {
 
 const ProjectLibrary: React.FC = () => {
   const dispatch = useDispatch();
-  dispatch({type: ActiveLib.PROJECTS});
+  dispatch({type: ActiveLib.PROJECT});
 
   let [state, baseSetState] = useState(StateDefault);
   const isMobile = useSelector<RootState, boolean>(({checkMobile}) => checkMobile);
@@ -45,10 +45,10 @@ const ProjectLibrary: React.FC = () => {
 
   useEffect(() => {
     (async() => {
-      fetchData(
+      fetchData<Project, typeof setLoadingState>(
         ['getProjects', 'getBoM'],
-        'Base ID',
-        ActiveLib.PROJECTS,
+        'baseID',
+        ActiveLib.PROJECT,
         setLoadingState
       );
     })()

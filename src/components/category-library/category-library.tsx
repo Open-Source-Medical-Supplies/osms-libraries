@@ -31,7 +31,7 @@ const StateDefault: {
 
 const CategoryLibrary: React.FC = () => {
   const dispatch = useDispatch();
-  dispatch({type: ActiveLib.CATEGORIES});
+  dispatch({type: ActiveLib.CATEGORY});
   
   let [state, baseSetState] = useState(StateDefault);
   const isMobile = useSelector<RootState, boolean>(({checkMobile}) => checkMobile);
@@ -41,10 +41,10 @@ const CategoryLibrary: React.FC = () => {
 
   useEffect(() => {
     (async() => {
-      fetchData<typeof setState>(
+      fetchData<CategoryInfo, typeof setLoadingState>(
         ['getCategories', 'getLinks'],
-        "['displayName'][0]",
-        ActiveLib.CATEGORIES,
+        "displayName",
+        ActiveLib.CATEGORY,
         setLoadingState
         );
       })()
@@ -52,8 +52,7 @@ const CategoryLibrary: React.FC = () => {
   
   useEffect(() => {
     if (!state.selected) { return; }
-    const key = state.selected.displayName[0];
-    debugger
+    const key = state.selected.displayName;
     setState({selectedProjects: state.projectsByCategory[key]});
   }, [state.selected]); // eslint-disable-line react-hooks/exhaustive-deps
 

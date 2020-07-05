@@ -10,6 +10,8 @@ import {
   AopenExternal,
   openExternal
 } from "../../shared/utility/general.utility";
+import { genLocalParam } from '../../shared/utility/param-handling';
+import ActiveLib from "../../types/lib.enum";
 
 const ProjectFullCard = ({
 	selected,
@@ -32,7 +34,9 @@ const ProjectFullCard = ({
 		creator,
 		osmsNotes,
 		externalLink,
-	} = selected;
+  } = selected;
+
+  const linkAcross = genLocalParam( ActiveLib.CATEGORY, name );
 
 	const headerImage =
 		typeof imageURL !== "string" ? (
@@ -42,7 +46,7 @@ const ProjectFullCard = ({
 		) : (
 			<img
 				className="centered-image"
-				alt={name}
+				alt={displayName}
 				src={imageURL}
 				style={{ height: "250px" }}
 			/>
@@ -71,8 +75,6 @@ const ProjectFullCard = ({
 			</span>
 		) : null;
 
-	const linkOut = window.location.pathname + "?category=" + encodeURI(displayName);
-
   const ICCardTemplate = (data: Material) => {
     const {idealCaption, imageURL, detail} = data;
     return (
@@ -87,8 +89,8 @@ const ProjectFullCard = ({
 		<div className="full-card">
 			<div className="full-card__content">
 				{headerImage}
-				<h1>{name}</h1>
-				{AopenExternal(linkOut, <h2>{displayName}</h2>)}
+				<h1>{displayName}</h1>
+				{AopenExternal(linkAcross, <h2>{name}</h2>)}
 				{desc}
 				{attributionOrg || creator ? (
 					<div className="p-grid">

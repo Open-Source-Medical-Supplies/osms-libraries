@@ -1,13 +1,15 @@
 import ActiveLib from '../types/lib.enum';
 
 const libReducer = (
-  state = ActiveLib.CATEGORIES,
+  state = ActiveLib.CATEGORY,
   { type }: { type: ActiveLib }
 ) => {
-  if (type in ActiveLib) {
-    return type
+  switch (type) {
+    case ActiveLib.CATEGORY: case ActiveLib.PROJECT:
+      return type
+    default:
+      return state;
   }
-  return state;
 }
 
 export default libReducer;

@@ -36,7 +36,7 @@ const getLinks = async (): Promise<{
 		AirtableCalls.getProjects,
 		Project
 	);
-	return { projectsByCategory: toDict<Project>(data, 'name[0]') };
+	return { projectsByCategory: toDict<Project>(data, 'name') };
 };
 
 const getBoM = async (): Promise<{ materials: {} }> => {
@@ -44,7 +44,7 @@ const getBoM = async (): Promise<{ materials: {} }> => {
 		AirtableCalls.getBoM,
 		Material
 	);
-	return { materials: toDict<Material>(materials, 'name[0]') };
+	return { materials: toDict<Material>(materials, 'name') };
 };
 
 const AppServices = {
@@ -55,11 +55,11 @@ const AppServices = {
 };
 type AppServiceKeys = keyof typeof AppServices;
 
-export const fetchData = async <T extends Function>(
+export const fetchData = async <T, S extends Function>(
 	callKeys: AppServiceKeys[],
-	selector: string,
+	selector: keyof T,
 	splitOn: ActiveLib,
-	setState: T
+	setState: S
 ): Promise<void> => {
 	Promise.all(
 		callKeys.map((k: AppServiceKeys) => AppServices[k]()) as Promise<any>[]
@@ -72,7 +72,7 @@ export const fetchData = async <T extends Function>(
 			} else {
 				const selected =
 					res[0]._records.find((r: any) => get(r, selector) === param) ||
-					undefined;
+          undefined;
 				setState({
 					...flatRes,
 					selected,

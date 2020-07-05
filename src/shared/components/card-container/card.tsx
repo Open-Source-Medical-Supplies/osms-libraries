@@ -6,21 +6,7 @@ import { Project } from '../../../classes/project.class';
 import { RootState } from "../../../redux/root.reducer";
 import ActiveLib from "../../../types/lib.enum";
 import TileCard from "../tile-card";
-
-const updateQueryParam = (activeLib: ActiveLib) => (param: string): void => {
-  // update url w/o page reload
-  if (!param) return;
-  if (window.history && window.history.pushState) {
-    const { location } = window;
-    const newurl = [
-      location.protocol, "//", location.host, location.pathname,
-      '?', activeLib, '=', encodeURI(param)
-    ].join('');
-    window.history.pushState({ path: newurl }, '', newurl);
-  } else {
-    alert('Please update your browser version');
-  }
-}
+import { updateQueryParam } from "../../utility/param-handling";
 
 const ProjectCard = ({
   data, setCard, selected, isMobile
@@ -30,11 +16,11 @@ const ProjectCard = ({
   selected: Project | CategoryInfo;
   isMobile: boolean;
 }) => {
-  const lib: ActiveLib = useSelector<RootState, ActiveLib>(({lib}) => lib)
+  const lib = useSelector<RootState, ActiveLib>(({lib}) => lib)
   const setQueryParam = updateQueryParam(lib);
 
   const { displayName, imageURL } = data;
-  const selectedName = selected && selected.displayName ? selected.displayName[0] : '';
+  const selectedName = selected && selected.displayName ? selected.displayName : '';
 
   const selectCard = () => {
     setQueryParam(displayName);
@@ -48,7 +34,7 @@ const ProjectCard = ({
   let sizing = 'p-col-2'; // default: show all, not mobile
   if (!!selectedName) {
     // condense to share w/ fullcard
-    sizing = lib === ActiveLib.PROJECTS ? 'p-col-6': 'p-col-12';
+    sizing = lib === ActiveLib.PROJECT ? 'p-col-6': 'p-col-12';
   } else if (isMobile) {
     // show all, mobile
     sizing = 'p-col-4';
