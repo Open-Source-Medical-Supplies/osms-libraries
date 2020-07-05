@@ -14,9 +14,7 @@ const CategoryLibFullCard = ({
   links: Project[];
 }) => {
   if (!selected) return <div></div>;
-
-  const {displayName, imageURL} = selected;
-  
+  const { displayName, imageURL } = selected;
   const headerImage = (
     typeof imageURL !== 'string' ?
       <div className='center-flex' style={{height: '150px'}}>No image available</div> :
@@ -57,10 +55,7 @@ const CategoryLibFullCard = ({
           CategoryInfo.CardSections,
           ([key, label]) => (selected as Indexable)[key] ? MarkdownSection(label, (selected as Indexable)[key]) : null
         )}
-        {ImageCarousel<Project>({
-          links: links,
-          cardTemplate: ICCardTemplate
-        })}
+        { ImageCarousel<Project>({ links, cardTemplate: ICCardTemplate }) }
       </div>
     </div>
   );

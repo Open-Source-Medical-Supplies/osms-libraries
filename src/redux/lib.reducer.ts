@@ -1,10 +1,10 @@
-import LIB from '../types/lib.enum';
+import ActiveLib from '../types/lib.enum';
 
 const libReducer = (
-  state = LIB.CATEGORIES,
-  { type }: { type: LIB }
+  state = ActiveLib.CATEGORIES,
+  { type }: { type: ActiveLib }
 ) => {
-  if (type in LIB) {
+  if (type in ActiveLib) {
     return type
   }
   return state;

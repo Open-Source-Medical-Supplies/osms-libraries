@@ -9,7 +9,7 @@ import CategoryLibFullCard from './category-library.full-card';
 import SearchBar from '../../shared/components/search-bar';
 import { CategoryInfo } from '../../classes/category-info.class';
 import Loading from '../../shared/components/loading';
-import LIB from '../../types/lib.enum';
+import ActiveLib from '../../types/lib.enum';
 
 const StateDefault: {
   _records: []; // immutable
@@ -31,7 +31,7 @@ const StateDefault: {
 
 const CategoryLibrary: React.FC = () => {
   const dispatch = useDispatch();
-  dispatch({type: LIB.CATEGORIES});
+  dispatch({type: ActiveLib.CATEGORIES});
   
   let [state, baseSetState] = useState(StateDefault);
   const isMobile = useSelector<RootState, boolean>(({checkMobile}) => checkMobile);
@@ -43,8 +43,8 @@ const CategoryLibrary: React.FC = () => {
     (async() => {
       fetchData<typeof setState>(
         ['getCategories', 'getLinks'],
-        "['CategoryName'][0]",
-        'category',
+        "['displayName'][0]",
+        ActiveLib.CATEGORIES,
         setLoadingState
         );
       })()
@@ -52,8 +52,9 @@ const CategoryLibrary: React.FC = () => {
   
   useEffect(() => {
     if (!state.selected) { return; }
-    const {categoryKey} = state.selected;
-    setState({selectedProjects: state.projectsByCategory[categoryKey]});
+    const key = state.selected.displayName[0];
+    debugger
+    setState({selectedProjects: state.projectsByCategory[key]});
   }, [state.selected]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const leftFlex = `${state.visible ? 1 : 6} 0 ${state.visible ? '20%' : '100%'}`;

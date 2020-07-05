@@ -1,5 +1,5 @@
-enum LIB {
+enum ActiveLib {
   PROJECTS = 'PROJECTS',
   CATEGORIES = 'CATEGORIES'
 }
-export default LIB;
+export default ActiveLib;

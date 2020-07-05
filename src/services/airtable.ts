@@ -1,4 +1,5 @@
 import {API_KEY} from '../env.js';
+import { Constructor } from '../types/shared.type';
 
 const Airtable = require('airtable');
 const base = new Airtable({apiKey: API_KEY}).base('apppSjiUMTolFIo1P');
@@ -45,13 +46,18 @@ export const AirtableCalls = {
   getBoM
 }
 
-const callATbase = async (
-  apiCall: typeof AirtableCalls[AirtableCallKeys]
-): Promise<any[]> => {
+const callATbase = async<T>(
+  apiCall: typeof AirtableCalls[AirtableCallKeys],
+  ctor?: Constructor<T>
+): Promise<T[]> => {
   return await apiCall().then(
     // data is an AT object
     async data => {
-      return AirtableHelpers.filterRecords(await data.all());
+      const vals = AirtableHelpers.filterRecords(await data.all());
+      if (ctor) {
+        return vals.map(v => new ctor(v));
+      }
+      return vals;
     },
     e => {
       console.warn(e);

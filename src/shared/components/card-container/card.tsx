@@ -1,17 +1,21 @@
 import classNames from "classnames";
 import React from 'react';
-import { Project } from '../../../classes/project.class';
-import { CategoryInfo } from "../../../classes/category-info.class";
-import TileCard from "../tile-card";
-import LIB from "../../../types/lib.enum";
 import { useSelector } from "react-redux";
+import { CategoryInfo } from "../../../classes/category-info.class";
+import { Project } from '../../../classes/project.class';
 import { RootState } from "../../../redux/root.reducer";
+import ActiveLib from "../../../types/lib.enum";
+import TileCard from "../tile-card";
 
-const updateQueryParam = (param: string): void => {
+const updateQueryParam = (activeLib: ActiveLib) => (param: string): void => {
   // update url w/o page reload
   if (!param) return;
   if (window.history && window.history.pushState) {
-    const newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?category=' + encodeURI(param);
+    const { location } = window;
+    const newurl = [
+      location.protocol, "//", location.host, location.pathname,
+      '?', activeLib, '=', encodeURI(param)
+    ].join('');
     window.history.pushState({ path: newurl }, '', newurl);
   } else {
     alert('Please update your browser version');
@@ -26,13 +30,14 @@ const ProjectCard = ({
   selected: Project | CategoryInfo;
   isMobile: boolean;
 }) => {
-  const lib: LIB = useSelector<RootState, LIB>(({lib}) => lib)
+  const lib: ActiveLib = useSelector<RootState, ActiveLib>(({lib}) => lib)
+  const setQueryParam = updateQueryParam(lib);
 
   const { displayName, imageURL } = data;
   const selectedName = selected && selected.displayName ? selected.displayName[0] : '';
 
   const selectCard = () => {
-    updateQueryParam(displayName);
+    setQueryParam(displayName);
     setCard({selected: data, visible: true});
   };
   
@@ -43,7 +48,7 @@ const ProjectCard = ({
   let sizing = 'p-col-2'; // default: show all, not mobile
   if (!!selectedName) {
     // condense to share w/ fullcard
-    sizing = lib === LIB.PROJECTS ? 'p-col-6': 'p-col-12';
+    sizing = lib === ActiveLib.PROJECTS ? 'p-col-6': 'p-col-12';
   } else if (isMobile) {
     // show all, mobile
     sizing = 'p-col-4';

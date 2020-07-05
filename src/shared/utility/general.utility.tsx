@@ -1,5 +1,6 @@
 import React from 'react';
 import { BasicObject } from '../../types/shared.type';
+import get from 'lodash.get';
 
 export const OpenExternalSafely = '_blank noopener noreferrer nofollow';
 
@@ -109,4 +110,16 @@ export const fixMdUrls = (md: string): string => {
     return tempMD;
   }
   return md;
+}
+
+export const toDict = <T extends any> (data: T[], index: string) => {
+  return data.reduce((acc: BasicObject<T[]>, datum: T) => {
+    const key = get(datum, index);
+    if (acc[key]) {
+      acc[key].push(datum);
+    } else {
+      acc[key] = [datum]
+    }
+		return acc;
+	}, {});
 }

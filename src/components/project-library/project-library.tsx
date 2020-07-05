@@ -9,7 +9,7 @@ import CardContainer from "../../shared/components/card-container/card-container
 import DetailWindow from "../../shared/components/detail-window/detail-window";
 import FilterMenu from "../../shared/components/filter-menu/filter-menu";
 import Loading from '../../shared/components/loading';
-import LIB from '../../types/lib.enum';
+import ActiveLib from '../../types/lib.enum';
 import { BasicObject } from '../../types/shared.type';
 import ProjectFullCard from './project-library.full-card';
 
@@ -35,7 +35,7 @@ const StateDefault: {
 
 const ProjectLibrary: React.FC = () => {
   const dispatch = useDispatch();
-  dispatch({type: LIB.PROJECTS});
+  dispatch({type: ActiveLib.PROJECTS});
 
   let [state, baseSetState] = useState(StateDefault);
   const isMobile = useSelector<RootState, boolean>(({checkMobile}) => checkMobile);
@@ -48,7 +48,7 @@ const ProjectLibrary: React.FC = () => {
       fetchData(
         ['getProjects', 'getBoM'],
         'Base ID',
-        'category',
+        ActiveLib.PROJECTS,
         setLoadingState
       );
     })()
