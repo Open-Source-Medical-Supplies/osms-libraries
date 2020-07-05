@@ -6,6 +6,7 @@ import ActiveLib from "../types/lib.enum";
 import { BasicObject } from "../types/shared.type";
 import { AirtableCalls, AirtableHelpers } from "./airtable";
 import { toDict } from "../shared/utility/general.utility";
+import { getParam } from "../shared/utility/param-handling";
 
 const getCategories = async (): Promise<{
 	records: CategoryInfo[];
@@ -86,11 +87,6 @@ export const fetchData = async <T, S extends Function>(
 		}
 	);
 };
-
-const getParam = (splitOn: ActiveLib) =>
-	window.location && window.location.search
-		? decodeURI(window.location.search.split(splitOn + "=")[1])
-		: undefined;
 
 const flattenPromiseAll = (res: BasicObject<any>[]) => {
 	return res.reduce((acc: BasicObject<string>, val) => {

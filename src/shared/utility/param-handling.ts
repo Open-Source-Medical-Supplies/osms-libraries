@@ -1,5 +1,10 @@
 import ActiveLib from "../../types/lib.enum";
 
+export const getParam = (splitOn: ActiveLib) =>
+	window.location && window.location.search
+		? decodeURI(window.location.search.split(splitOn + "=")[1])
+		: undefined;
+
 export const genParamURL = (lib: ActiveLib, param: string, path?: string) => [
   window.location.protocol,
   '//',
