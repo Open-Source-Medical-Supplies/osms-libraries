@@ -47,7 +47,7 @@ const ProjectLibrary: React.FC = () => {
     (async() => {
       fetchData<Project, typeof setLoadingState>(
         ['getProjects', 'getBoM'],
-        'baseID',
+        'displayName',
         ActiveLib.PROJECT,
         setLoadingState
       );
