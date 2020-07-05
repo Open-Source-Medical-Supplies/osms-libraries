@@ -1,9 +1,9 @@
 import { BasicObject } from "../types/shared.type";
-import { DataConverter } from "./data-converter.class";
+import DataConverter from "./data-converter";
 
 const RawMap = {
   "Assembly/Fabrication Requirements": 'fabReqs',
-  "CategoryName": 'categoryName',
+  "CategoryName": 'displayName',
   "Image": 'imageURL',
   "Current Global Resources": 'currentGlobalResources',
   "Disclaimer": 'disclaimer',
@@ -26,13 +26,26 @@ const CardSections = [
 	['designDisclaimers', 'Disclaimer Designs']
 ];
 
-export type CategoryInfoType = typeof RawMap & CategoryInfo;
-
-export class CategoryInfo extends DataConverter<typeof RawMap> {
+export class CategoryInfo {
   // used by the Category Library
+
   static CardSections = CardSections;
 
+  fabReqs!: string;
+  displayName!: string;
+  imageURL!: string;
+  currentGlobalResources!: string;
+  disclaimer!: string;
+  designDisclaimers!: string;
+  name!: string;
+  engReqs!: string;
+  categoryKey!: string;
+  resources!: string;
+  problem!: string;
+  key!: string;
+  raw: BasicObject<any> = {};
+
   constructor(data: BasicObject<any>) {
-    super(data, RawMap);
+    DataConverter.format(this, data, RawMap);
   }
 }

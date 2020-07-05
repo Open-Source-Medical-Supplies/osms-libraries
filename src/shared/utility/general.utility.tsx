@@ -1,11 +1,12 @@
 import React from 'react';
 import { BasicObject } from '../../types/shared.type';
+import get from 'lodash.get';
 
 export const OpenExternalSafely = '_blank noopener noreferrer nofollow';
 
 export const openExternal = (link: string) => () => window.open(link, OpenExternalSafely);
 
-export const AopenExternal = (href: string, children: any) => <a href={href} target='_blank' rel='noopener noreferrer nofollow'>{children}</a>
+export const AopenExternal = (href: string, children: React.ReactNode) => <a href={href} target='_blank' rel='noopener noreferrer nofollow'>{children}</a>
 
 export const empty = (o: object): boolean => !!o && !Object.keys(o).length;
 
@@ -90,4 +91,35 @@ export const isPartialObject = (base: BasicObject<any>, test: BasicObject<any>) 
 
 export const timeNow = (): number => {
   return new Date().getTime();
+}
+
+const urlRegexMatch = new RegExp(/\[\d+\]/);
+// Airtable sends MD Links similar to -> 'some url text[1] [1]: https://example.com'
+export const fixMdUrls = (md: string): string => {
+  if (urlRegexMatch.test(md)) {
+    const urlArr = md.split(urlRegexMatch);
+    const mid = Math.round(urlArr.length / 2);
+    let tempMD = '';
+    for (let i = 0, j = mid; i < (mid - 1); i++, j++) {
+      const linkDesc = urlArr[i] 
+      // slice(2,n) removes ': ' from the front, trim removes whitespace and carriage returns from the end
+      const n = urlArr[j].length;
+      const link = `(${urlArr[j].slice(2,n).trim()})`;
+      tempMD += linkDesc + link;
+    }
+    return tempMD;
+  }
+  return md;
+}
+
+export const toDict = <T extends any> (data: T[], index: string) => {
+  return data.reduce((acc: BasicObject<T[]>, datum: T) => {
+    const key = get(datum, index);
+    if (acc[key]) {
+      acc[key].push(datum);
+    } else {
+      acc[key] = [datum]
+    }
+		return acc;
+	}, {});
 }

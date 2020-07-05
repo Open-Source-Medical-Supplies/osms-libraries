@@ -1,16 +1,16 @@
 import { InputText } from 'primereact/inputtext';
 import React, { useEffect, useState } from 'react';
-import { CategoryInfoType } from '../../classes/category-info.class';
-import { ProjectType } from '../../classes/project.class';
+import { CategoryInfo } from '../../classes/category-info.class';
+import { Project } from '../../classes/project.class';
 
-const SearchBar = ({setState, _records}: {setState: Function, _records: Array<ProjectType | CategoryInfoType>}) => {
+const SearchBar = ({setState, _records}: {setState: Function, _records: Array<Project | CategoryInfo>}) => {
   const [searchState, setSearchState] = useState('');
   const onInputChange = (e: any) => setSearchState((e.target as HTMLInputElement).value); // PrimeReact is not typed well here it seems.
   
   useEffect(() => {
     const filteredRecords = !searchState.length ? _records : _records.filter(record => {
-      const { categoryName } = record;
-      return categoryName.toLowerCase().includes(searchState.toLowerCase())
+      const { displayName } = record;
+      return displayName.toLowerCase().includes(searchState.toLowerCase())
     });
     setState({records: filteredRecords});
   }, [searchState]); // eslint-disable-line react-hooks/exhaustive-deps

@@ -13,7 +13,7 @@ const defaultState = {
 
 type Actions =  'updateCategoryRecords' | 'updateCategoryLinks' | 'updateProjects' | 'updateBoM';
 
-export const databaseReducer = (state = defaultState, action: Actions) => {
+const databaseReducer = (state = defaultState, action: Actions) => {
     switch(action) {
         case "updateBoM":
             break;
@@ -27,3 +27,5 @@ export const databaseReducer = (state = defaultState, action: Actions) => {
             return state;
     }
 }
+
+export default databaseReducer;

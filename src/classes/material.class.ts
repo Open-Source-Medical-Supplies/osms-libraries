@@ -1,5 +1,5 @@
 import { BasicObject } from "../types/shared.type";
-import { DataConverter } from "./data-converter.class";
+import DataConverter from "./data-converter";
 
 const RawMap = {
   'Detail': 'detail',
@@ -9,18 +9,15 @@ const RawMap = {
   'Image': 'imageURL'
 };
 
-export type MaterialType = typeof RawMap & Material;
-
-export class Material extends DataConverter<typeof RawMap> {
-  static toCarousel(mat: MaterialType) {
-    return {
-			header: mat.idealCaption || '',
-			subHeader: mat.detail || '',
-			imageURL: mat.imageURL || '',
-		};
-  }
+export class Material {
+  detail!: string;
+  name!: string;
+  fn!: string;
+  idealCaption!: string;
+  imageURL!: string;
+  raw: BasicObject<any> = {};
 
   constructor(data: BasicObject<any>) {
-    super(data, RawMap);
+    DataConverter.format(this, data, RawMap);
   }
 }

@@ -1,49 +1,48 @@
 import classNames from "classnames";
 import React from 'react';
-import { ProjectType } from '../../../classes/project.class';
-import { CategoryInfoType } from "../../../classes/category-info.class";
+import { useSelector } from "react-redux";
+import { CategoryInfo } from "../../../classes/category-info.class";
+import { Project } from '../../../classes/project.class';
+import { RootState } from "../../../redux/root.reducer";
+import ActiveLib from "../../../types/lib.enum";
 import TileCard from "../tile-card";
-
-const updateQueryParam = (param: string): void => {
-  // update url w/o page reload
-  if (!param) return;
-  if (window.history && window.history.pushState) {
-    const newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?category=' + encodeURI(param);
-    window.history.pushState({ path: newurl }, '', newurl);
-  } else {
-    alert('Please update your browser version');
-  }
-}
+import { updateQueryParam } from "../../utility/param-handling";
 
 const ProjectCard = ({
   data, setCard, selected, isMobile
 }: {
-  data: ProjectType | CategoryInfoType, setCard: Function, selected: ProjectType | CategoryInfoType, isMobile: boolean
+  data: Project | CategoryInfo;
+  setCard: Function;
+  selected: Project | CategoryInfo;
+  isMobile: boolean;
 }) => {
-  const { categoryName, imageURL } = data;
-  const selectedName = selected && selected.categoryName ? selected.categoryName[0] : '';
+  const lib = useSelector<RootState, ActiveLib>(({lib}) => lib)
+  const setQueryParam = updateQueryParam(lib);
+
+  const { displayName, imageURL } = data;
+  const selectedName = selected && selected.displayName ? selected.displayName : '';
 
   const selectCard = () => {
-    updateQueryParam(categoryName)
+    setQueryParam(displayName);
     setCard({selected: data, visible: true});
   };
   
   const highlight = classNames({
-    "card-selected": !!selectedName && selectedName === categoryName
+    "card-selected": !!selectedName && selectedName === displayName
   });
 
-  let sizing;
+  let sizing = 'p-col-2'; // default: show all, not mobile
   if (!!selectedName) {
-    sizing = 'p-col-12';
-  } else if (isMobile) { // show all, mobile
+    // condense to share w/ fullcard
+    sizing = lib === ActiveLib.PROJECT ? 'p-col-6': 'p-col-12';
+  } else if (isMobile) {
+    // show all, mobile
     sizing = 'p-col-4';
-  } else { // show all, not mobile
-    sizing = 'p-col-2';
   }
-  
+
   return (
-    <div key={categoryName} className={sizing}>
-      <TileCard displayName={categoryName} imageURL={imageURL} actions={[{fn: selectCard}]} className={highlight}/>
+  <div key={displayName} className={sizing}>
+    <TileCard mainText={displayName} imageURL={imageURL} actions={[{fn: selectCard}]} className={highlight}/>
     </div>
   );
 }

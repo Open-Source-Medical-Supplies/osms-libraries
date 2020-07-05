@@ -1,4 +1,5 @@
 import {API_KEY} from '../env.js';
+import { Constructor } from '../types/shared.type';
 
 const Airtable = require('airtable');
 const base = new Airtable({apiKey: API_KEY}).base('apppSjiUMTolFIo1P');
@@ -14,8 +15,15 @@ export interface AirtableData {
 }
 export type AirtableCallKeys = keyof typeof AirtableCalls;
 
-async function getCategories(): Promise<AirtableData> {
+async function getCategoryInfo(): Promise<AirtableData> {
   return base('Category Information').select({ view: VIEWS.GRID_VIEW });
+}
+
+async function getCategorySupply() {
+  return base('Medical Supply Categories').select({
+    view: VIEWS.DEFAULT_GRID,
+    fields: ['web-name', 'Display Name', 'CoverImage']
+  });
 }
 
 async function getProjects(): Promise<AirtableData> {
@@ -33,17 +41,23 @@ async function getBoM(): Promise<AirtableData> {
 export const AirtableCalls = {
   getProjects,
   getFilterMenu,
-  getCategories,
+  getCategoryInfo,
+  getCategorySupply,
   getBoM
 }
 
-const callATbase = async (
-  apiCall: typeof AirtableCalls[AirtableCallKeys]
-): Promise<any[]> => {
+const callATbase = async<T>(
+  apiCall: typeof AirtableCalls[AirtableCallKeys],
+  ctor?: Constructor<T>
+): Promise<T[]> => {
   return await apiCall().then(
     // data is an AT object
     async data => {
-      return AirtableHelpers.filterRecords(await data.all());
+      const vals = AirtableHelpers.filterRecords(await data.all());
+      if (ctor) {
+        return vals.map(v => new ctor(v));
+      }
+      return vals;
     },
     e => {
       console.warn(e);

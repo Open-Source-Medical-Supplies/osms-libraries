@@ -7,9 +7,8 @@ import 'primeicons/primeicons.css';
 import 'primereact/resources/primereact.min.css';
 import 'primereact/resources/themes/nova-light/theme.css';
 import "./App.scss";
-import './shared/css/_prime.scss';
-import CategoryLibrary from "./components/category-library/category-library.component";
-import ProjectLibrary from "./components/project-library/project-library.component";
+import CategoryLibrary from "./components/category-library/category-library";
+import ProjectLibrary from "./components/project-library/project-library";
 import { CHECK_MOBILE } from "./redux/check-mobile.reducer";
 
 /* '20-06-28 * Can't get working due to bad path names after build + hosting */
