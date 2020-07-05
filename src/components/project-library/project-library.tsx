@@ -58,7 +58,7 @@ const ProjectLibrary: React.FC = () => {
     if (!state.selected) {
      return;
     }
-    const selectedMaterials = state.materials[state.selected.name] || [];
+    const selectedMaterials = state.materials[state.selected.displayName] || [];
     setState({selectedMaterials});
   }, [state.selected]); // eslint-disable-line react-hooks/exhaustive-deps
 
