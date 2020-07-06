@@ -7,6 +7,7 @@ import { RootState } from "../../../redux/root.reducer";
 import ActiveLib from "../../../types/lib.enum";
 import TileCard from "../tile-card";
 import { updateQueryParam } from "../../utility/param-handling";
+import NewUpdatedBanner from "../new-updated-banner";
 
 const ProjectCard = ({
   data, setCard, selected, isMobile
@@ -41,8 +42,9 @@ const ProjectCard = ({
   }
 
   return (
-  <div key={displayName} className={sizing}>
-    <TileCard mainText={displayName} imageURL={imageURL} actions={[{fn: selectCard}]} className={highlight}/>
+    <div key={displayName} style={{position: 'relative'}} className={sizing}>
+      <NewUpdatedBanner data={data} />
+      <TileCard mainText={displayName} imageURL={imageURL} actions={[{fn: selectCard}]} className={highlight}/>
     </div>
   );
 }
