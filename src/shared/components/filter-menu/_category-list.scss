@@ -1,3 +1,5 @@
+@import '../../css/variables';
+
 .category-list-card {
   img.card-header__image, div.card-header__no-image {
     height: 75px;
@@ -5,7 +7,7 @@
 }
 
 .highlight-child > div {
-  background-color: #007ad9;
-  border-color: #007ad9;
+  background-color: $blue;
+  border-color: $blue;
   color: #ffffff;
 }
