@@ -1,8 +1,9 @@
 @import './reset';
 @import './mixins';
 @import './variables';
+@import './shared';
 
 @import './full-card';
-@import './_prime.scss';
+@import './prime-custom';
 
 @import './fonts/primeicons/fonts/export';

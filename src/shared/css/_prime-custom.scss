@@ -1,0 +1,57 @@
+// prime overrides / customization
+.p-datascroller-list {
+  list-style: none;
+}
+
+.p-sidebar:not(.p-sidebar-active) {
+  display: none;
+}
+
+.p-tree {
+  max-height: 80vh;
+  overflow: auto;
+}
+
+.p-panel .p-dataview-content {
+  padding: 0.571em 0 !important;
+}
+
+div.p-dataview.p-component.p-dataview-grid > div.p-dataview-content {
+  border: none;
+  background-color: transparent;
+}
+
+.filter-panel {
+  &.p-panel .p-panel-content {
+    padding: 0;
+    border: none;
+
+    .p-tree {
+      border: none;
+    }
+  }
+
+  .p-toggleable-content {
+    max-height: 40vh;
+    overflow-y: auto;
+  }
+}
+
+.attribute-list-panel div.p-panel-content {
+  padding: 0;
+}
+
+div.p-grid, .p-dataview.p-component.p-dataview-grid {
+  width: 100%;
+}
+
+.p-sidebar-right {
+  position: relative !important;
+  height: 100vh;
+  width: calc(100% - 0.5rem) !important;
+  margin-left: 0.5rem !important;
+}
+
+.p-card img, .p-card div.center-flex  {
+  margin-top: 2px;
+}

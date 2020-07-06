@@ -1,0 +1,83 @@
+
+.button-no-style {
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.clamp-1 {
+  @include clamp-n(1);
+}
+
+.divider-1 {
+  margin-bottom: 1rem;
+}
+
+.sticky-top-0 {
+  top: 0;
+  position: sticky;
+  position: -webkit-sticky;
+}
+
+.markdown-section ul {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+.margin-z-auto {
+  margin: 0 auto !important;
+}
+
+.center-flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.card-selected {
+  box-shadow: inset 0px 0px 0px 2px $primary !important;
+}
+
+.centered-image {
+  // be sure to add a height attr to the element;
+  object-fit: scale-down;
+  object-position: center;
+  width: 100%;
+}
+
+.close-button {
+  padding: 0.5rem !important;
+  background: $primary !important;
+  border-radius: 4px !important;
+  position: absolute;
+  top: 0.5rem;
+  right: 1rem;
+  z-index: 10000;
+
+  &:hover {
+    opacity: 0.5;
+  }
+  span {
+    color: white;
+  }
+}
+
+div.fullcard-carousel-cards {
+  @include tileCardFonts(12px);
+
+  margin: 0 0.5rem;
+  box-shadow: none;
+}
+
+.card-header{
+  &__image {
+    height: 150px;
+  }
+  &__no-image {
+    height: 152px;
+  }
+}

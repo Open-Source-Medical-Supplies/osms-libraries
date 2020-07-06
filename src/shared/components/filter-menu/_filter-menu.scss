@@ -1,0 +1,15 @@
+@import './category-list';
+
+.search-bar-wrapper {
+  display: flex;
+
+  #search-bar-container {
+    margin-right: 0.5rem;
+    height: 31px;
+    width: 100%;
+
+    #searchBar {
+      height: 32.6px;
+    }
+  }
+}

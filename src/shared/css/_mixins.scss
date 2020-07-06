@@ -5,3 +5,18 @@
   overflow: hidden;
   word-break: break-all;
 }
+
+@mixin tileCardFonts($header: 21px, $subHeader: 16.38px, $headerWeight: 700, $subHeaderWeight: 700) {
+  .tile-card {
+    &__header {
+      font-size: $header;
+      font-weight: $headerWeight;
+      text-align: center;
+    }
+    
+    &__sub-header {
+      font-size: $subHeader;
+      font-weight: $subHeaderWeight;
+    }
+  }
+}
