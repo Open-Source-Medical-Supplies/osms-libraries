@@ -1,9 +1,9 @@
 import { BasicObject } from "../types/shared.type";
-import DataConverter, { ClassMaps, sharedFields } from "./data-converter";
+import DataConverter from "./data-converter";
 
 const RawMap = {
   "Assembly/Fabrication Requirements": 'fabReqs',
-  "CategoryName": ClassMaps.displayName,
+  "CategoryName": DataConverter.classMaps.displayName,
   "Current Global Resources": 'currentGlobalResources',
   "Disclaimer": 'disclaimer',
   "Disclaimer Designs": 'designDisclaimers',
@@ -11,10 +11,10 @@ const RawMap = {
   "Medical Supply Category": 'categoryKey',
   "Resources": 'resources',
   "The Problem": 'problem',
-  ...ClassMaps.DISPLAY_NAME,
-  ...ClassMaps.IMAGE_URL,
-  ...ClassMaps.WEB_NAME,
-  ...sharedFields
+  ...DataConverter.classMaps.DISPLAY_NAME,
+  ...DataConverter.classMaps.IMAGE_URL,
+  ...DataConverter.classMaps.WEB_NAME,
+  ...DataConverter.sharedFields
 };
 
 const CardSections = [

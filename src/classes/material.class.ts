@@ -1,12 +1,12 @@
 import { BasicObject } from "../types/shared.type";
-import DataConverter, { ClassMaps } from "./data-converter";
+import DataConverter from "./data-converter";
 
 const RawMap = {
   'Detail': 'detail',
   'Full Project Name': 'name',
   'Function': 'fn',
   'Ideal Material Name': 'idealCaption',
-  ...ClassMaps.IMAGE_URL,
+  ...DataConverter.classMaps.IMAGE_URL,
 };
 
 export class Material {

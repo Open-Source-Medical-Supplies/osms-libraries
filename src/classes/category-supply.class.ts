@@ -1,11 +1,11 @@
 import { BasicObject } from "../types/shared.type";
-import DataConverter, { ClassMaps, sharedFields } from "./data-converter";
+import DataConverter from "./data-converter";
 
 const RawMap = {
-  "CoverImage": ClassMaps.imageURL,
-  ...ClassMaps.DISPLAY_NAME,
-  ...ClassMaps.WEB_NAME,
-  ...sharedFields
+  "CoverImage": DataConverter.classMaps.imageURL,
+  ...DataConverter.classMaps.DISPLAY_NAME,
+  ...DataConverter.classMaps.WEB_NAME,
+  ...DataConverter.sharedFields
 };
 
 export class CategorySupply {

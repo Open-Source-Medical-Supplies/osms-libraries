@@ -1,5 +1,5 @@
 import { BasicObject } from "../types/shared.type";
-import DataConverter, { sharedFields, ClassMaps } from "./data-converter";
+import DataConverter from "./data-converter";
 
 const RawMap = {
   "Attribution Organization": 'attributionOrg',
@@ -8,9 +8,9 @@ const RawMap = {
   "Creator": 'creator',
   "Description": 'description',
   "Difficulty": 'difficulty',
-  "Full Project Name": ClassMaps.displayName,
+  "Full Project Name": DataConverter.classMaps.displayName,
   "General Skills/Tools": 'generalSkillsTools',
-  "HeaderImage": ClassMaps.imageURL,
+  "HeaderImage": DataConverter.classMaps.imageURL,
   "Hyperlink Text": 'hyperLinkText',
   "Link": 'externalLink',
   "Medical Status": 'medicalStatus',
@@ -18,9 +18,9 @@ const RawMap = {
   "Project Type": 'Project',
   "Reviewed By": 'reviewedBy',
   "Use Case": 'useCase',
-  ...ClassMaps.DISPLAY_NAME,
-  ...ClassMaps.WEB_NAME,
-  ...sharedFields
+  ...DataConverter.classMaps.DISPLAY_NAME,
+  ...DataConverter.classMaps.WEB_NAME,
+  ...DataConverter.sharedFields
 };
 
 const getCrossLinks = (projects: Project[]) => projects.reduce((acc: BasicObject<Project[]>, project) => {
