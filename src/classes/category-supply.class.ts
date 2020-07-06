@@ -1,10 +1,11 @@
 import { BasicObject } from "../types/shared.type";
-import DataConverter from "./data-converter";
+import DataConverter, { ClassMaps, sharedFields } from "./data-converter";
 
 const RawMap = {
-  "CoverImage": 'imageURL',
-  "Display Name": 'name',
-  "web-name": 'key'
+  "CoverImage": ClassMaps.imageURL,
+  ...ClassMaps.DISPLAY_NAME,
+  ...ClassMaps.WEB_NAME,
+  ...sharedFields
 };
 
 export class CategorySupply {
@@ -13,6 +14,8 @@ export class CategorySupply {
   imageURL!: string;
   name!: string;
   key!: string;
+  isNew!: '0' | '1';
+  isUpdated!: '0' | '1';
   raw: BasicObject<any> = {};
 
   constructor(data: BasicObject<any>) {

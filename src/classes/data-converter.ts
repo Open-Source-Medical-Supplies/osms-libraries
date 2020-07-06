@@ -20,4 +20,17 @@ const DataConverter = {
   parseImageUrl:(img: Array<{thumbnails: {large: {url: string}}}>) => img[0].thumbnails.large.url
 }
 
+export const sharedFields = {
+  New: 'isNew',
+  Updated: 'isUpdated'
+}
+
+export const ClassMaps = {
+  imageURL: 'imageURL',
+  displayName: 'displayName',
+  WEB_NAME: {'web-name': 'key'},
+  IMAGE_URL: {'Image': 'imageURL'},
+  DISPLAY_NAME: {'Display Name': 'name'}
+}
+
 export default DataConverter;

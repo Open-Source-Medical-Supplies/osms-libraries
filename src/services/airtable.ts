@@ -22,7 +22,7 @@ async function getCategoryInfo(): Promise<AirtableData> {
 async function getCategorySupply() {
   return base('Medical Supply Categories').select({
     view: VIEWS.DEFAULT_GRID,
-    fields: ['web-name', 'Display Name', 'CoverImage']
+    fields: ['web-name', 'Display Name', 'CoverImage', 'New', 'Updated']
   });
 }
 

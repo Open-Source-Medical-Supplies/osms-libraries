@@ -1,5 +1,5 @@
 import { BasicObject } from "../types/shared.type";
-import DataConverter from "./data-converter";
+import DataConverter, { sharedFields, ClassMaps } from "./data-converter";
 
 const RawMap = {
   "Attribution Organization": 'attributionOrg',
@@ -8,10 +8,9 @@ const RawMap = {
   "Creator": 'creator',
   "Description": 'description',
   "Difficulty": 'difficulty',
-  "Display Name": 'name',
-  "Full Project Name": 'displayName',
+  "Full Project Name": ClassMaps.displayName,
   "General Skills/Tools": 'generalSkillsTools',
-  "HeaderImage": 'imageURL',
+  "HeaderImage": ClassMaps.imageURL,
   "Hyperlink Text": 'hyperLinkText',
   "Link": 'externalLink',
   "Medical Status": 'medicalStatus',
@@ -19,11 +18,13 @@ const RawMap = {
   "Project Type": 'Project',
   "Reviewed By": 'reviewedBy',
   "Use Case": 'useCase',
-  "web-name": 'webName'
+  ...ClassMaps.DISPLAY_NAME,
+  ...ClassMaps.WEB_NAME,
+  ...sharedFields
 };
 
 const getCrossLinks = (projects: Project[]) => projects.reduce((acc: BasicObject<Project[]>, project) => {
-  const name = project.webName; // 'web-name' here used to match against Project.categoryKey
+  const name = project.key; // 'web-name' here used to match against Project.categoryKey
   acc[name] ? acc[name].push(project) : acc[name] = [project];
   return acc;
 }, {});
@@ -50,7 +51,9 @@ export class Project {
   Project!: string;
   reviewedBy!: string;
   useCase!: string;
-  webName!: string;
+  key!: string;
+  isNew!: '0' | '1';
+  isUpdated!: '0' | '1';
   raw: BasicObject<any> = {};
 
   constructor(data: BasicObject<any>) {

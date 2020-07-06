@@ -1,19 +1,20 @@
 import { BasicObject } from "../types/shared.type";
-import DataConverter from "./data-converter";
+import DataConverter, { ClassMaps, sharedFields } from "./data-converter";
 
 const RawMap = {
   "Assembly/Fabrication Requirements": 'fabReqs',
-  "CategoryName": 'displayName',
-  "Image": 'imageURL',
+  "CategoryName": ClassMaps.displayName,
   "Current Global Resources": 'currentGlobalResources',
   "Disclaimer": 'disclaimer',
   "Disclaimer Designs": 'designDisclaimers',
-  "Display Name": 'name',
   "Engineering Requirements": 'engReqs',
   "Medical Supply Category": 'categoryKey',
   "Resources": 'resources',
   "The Problem": 'problem',
-  "web-name": 'key'
+  ...ClassMaps.DISPLAY_NAME,
+  ...ClassMaps.IMAGE_URL,
+  ...ClassMaps.WEB_NAME,
+  ...sharedFields
 };
 
 const CardSections = [
@@ -43,6 +44,8 @@ export class CategoryInfo {
   resources!: string;
   problem!: string;
   key!: string;
+  isNew!: '0' | '1';
+  isUpdated!: '0' | '1';
   raw: BasicObject<any> = {};
 
   constructor(data: BasicObject<any>) {
