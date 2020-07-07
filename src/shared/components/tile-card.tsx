@@ -1,7 +1,6 @@
-import React from 'react';
 import { Button } from 'primereact/button';
 import { Card } from 'primereact/card';
-import classNames from 'classnames';
+import React from 'react';
 
 export interface TileCardAction {
   fn: Function;
