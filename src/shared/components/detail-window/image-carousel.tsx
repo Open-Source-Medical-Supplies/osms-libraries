@@ -26,15 +26,14 @@ const ImageCarousel = <T extends any>({
     },
   ];
 
-  return (
-    links.length ? <Carousel
+  return links && links.length ?
+    <Carousel
       value={links}
       itemTemplate={cardTemplate}
       numVisible={3}
       numScroll={2}
       responsiveOptions={responsiveOptions}
-    ></Carousel> : null
-  );
+    /> : null;
 };
 
 export default ImageCarousel;

@@ -69,7 +69,10 @@ const CategoryLibFullCard = ({
 						? MarkdownSection(label, (selected as Indexable)[key])
 						: null
 				)}
-				{ImageCarousel<Project>({ links, cardTemplate: ICCardTemplate })}
+        {ImageCarousel<Project>({
+          links,
+          cardTemplate: ICCardTemplate
+        })}
 			</div>
 		</div>
 	);
