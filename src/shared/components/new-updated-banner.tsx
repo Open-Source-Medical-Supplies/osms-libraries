@@ -1,8 +1,8 @@
 import React from 'react';
 import { Project } from "../../classes/project.class";
 import { CategoryInfo } from "../../classes/category-info.class";
-import NewSvg from '../assets/new.svg';
-import UpdatedSvg from '../assets/updated.svg';
+import NewSvg from '../assets/new-outline.svg';
+import UpdatedSvg from '../assets/updated-outline.svg';
 
 const NewUpdatedBanner = ({data}: {data: Project | CategoryInfo}) => {
   const { isNew, isUpdated } = data;

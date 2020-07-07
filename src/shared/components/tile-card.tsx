@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from 'primereact/button';
 import { Card } from 'primereact/card';
+import classNames from 'classnames';
 
 export interface TileCardAction {
   fn: Function;
@@ -31,11 +32,12 @@ const TileCard = ({
   if (actionOnCard && actions && actions.length > 1) {
     console.warn('Only the first action can be used!');
   }
+  className = 'grayscale ' + className; 
 
   const headerImage = (
-    typeof imageURL !== 'string' ?
-      <div className='center-flex card-header__no-image'>No image available</div> :
-      <img className='centered-image card-header__image' alt={mainText} src={imageURL}/>
+    typeof imageURL === 'string' ?
+      <img className={'card-header__image centered-image'} alt={mainText} src={imageURL}/> :
+      <div className={'card-header__no-image center-flex'}>No image available</div>
   );
 
   const footer = (

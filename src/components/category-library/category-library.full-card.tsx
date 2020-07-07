@@ -50,6 +50,7 @@ const CategoryLibFullCard = ({
 
 		return (
 			<TileCard
+        className={'fullcard-carousel-cards'}
 				mainText={displayName}
 				imageURL={imageURL}
 				buttonIcon="external-link"
