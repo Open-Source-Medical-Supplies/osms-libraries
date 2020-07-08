@@ -20,10 +20,7 @@ async function getCategoryInfo(): Promise<AirtableData> {
 }
 
 async function getCategorySupply() {
-  return base('Medical Supply Categories').select({
-    view: VIEWS.DEFAULT_GRID,
-    fields: ['web-name', 'Display Name', 'CoverImage', 'New', 'Updated']
-  });
+  return base('Medical Supply Categories').select({view: VIEWS.DEFAULT_GRID});
 }
 
 async function getProjects(): Promise<AirtableData> {
@@ -68,7 +65,7 @@ const callATbase = async<T>(
 
 const filterRecords = (r: any): any[] => r
   .map(({fields}: {fields: any[]}) => fields)
-  .filter((field: {staging: boolean}) => field.staging !== true);
+  .filter((field: any) => !field.staging || !field.Staging);
 
 export const AirtableHelpers = {
   filterRecords,
