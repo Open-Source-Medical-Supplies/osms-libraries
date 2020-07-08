@@ -1,8 +1,8 @@
-import {API_KEY} from '../env.js';
 import { Constructor } from '../types/shared.type';
-
+import ENV from '../env';
 const Airtable = require('airtable');
-const base = new Airtable({apiKey: API_KEY}).base('apppSjiUMTolFIo1P');
+
+const base = new Airtable({ apiKey: ENV.AT_KEY }).base('apppSjiUMTolFIo1P');
 
 const VIEWS = {
   GRID_VIEW: 'Grid view',
