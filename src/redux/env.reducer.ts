@@ -19,7 +19,7 @@ export const envReducer = (
   switch(action.type) {
     case SET_ENV:
       return {
-        isProd: /open-source-medical-supplies/.test(window.location.href),
+        isProd: /open-source-medical-supplies|opensourcemedicalsupplies/.test(window.location.href),
         isMobile: detectMobile()
       }
     default:
