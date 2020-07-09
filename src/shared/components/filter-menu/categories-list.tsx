@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { CategorySupply } from "../../../classes/category-supply.class";
 import { empty, notEmpty } from "../../utility/general.utility";
 import TileCard from "../tile-card";
+import { CategoryInfo } from "../../../classes/category-info.class";
 
 /* eslint-disable react-hooks/exhaustive-deps */
 type MouseEvent = React.MouseEvent<HTMLElement>;
@@ -15,10 +16,13 @@ const CategoriesList = (
   }: {
     setFilterState: Function,
     categoriesFilters: any,
-    categories: {}[]
+    categories: CategorySupply[]
   }
 ) => {
   const [toggleState, setToggleState] = useState<{[k: string]: boolean}>({});
+
+  // ensure category list is sorted alphabetically
+  categories = categories.sort((a, b) => a.name.localeCompare(b.name));
 
   useEffect(() => {
     // ensure deactivated toggles on selection-clear
