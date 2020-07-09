@@ -1,8 +1,8 @@
-import {API_KEY} from '../env.js';
 import { Constructor } from '../types/shared.type';
-
+import ENV from '../env';
 const Airtable = require('airtable');
-const base = new Airtable({apiKey: API_KEY}).base('apppSjiUMTolFIo1P');
+
+const base = new Airtable({ apiKey: ENV.AT_KEY }).base('apppSjiUMTolFIo1P');
 
 const VIEWS = {
   GRID_VIEW: 'Grid view',
@@ -20,10 +20,7 @@ async function getCategoryInfo(): Promise<AirtableData> {
 }
 
 async function getCategorySupply() {
-  return base('Medical Supply Categories').select({
-    view: VIEWS.DEFAULT_GRID,
-    fields: ['web-name', 'Display Name', 'CoverImage']
-  });
+  return base('Medical Supply Categories').select({view: VIEWS.DEFAULT_GRID});
 }
 
 async function getProjects(): Promise<AirtableData> {
@@ -68,7 +65,7 @@ const callATbase = async<T>(
 
 const filterRecords = (r: any): any[] => r
   .map(({fields}: {fields: any[]}) => fields)
-  .filter((field: {staging: boolean}) => field.staging !== true);
+  .filter((field: any) => !field.staging || !field.Staging);
 
 export const AirtableHelpers = {
   filterRecords,

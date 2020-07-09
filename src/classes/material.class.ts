@@ -6,7 +6,7 @@ const RawMap = {
   'Full Project Name': 'name',
   'Function': 'fn',
   'Ideal Material Name': 'idealCaption',
-  'Image': 'imageURL'
+  ...DataConverter.classMaps.IMAGE_URL,
 };
 
 export class Material {

@@ -11,16 +11,16 @@ interface CardContainerType {
   isMobile: boolean;
 }
 
-const CardContainer = ({records, cardChange, selected, isMobile}: CardContainerType) => {
+const CardContainer: React.FC<CardContainerType> = ({records, cardChange, selected, isMobile}) => {
   const MappedCard = (data: Project | CategoryInfo) => {
     const key = data instanceof Project ? data.baseID :  data.categoryKey;
-   return <ProjectCard
+    return <ProjectCard
       key={key}
       data={data}
       isMobile={isMobile}
       setCard={cardChange}
       selected={selected}/>
-};
+  };
 
   return records.length ?
     <DataView value={records} layout='grid' itemTemplate={MappedCard} /> :

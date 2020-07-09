@@ -50,6 +50,7 @@ const CategoryLibFullCard = ({
 
 		return (
 			<TileCard
+        className={'fullcard-carousel-cards'}
 				mainText={displayName}
 				imageURL={imageURL}
 				buttonIcon="external-link"
@@ -68,7 +69,10 @@ const CategoryLibFullCard = ({
 						? MarkdownSection(label, (selected as Indexable)[key])
 						: null
 				)}
-				{ImageCarousel<Project>({ links, cardTemplate: ICCardTemplate })}
+        {ImageCarousel<Project>({
+          links,
+          cardTemplate: ICCardTemplate
+        })}
 			</div>
 		</div>
 	);

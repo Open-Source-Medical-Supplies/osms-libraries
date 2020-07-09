@@ -34,7 +34,7 @@ const CategoryLibrary: React.FC = () => {
   dispatch({type: ActiveLib.CATEGORY});
   
   let [state, baseSetState] = useState(StateDefault);
-  const isMobile = useSelector<RootState, boolean>(({checkMobile}) => checkMobile);
+  const isMobile = useSelector<RootState, boolean>(({env}) => env.isMobile);
   const setState = (props: Partial<typeof StateDefault>) => baseSetState({...state, ...props});
   const setLoadingState = (d: Partial<typeof StateDefault>) => setState({loading: false, ...d});
   const hide = () => setState({selected: undefined, visible: false});
@@ -53,6 +53,7 @@ const CategoryLibrary: React.FC = () => {
   useEffect(() => {
     if (!state.selected) { return; }
     const key = state.selected.displayName;
+    debugger
     setState({selectedProjects: state.projectsByCategory[key]});
   }, [state.selected]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -60,7 +61,7 @@ const CategoryLibrary: React.FC = () => {
   const rightFlex = `${state.visible ? 5 : 0} 0 ${isMobile ? '0%' : '80%'}`;
 
   return (
-    <div style={{display: 'flex'}}>
+    <div id='category-library' className='library-container'>
       <div id='app__left-column' className='flex-column' style={{ flex: leftFlex }}>
         <SearchBar _records={state._records} setState={setState} />
         <div className='divider-1'></div>

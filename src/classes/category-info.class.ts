@@ -3,17 +3,18 @@ import DataConverter from "./data-converter";
 
 const RawMap = {
   "Assembly/Fabrication Requirements": 'fabReqs',
-  "CategoryName": 'displayName',
-  "Image": 'imageURL',
+  "CategoryName": DataConverter.classMaps.displayName,
   "Current Global Resources": 'currentGlobalResources',
   "Disclaimer": 'disclaimer',
   "Disclaimer Designs": 'designDisclaimers',
-  "Display Name": 'name',
   "Engineering Requirements": 'engReqs',
   "Medical Supply Category": 'categoryKey',
   "Resources": 'resources',
   "The Problem": 'problem',
-  "web-name": 'key'
+  ...DataConverter.classMaps.DISPLAY_NAME,
+  ...DataConverter.classMaps.IMAGE_URL,
+  ...DataConverter.classMaps.WEB_NAME,
+  ...DataConverter.sharedFields
 };
 
 const CardSections = [
@@ -43,6 +44,8 @@ export class CategoryInfo {
   resources!: string;
   problem!: string;
   key!: string;
+  isNew!: '0' | '1';
+  isUpdated!: '0' | '1';
   raw: BasicObject<any> = {};
 
   constructor(data: BasicObject<any>) {

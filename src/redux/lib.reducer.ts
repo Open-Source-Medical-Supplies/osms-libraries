@@ -1,15 +1,14 @@
+import { Action } from 'redux';
 import ActiveLib from '../types/lib.enum';
 
-const libReducer = (
+export const libReducer = (
   state = ActiveLib.CATEGORY,
-  { type }: { type: ActiveLib }
+  action: Action<ActiveLib>
 ) => {
-  switch (type) {
+  switch (action.type) {
     case ActiveLib.CATEGORY: case ActiveLib.PROJECT:
-      return type
+      return action.type
     default:
       return state;
   }
 }
-
-export default libReducer;

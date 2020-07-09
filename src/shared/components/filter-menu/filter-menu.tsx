@@ -7,6 +7,7 @@ import { FilterState } from './filter-menu.interface';
 import ClearFilters from './clear-filers';
 import { CategoryComparator, createUUID } from '../../utility/general.utility';
 import { parseFilterMenu, parseCategories } from '../../../services/filter-menu.service';
+import './_filter-menu.scss';
 
 /* eslint-disable react-hooks/exhaustive-deps */
 

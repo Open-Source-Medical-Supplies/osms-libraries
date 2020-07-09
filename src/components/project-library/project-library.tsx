@@ -38,7 +38,7 @@ const ProjectLibrary: React.FC = () => {
   dispatch({type: ActiveLib.PROJECT});
 
   let [state, baseSetState] = useState(StateDefault);
-  const isMobile = useSelector<RootState, boolean>(({checkMobile}) => checkMobile);
+  const isMobile = useSelector<RootState, boolean>(({env}) => env.isMobile);
   const setState = (props: Partial<typeof StateDefault>) => baseSetState({...state, ...props});
   const setLoadingState = (d: Partial<typeof StateDefault>) => setState({loading: false, ...d});
   const hide = () => setState({selected: undefined, visible: false});
@@ -63,7 +63,7 @@ const ProjectLibrary: React.FC = () => {
   }, [state.selected]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div style={{display: 'flex'}}>
+    <div id='project-library' className='library-container'>
      <div id='app__filter-menu' style={{flex: 1, marginRight: '0.5rem'}}>
        <FilterMenu state={state} setState={setState}/>
      </div>
