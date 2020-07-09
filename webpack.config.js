@@ -16,12 +16,12 @@ module.exports = {
     "react-redux": "ReactRedux",
     "redux": "Redux"
   },
-  module: {
-    rules: [
-      {
-        test: /\.svg$/,
-        use: ['@svgr/webpack', 'url-loader']
-      }
-    ]
-  }
+  // module: {
+  //   rules: [
+  //     {
+  //       test: /\.svg$/,
+  //       use: ['@svgr/webpack', 'url-loader']
+  //     }
+  //   ]
+  // }
 };

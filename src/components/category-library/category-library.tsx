@@ -34,7 +34,7 @@ const CategoryLibrary: React.FC = () => {
   dispatch({type: ActiveLib.CATEGORY});
   
   let [state, baseSetState] = useState(StateDefault);
-  const isMobile = useSelector<RootState, boolean>(({checkMobile}) => checkMobile);
+  const isMobile = useSelector<RootState, boolean>(({env}) => env.isMobile);
   const setState = (props: Partial<typeof StateDefault>) => baseSetState({...state, ...props});
   const setLoadingState = (d: Partial<typeof StateDefault>) => setState({loading: false, ...d});
   const hide = () => setState({selected: undefined, visible: false});
