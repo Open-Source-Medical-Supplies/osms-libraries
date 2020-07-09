@@ -113,15 +113,17 @@ const checkAttributes = (attrs: string[], projectJSON: any, flatNodes: any) => {
   return false;
 };
 
+const strMatches = (match: string, target: string) => match.toLowerCase().includes(target.toLowerCase());
+
 const checkSearchString = (
   target: string,
   projectJSON: Project
-) => {
+): boolean => {
   if (target.length) {
     const { name, displayName } = projectJSON;
-    return (
-      name.toLowerCase().includes(target.toLowerCase()) ||
-      displayName.toLowerCase().includes(target.toLowerCase())
+    return !!(
+      (name && strMatches(name, target)) ||
+      (displayName && strMatches(displayName, target))
     );
   }
   return false;
