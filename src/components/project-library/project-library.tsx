@@ -63,7 +63,7 @@ const ProjectLibrary: React.FC = () => {
   }, [state.selected]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div style={{display: 'flex'}}>
+    <div id='project-library' className='library-container'>
      <div id='app__filter-menu' style={{flex: 1, marginRight: '0.5rem'}}>
        <FilterMenu state={state} setState={setState}/>
      </div>

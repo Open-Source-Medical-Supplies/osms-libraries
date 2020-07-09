@@ -61,7 +61,7 @@ const CategoryLibrary: React.FC = () => {
   const rightFlex = `${state.visible ? 5 : 0} 0 ${isMobile ? '0%' : '80%'}`;
 
   return (
-    <div style={{display: 'flex'}}>
+    <div id='category-library' className='library-container'>
       <div id='app__left-column' className='flex-column' style={{ flex: leftFlex }}>
         <SearchBar _records={state._records} setState={setState} />
         <div className='divider-1'></div>
