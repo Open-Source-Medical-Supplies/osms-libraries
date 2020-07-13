@@ -66,7 +66,6 @@ const callATbase = async<T>(
 const filterRecords = (r: any): any[] => r
   .map(({fields}: {fields: any[]}) => fields)
   .filter((field: any) => {
-    debugger
     const val = field.staging || field.Staging;
     return !(val instanceof Array ? val[0] : val);
   });
