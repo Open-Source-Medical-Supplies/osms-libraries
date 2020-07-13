@@ -53,7 +53,6 @@ const CategoryLibrary: React.FC = () => {
   useEffect(() => {
     if (!state.selected) { return; }
     const key = state.selected.displayName;
-    debugger
     setState({selectedProjects: state.projectsByCategory[key]});
   }, [state.selected]); // eslint-disable-line react-hooks/exhaustive-deps
 

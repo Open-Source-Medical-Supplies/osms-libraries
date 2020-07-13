@@ -65,7 +65,10 @@ const callATbase = async<T>(
 
 const filterRecords = (r: any): any[] => r
   .map(({fields}: {fields: any[]}) => fields)
-  .filter((field: any) => !field.staging || !field.Staging);
+  .filter((field: any) => {
+    const val = field.staging || field.Staging;
+    return !(val instanceof Array ? val[0] : val);
+  });
 
 export const AirtableHelpers = {
   filterRecords,

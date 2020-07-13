@@ -15,10 +15,13 @@ const CategoriesList = (
   }: {
     setFilterState: Function,
     categoriesFilters: any,
-    categories: {}[]
+    categories: CategorySupply[]
   }
 ) => {
   const [toggleState, setToggleState] = useState<{[k: string]: boolean}>({});
+
+  // ensure category list is sorted alphabetically
+  categories = categories.sort((a, b) => a.name.localeCompare(b.name));
 
   useEffect(() => {
     // ensure deactivated toggles on selection-clear
