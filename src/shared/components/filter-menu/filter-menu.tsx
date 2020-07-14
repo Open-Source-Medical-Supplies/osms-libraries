@@ -1,12 +1,15 @@
+import { Button } from 'primereact/button';
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../redux/root.reducer';
+import { parseCategories, parseFilterMenu } from '../../../services/filter-menu.service';
+import { CategoryComparator, createUUID } from '../../utility/general.utility';
 import AttributesList from './attributes-list';
 import CategoriesList from './categories-list';
-import { filterBy } from './filter-menu.utilities';
-import { SearchBar } from './search-bar';
-import { FilterState } from './filter-menu.interface';
 import ClearFilters from './clear-filers';
-import { CategoryComparator, createUUID } from '../../utility/general.utility';
-import { parseFilterMenu, parseCategories } from '../../../services/filter-menu.service';
+import { FilterState } from './filter-menu.interface';
+import { filterBy } from './filter-menu.utilities';
+import { FilterSearchBar } from './filter-search-bar';
 import './_filter-menu.scss';
 
 /* eslint-disable react-hooks/exhaustive-deps */
@@ -28,10 +31,13 @@ const FilterStateDefault: FilterState = {
     categoriesFilters: {},
     searchBar: ''
   },
-  isFiltering: false
+  isFiltering: false,
+  showMobileFilters: false
 };
 
 const FilterMenu = ({state, setState}: {state: any, setState: Function}) => {
+  const isMobile = useSelector<RootState, boolean>(({env}) => env.isMobile);
+  
   const {_records, records } = state;
   const [filterState, baseSetFilterState] = useState(FilterStateDefault);
   const setFilterState: SetFilterFn = (props: Partial<FilterState>) => {
@@ -90,13 +96,15 @@ const FilterMenu = ({state, setState}: {state: any, setState: Function}) => {
     filterState.searchBar
   ]);
 
-  return (
+  const DesktopFormat = (
     <div>
       <div className='search-bar-wrapper'>
-        <SearchBar
+        <FilterSearchBar
           searchBarText={filterState.searchBar}
           setFilterState={setFilterState}/>
-        <ClearFilters setFilterState={setFilterState} isFiltering={filterState.isFiltering} />
+        <ClearFilters
+          setFilterState={setFilterState}
+          isFiltering={filterState.isFiltering}/>
       </div>
       <div className='divider-1'></div>
       <CategoriesList
@@ -110,6 +118,31 @@ const FilterMenu = ({state, setState}: {state: any, setState: Function}) => {
         setSelection={setSelection}/>
     </div>
   );
+
+  // MOBILE
+  const toggleFilterMenus = () => setFilterState({
+    showMobileFilters: !state.showMobileFilters
+  });
+  const OpenMobileFitlers = () => (
+    <Button
+      onClick={() => toggleFilterMenus()}
+      icon='pi pi-bars'>
+    </Button>
+  );
+
+  const MobileFormat = (
+    <div className='search-bar-wrapper'>
+      <OpenMobileFitlers />
+      <FilterSearchBar
+        searchBarText={filterState.searchBar}
+        setFilterState={setFilterState}/>
+      <ClearFilters
+        setFilterState={setFilterState}
+        isFiltering={filterState.isFiltering}/>
+    </div>
+  );
+
+  return isMobile ? MobileFormat : DesktopFormat;
 };
 
 export default FilterMenu;

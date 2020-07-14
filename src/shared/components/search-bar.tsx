@@ -1,31 +1,41 @@
-import { InputText } from 'primereact/inputtext';
-import React, { useEffect, useState } from 'react';
-import { CategoryInfo } from '../../classes/category-info.class';
-import { Project } from '../../classes/project.class';
+import { InputText } from "primereact/inputtext";
+import React, { useEffect, useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
 
-const SearchBar = ({setState, _records}: {setState: Function, _records: Array<Project | CategoryInfo>}) => {
-  const [searchState, setSearchState] = useState('');
-  const onInputChange = (e: any) => setSearchState((e.target as HTMLInputElement).value); // PrimeReact is not typed well here it seems.
+export type SearchBarStateChange = (searchState: string) => any;
+
+const SearchBar = (props: {
+  onStateChange: SearchBarStateChange;
+  providedStr?: string;
+	id?: string;
+}) => {
+	const [searchState, setSearchState] = useState('');
+
+	useEffect(() => {
+    if (!!searchState && searchState.length) {
+      props.onStateChange(searchState);
+    }
+  }, [ searchState ]);
+	useEffect(() => {
+		// value provided is empty but the internal state is not => reset
+		if (props.providedStr && !props.providedStr.length && searchState.length > 1) {
+			setSearchState('');
+		}
+  }, [props.providedStr]);
   
-  useEffect(() => {
-    const filteredRecords = !searchState.length ? _records : _records.filter(record => {
-      const { displayName } = record;
-      return displayName.toLowerCase().includes(searchState.toLowerCase())
-    });
-    setState({records: filteredRecords});
-  }, [searchState]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  return (
-    <div id='app__search-bar' className='sticky-top-0' style={{zIndex: 10}}>
-      <span className='p-float-label'>
-        <label htmlFor='searchBar'>{searchState.length ? '' : 'Search'}</label>
-        <InputText id='searchBar'
-          style={{width: '100%'}}
-          onChange={onInputChange}
-          value={searchState}></InputText>
-      </span>
-    </div>
-  )
-}
+	return (
+		<div id={props.id || "search-bar"} className="sticky-top-0" style={{ zIndex: 20 }}>
+			<span className="p-float-label">
+				<label htmlFor="searchBar">{searchState.length ? "" : "Search"}</label>
+				<InputText
+					id="searchBar"
+					style={{ width: "100%" }}
+					onChange={(e: any) => setSearchState(e.target.value)}
+					value={searchState}
+				></InputText>
+			</span>
+		</div>
+	);
+};
 
 export default SearchBar;

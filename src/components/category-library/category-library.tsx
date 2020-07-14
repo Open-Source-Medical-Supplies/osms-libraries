@@ -6,7 +6,7 @@ import { fetchData } from '../../services/app.service';
 import CardContainer from '../../shared/components/card-container/card-container';
 import DetailWindow from '../../shared/components/detail-window/detail-window';
 import CategoryLibFullCard from './category-library.full-card';
-import SearchBar from '../../shared/components/search-bar';
+import CategorySearchBar from './category-search-bar';
 import { CategoryInfo } from '../../classes/category-info.class';
 import Loading from '../../shared/components/loading';
 import ActiveLib from '../../types/lib.enum';
@@ -62,7 +62,7 @@ const CategoryLibrary: React.FC = () => {
   return (
     <div id='category-library' className='library-container'>
       <div id='app__left-column' className='flex-column' style={{ flex: leftFlex }}>
-        <SearchBar _records={state._records} setState={setState} />
+        <CategorySearchBar _records={state._records} setState={setState} />
         <div className='divider-1'></div>
         <Loading loading={state.loading}>
           <CardContainer
