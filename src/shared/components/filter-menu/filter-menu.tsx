@@ -10,6 +10,7 @@ import ClearFilters from './clear-filers';
 import { FilterState } from './filter-menu.interface';
 import { filterBy } from './filter-menu.utilities';
 import { FilterSearchBar } from './filter-search-bar';
+import { Sidebar } from 'primereact/sidebar';
 import './_filter-menu.scss';
 
 /* eslint-disable react-hooks/exhaustive-deps */
@@ -96,6 +97,20 @@ const FilterMenu = ({state, setState}: {state: any, setState: Function}) => {
     filterState.searchBar
   ]);
 
+  const Filters = (
+    <React.Fragment>
+      <CategoriesList
+        categories={filterState.categories}
+        categoriesFilters={filterState.categoriesFilters}
+        setFilterState={setFilterState}/>
+      <div className='divider-1'></div>
+      <AttributesList
+        nodes={filterState.nodes}
+        nodeFilters={filterState.nodeFilters}
+        setSelection={setSelection}/>
+    </React.Fragment>
+  );
+
   const DesktopFormat = (
     <div>
       <div className='search-bar-wrapper'>
@@ -107,39 +122,39 @@ const FilterMenu = ({state, setState}: {state: any, setState: Function}) => {
           isFiltering={filterState.isFiltering}/>
       </div>
       <div className='divider-1'></div>
-      <CategoriesList
-        categories={filterState.categories}
-        categoriesFilters={filterState.categoriesFilters}
-        setFilterState={setFilterState}/>
-      <div className='divider-1'></div>
-      <AttributesList
-        nodes={filterState.nodes}
-        nodeFilters={filterState.nodeFilters}
-        setSelection={setSelection}/>
+      {Filters}
     </div>
   );
 
   // MOBILE
-  const toggleFilterMenus = () => setFilterState({
-    showMobileFilters: !state.showMobileFilters
-  });
+  const showFilterSidebar = () => setFilterState({ showMobileFilters: true });
+  const hideSidebar = () => setFilterState({ showMobileFilters: false });
   const OpenMobileFitlers = () => (
     <Button
-      onClick={() => toggleFilterMenus()}
+      style={{marginRight: '0.5rem'}}
+      onClick={showFilterSidebar}
       icon='pi pi-bars'>
     </Button>
   );
 
   const MobileFormat = (
-    <div className='search-bar-wrapper'>
-      <OpenMobileFitlers />
-      <FilterSearchBar
-        searchBarText={filterState.searchBar}
-        setFilterState={setFilterState}/>
-      <ClearFilters
-        setFilterState={setFilterState}
-        isFiltering={filterState.isFiltering}/>
-    </div>
+    <React.Fragment>
+      <div className='search-bar-wrapper'>
+        <OpenMobileFitlers />
+        <FilterSearchBar
+          searchBarText={filterState.searchBar}
+          setFilterState={setFilterState}/>
+        <ClearFilters
+          setFilterState={setFilterState}
+          isFiltering={filterState.isFiltering}/>
+      </div>
+      <Sidebar
+        position='left' className="ui-sidebar-lg"
+        visible={filterState.showMobileFilters}
+        onHide={hideSidebar}>
+        {Filters}
+      </Sidebar>
+    </React.Fragment>
   );
 
   return isMobile ? MobileFormat : DesktopFormat;

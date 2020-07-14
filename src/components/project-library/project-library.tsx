@@ -62,20 +62,39 @@ const ProjectLibrary: React.FC = () => {
     setState({selectedMaterials});
   }, [state.selected]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const DesktopFormat = (
+    <React.Fragment>
+      <div id='app__filter-menu' style={{flex: 1, marginRight: '0.5rem'}}>
+        <FilterMenu state={state} setState={setState}/>
+      </div>
+      <div id='app__card-container' style={{display: 'flex', flex: state.visible ? 2 : 4}}>
+          <Loading loading={state.loading} >
+            <CardContainer
+              isMobile={isMobile}
+              records={state.records}
+              cardChange={setState}
+              selected={state.selected as Project} />
+          </Loading>
+      </div>
+    </React.Fragment>
+  );
+
+  const MobileFormat = (
+    <div className='flex-column'>
+      <FilterMenu state={state} setState={setState}/>
+      <Loading loading={state.loading} >
+        <CardContainer
+          isMobile={isMobile}
+          records={state.records}
+          cardChange={setState}
+          selected={state.selected as Project} />
+      </Loading>
+    </div>
+  );
+
   return (
     <div id='project-library' className='library-container'>
-     <div id='app__filter-menu' style={{flex: 1, marginRight: '0.5rem'}}>
-       <FilterMenu state={state} setState={setState}/>
-     </div>
-     <div id='app__card-container' style={{display: 'flex', flex: state.visible ? 2 : 4}}>
-        <Loading loading={state.loading} >
-          <CardContainer
-            isMobile={isMobile}
-            records={state.records}
-            cardChange={setState}
-            selected={state.selected as Project} />
-        </Loading>
-     </div>
+      {isMobile ? MobileFormat : DesktopFormat}
      <div id='app__detail-window-container' style={{display: 'flex', flex: state.visible ? 2 : 0}}>
        <DetailWindow visible={state.visible} onHide={hide} className='p-sidebar-md'>
          <ProjectFullCard selected={state.selected as Project} materials={state.selectedMaterials}/>
