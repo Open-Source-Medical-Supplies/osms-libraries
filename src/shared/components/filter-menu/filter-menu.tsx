@@ -140,7 +140,7 @@ const FilterMenu = ({state, setState}: {state: any, setState: Function}) => {
 
   const MobileFormat = (
     <React.Fragment>
-      <div className='search-bar-wrapper'>
+      <div className='search-bar-wrapper sticky-top-0'>
         <OpenMobileFitlers />
         <FilterSearchBar
           className='mobile-search-bar'
@@ -152,10 +152,11 @@ const FilterMenu = ({state, setState}: {state: any, setState: Function}) => {
           isFiltering={filterState.isFiltering}/>
       </div>
       <Sidebar
-        position='left' style={{width: '40vw'}}
+        position='left'
+        fullScreen={true}
         visible={filterState.showMobileFilters}
         onHide={hideSidebar}>
-        <div className='mb-2-5'></div>
+        <div className='mb-3-5'></div>
         {Filters}
       </Sidebar>
     </React.Fragment>

@@ -40,3 +40,5 @@ $directions: (top: t, right: r, bottom: b, left: l);
 @include makeSpacing(1.5);
 @include makeSpacing(2);
 @include makeSpacing(2.5);
+@include makeSpacing(3);
+@include makeSpacing(3.5);

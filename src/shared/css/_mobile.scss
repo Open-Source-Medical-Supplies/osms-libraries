@@ -1,12 +1,9 @@
 .mobile-button {
   &__square {
-    min-height: 3rem !important;
-    height: 3rem !important;
-    min-width: 3rem !important;
+    @include btn-sq;
   }
 
   &__rec {
-    min-height: 3rem !important;
-    height: 3rem !important;
+    @include btn-rec;
   }
 }
