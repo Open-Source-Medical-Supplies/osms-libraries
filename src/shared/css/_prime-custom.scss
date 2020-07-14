@@ -29,6 +29,8 @@ div.p-dataview.p-component.p-dataview-grid > div.p-dataview-content {
 
     .p-tree {
       border: none;
+      width: 100%;
+      padding: 0.571em 0;
     }
   }
 
@@ -50,7 +52,7 @@ div.p-grid, .p-dataview.p-component.p-dataview-grid {
   margin: 0 !important;
 }
 
-.p-sidebar-right {
+.p-sidebar-right-custom {
   position: relative !important;
   height: 100vh;
   width: calc(100% - 0.5rem) !important;

@@ -12,6 +12,7 @@ import Loading from '../../shared/components/loading';
 import ActiveLib from '../../types/lib.enum';
 import { BasicObject } from '../../types/shared.type';
 import ProjectFullCard from './project-library.full-card';
+import { Sidebar } from 'primereact/sidebar';
 
 const StateDefault: {
   _records: []; // immutable
@@ -76,30 +77,40 @@ const ProjectLibrary: React.FC = () => {
               selected={state.selected as Project} />
           </Loading>
       </div>
+      <div id='app__detail-window-container' style={{display: 'flex', flex: state.visible ? 2 : 0}}>
+       <DetailWindow visible={state.visible} onHide={hide} className='p-sidebar-md'>
+         <ProjectFullCard selected={state.selected as Project} materials={state.selectedMaterials}/>
+       </DetailWindow>
+     </div>
     </React.Fragment>
   );
 
   const MobileFormat = (
-    <div className='flex-column' style={{width: '100%'}}>
-      <FilterMenu state={state} setState={setState}/>
-      <Loading loading={state.loading} >
-        <CardContainer
-          isMobile={isMobile}
-          records={state.records}
-          cardChange={setState}
-          selected={state.selected as Project} />
-      </Loading>
-    </div>
+
+    <React.Fragment>
+      <div className='flex-column' style={{width: '100%'}}>
+        <FilterMenu state={state} setState={setState}/>
+        <Loading loading={state.loading} >
+          <CardContainer
+            isMobile={isMobile}
+            records={state.records}
+            cardChange={setState}
+            selected={state.selected as Project} />
+        </Loading>
+      </div>
+    <Sidebar
+      position='right'
+      fullScreen={true}
+      visible={state.visible}
+      onHide={hide}>
+      <ProjectFullCard selected={state.selected as Project} materials={state.selectedMaterials}/>
+    </Sidebar>
+  </React.Fragment>
   );
 
   return (
     <div id='project-library' className='library-container'>
       {isMobile ? MobileFormat : DesktopFormat}
-     <div id='app__detail-window-container' style={{display: 'flex', flex: state.visible ? 2 : 0}}>
-       <DetailWindow visible={state.visible} onHide={hide} className='p-sidebar-md'>
-         <ProjectFullCard selected={state.selected as Project} materials={state.selectedMaterials}/>
-       </DetailWindow>
-     </div>
     </div>
     );
 }

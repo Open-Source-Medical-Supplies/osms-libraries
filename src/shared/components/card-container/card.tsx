@@ -41,12 +41,12 @@ const ProjectCard: React.FC<{
   }
 
   let sizing = 'p-col-2'; // default: show all, not mobile
-  if (!!selectedName) {
-    // condense to share w/ fullcard
-    sizing = lib === ActiveLib.PROJECT ? 'p-col-6': 'p-col-12';
-  } else if (isMobile) {
+  if (isMobile) {
     // show all, mobile
     sizing = 'p-col-4';
+  } else if (!!selectedName) {
+    // condense to share w/ fullcard
+    sizing = lib === ActiveLib.PROJECT ? 'p-col-6': 'p-col-12';
   }
 
   return (

@@ -223,7 +223,7 @@ export default class DetailWindow extends React.Component<SidebarProps,any> {
 
   render() {
     const className = classNames(
-      "p-sidebar p-component",
+      "p-sidebar p-component p-sidebar-right-custom",
       this.props.className,
       "p-sidebar-" + this.props.position,
       {

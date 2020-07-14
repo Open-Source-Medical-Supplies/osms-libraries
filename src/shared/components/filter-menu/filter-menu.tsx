@@ -152,7 +152,7 @@ const FilterMenu = ({state, setState}: {state: any, setState: Function}) => {
           isFiltering={filterState.isFiltering}/>
       </div>
       <Sidebar
-        position='left' className="ui-sidebar-lg"
+        position='left' style={{width: '40vw'}}
         visible={filterState.showMobileFilters}
         onHide={hideSidebar}>
         <div className='mb-2-5'></div>
