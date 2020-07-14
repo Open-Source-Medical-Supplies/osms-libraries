@@ -94,7 +94,9 @@ const FilterMenu = ({state, setState}: {state: any, setState: Function}) => {
   }, [
     catFilterBool,
     nodeFiltersBool,
-    filterState.searchBar
+    filterState.searchBar,
+    filterState.nodeFilters,
+    filterState.categoriesFilters
   ]);
 
   const Filters = (

@@ -11,12 +11,11 @@ const ClearFilters = ({
   isFiltering: boolean;
   className?: string;
 }) => {
-  const clearFilters = () =>
-    setFilterState({
-      nodeFilters: {},
-      categoriesFilters: {},
-      searchBar: "",
-    });
+  const clearFilters = () => setFilterState({
+    nodeFilters: {},
+    categoriesFilters: {},
+    searchBar: "",
+  });
 
   return <Button
     className={className}
