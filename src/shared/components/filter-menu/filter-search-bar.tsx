@@ -4,10 +4,12 @@ import { SetFilterFn } from "./filter-menu";
 
 export const FilterSearchBar = ({
 	searchBarText,
-	setFilterState,
+  setFilterState,
+  className
 }: {
 	searchBarText: string;
-	setFilterState: SetFilterFn;
+  setFilterState: SetFilterFn;
+  className?: string;
 }) => {
 	const update: SearchBarStateChange = (searchState) => {
     setFilterState({
@@ -18,5 +20,5 @@ export const FilterSearchBar = ({
     });
   };
 
-  return <SearchBar onStateChange={update} id="search-bar-container"/>;
+  return <SearchBar className={className} onStateChange={update} id="search-bar-container"/>;
 };

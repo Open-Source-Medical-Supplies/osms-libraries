@@ -7,8 +7,12 @@
     height: 31px;
     width: 100%;
 
-    #searchBar {
-      height: 32.6px;
-    }
   }
+  #searchBar {
+    height: 32.6px;
+  }
+}
+
+.mobile-search-bar#search-bar-container #searchBar {
+  height: 3rem;
 }

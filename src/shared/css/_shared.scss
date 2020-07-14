@@ -12,6 +12,9 @@
 .divider-1 {
   margin-bottom: 1rem;
 }
+.divider-2 {
+  margin-bottom: 2rem;
+}
 
 .sticky-top-0 {
   top: 0;
@@ -50,19 +53,19 @@
 }
 
 .close-button {
-  padding: 0.5rem !important;
-  background: $primary !important;
-  border-radius: 4px !important;
   position: absolute;
   top: 0.5rem;
   right: 1rem;
   z-index: 10000;
+}
+span.p-sidebar-close-icon.pi.pi-times {
+  padding: 0.25rem !important;
+  background: $primary !important;
+  border-radius: 4px !important;
+  color: white;
 
   &:hover {
     opacity: 0.5;
-  }
-  span {
-    color: white;
   }
 }
 

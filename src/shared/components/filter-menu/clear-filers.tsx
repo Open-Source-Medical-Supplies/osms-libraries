@@ -5,9 +5,11 @@ import { SetFilterFn } from "./filter-menu";
 const ClearFilters = ({
   setFilterState,
   isFiltering,
+  className
 }: {
   setFilterState: SetFilterFn;
   isFiltering: boolean;
+  className?: string;
 }) => {
   const clearFilters = () =>
     setFilterState({
@@ -16,7 +18,11 @@ const ClearFilters = ({
       searchBar: "",
     });
 
-  return <Button icon="pi pi-undo" disabled={!isFiltering} onClick={clearFilters} />;
+  return <Button
+    className={className}
+    icon='pi pi-undo'
+    disabled={!isFiltering}
+    onClick={clearFilters} />;
 };
 
 export default ClearFilters;

@@ -12,8 +12,9 @@
   overflow: auto;
 }
 
-.p-panel .p-dataview-content {
-  padding: 0.571em 0 !important;
+.p-panel .p-dataview-content,
+div.p-dataview .p-dataview-content {
+  padding: 0.571em 0.25em !important;
 }
 
 div.p-dataview.p-component.p-dataview-grid > div.p-dataview-content {
@@ -43,6 +44,10 @@ div.p-dataview.p-component.p-dataview-grid > div.p-dataview-content {
 
 div.p-grid, .p-dataview.p-component.p-dataview-grid {
   width: 100%;
+}
+
+.p-grid {
+  margin: 0 !important;
 }
 
 .p-sidebar-right {

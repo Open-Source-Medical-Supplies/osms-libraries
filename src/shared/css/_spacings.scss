@@ -1,0 +1,42 @@
+$spacings: (margin: m, padding: p);
+$directions: (top: t, right: r, bottom: b, left: l);
+
+@mixin makeSpacing($rems) {
+  $sizing: 0;
+  $remString: #{$rems};
+  $splitStr: str-index($remString, '.');
+
+  @if ($splitStr) {
+    $front: str-slice($remString, $splitStr - str-length($remString) + 1, $splitStr - 1);
+    $back: str-slice($remString, $splitStr + 1, -1);
+    $sizing: $front + '-' + $back;
+  } @else {
+    $sizing: $remString;
+  }
+	
+	@each $spc, $spc-a in $spacings {
+		@each $dir, $dir-a in $directions {
+			.#{$spc-a}#{$dir-a}-#{$sizing} {
+				#{$spc}-#{$dir}: #{$rems}rem;
+			}
+		}
+		.#{$spc-a}x-#{$sizing} {
+			@extend .#{$spc-a}r-#{$sizing};
+			@extend .#{$spc-a}l-#{$sizing};
+		}
+		.#{$spc-a}y-#{$sizing} {
+			@extend .#{$spc-a}t-#{$sizing};
+			@extend .#{$spc-a}b-#{$sizing};
+		}
+		.#{$spc-a}-#{$sizing} {
+			@extend .#{$spc-a}x-#{$sizing};
+			@extend .#{$spc-a}y-#{$sizing};
+		}
+	}
+}
+
+@include makeSpacing(0.5);
+@include makeSpacing(1);
+@include makeSpacing(1.5);
+@include makeSpacing(2);
+@include makeSpacing(2.5);

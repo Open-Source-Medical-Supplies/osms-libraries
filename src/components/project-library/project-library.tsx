@@ -80,7 +80,7 @@ const ProjectLibrary: React.FC = () => {
   );
 
   const MobileFormat = (
-    <div className='flex-column'>
+    <div className='flex-column' style={{width: '100%'}}>
       <FilterMenu state={state} setState={setState}/>
       <Loading loading={state.loading} >
         <CardContainer

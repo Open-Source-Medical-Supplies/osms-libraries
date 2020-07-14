@@ -103,7 +103,7 @@ const FilterMenu = ({state, setState}: {state: any, setState: Function}) => {
         categories={filterState.categories}
         categoriesFilters={filterState.categoriesFilters}
         setFilterState={setFilterState}/>
-      <div className='divider-1'></div>
+      <div className='mb-1'></div>
       <AttributesList
         nodes={filterState.nodes}
         nodeFilters={filterState.nodeFilters}
@@ -121,7 +121,7 @@ const FilterMenu = ({state, setState}: {state: any, setState: Function}) => {
           setFilterState={setFilterState}
           isFiltering={filterState.isFiltering}/>
       </div>
-      <div className='divider-1'></div>
+      <div className='mb-1'></div>
       {Filters}
     </div>
   );
@@ -132,6 +132,7 @@ const FilterMenu = ({state, setState}: {state: any, setState: Function}) => {
   const OpenMobileFitlers = () => (
     <Button
       style={{marginRight: '0.5rem'}}
+      className='mobile-button__square'
       onClick={showFilterSidebar}
       icon='pi pi-bars'>
     </Button>
@@ -142,9 +143,11 @@ const FilterMenu = ({state, setState}: {state: any, setState: Function}) => {
       <div className='search-bar-wrapper'>
         <OpenMobileFitlers />
         <FilterSearchBar
+          className='mobile-search-bar'
           searchBarText={filterState.searchBar}
           setFilterState={setFilterState}/>
         <ClearFilters
+          className='mobile-button__square'
           setFilterState={setFilterState}
           isFiltering={filterState.isFiltering}/>
       </div>
@@ -152,6 +155,7 @@ const FilterMenu = ({state, setState}: {state: any, setState: Function}) => {
         position='left' className="ui-sidebar-lg"
         visible={filterState.showMobileFilters}
         onHide={hideSidebar}>
+        <div className='mb-2-5'></div>
         {Filters}
       </Sidebar>
     </React.Fragment>
