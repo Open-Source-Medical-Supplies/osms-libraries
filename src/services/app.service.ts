@@ -2,18 +2,18 @@ import get from "lodash.get";
 import { CategoryInfo } from "../classes/category-info.class";
 import { Material } from "../classes/material.class";
 import { Project } from "../classes/project.class";
-import ActiveLib from "../types/lib.enum";
-import { BasicObject } from "../types/shared.type";
-import { AirtableCalls, AirtableHelpers } from "./airtable";
 import { toDict } from "../shared/utility/general.utility";
 import { getParam } from "../shared/utility/param-handling";
+import ActiveLib from "../types/lib.enum";
+import { BasicObject } from "../types/shared.type";
+import { AirtableHelpers, AirtableSupplyCalls } from "./airtable";
 
 const getCategories = async (): Promise<{
 	records: CategoryInfo[];
 	_records: CategoryInfo[];
 }> => {
 	const records = await AirtableHelpers.callATbase<CategoryInfo>(
-		AirtableCalls.getCategoryInfo,
+		AirtableSupplyCalls.getCategoryInfo,
 		CategoryInfo
 	);
 	return { records, _records: records };
@@ -24,7 +24,7 @@ const getProjects = async (): Promise<{
 	_records: Project[];
 }> => {
 	const records = await AirtableHelpers.callATbase<Project>(
-		AirtableCalls.getProjects,
+		AirtableSupplyCalls.getProjects,
 		Project
 	);
 	return { records, _records: records };
@@ -34,7 +34,7 @@ const getLinks = async (): Promise<{
 	projectsByCategory: BasicObject<Project[]>;
 }> => {
 	const data = await AirtableHelpers.callATbase<Project>(
-		AirtableCalls.getProjects,
+		AirtableSupplyCalls.getProjects,
 		Project
 	);
 	return { projectsByCategory: toDict<Project>(data, 'name') };
@@ -42,7 +42,7 @@ const getLinks = async (): Promise<{
 
 const getBoM = async (): Promise<{ materials: {} }> => {
 	const materials = await AirtableHelpers.callATbase<Material>(
-		AirtableCalls.getBoM,
+		AirtableSupplyCalls.getBoM,
 		Material
 	);
 	return { materials: toDict<Material>(materials, 'name') };
@@ -52,7 +52,7 @@ const AppServices = {
 	getCategories,
 	getProjects,
 	getLinks,
-	getBoM,
+  getBoM
 };
 type AppServiceKeys = keyof typeof AppServices;
 

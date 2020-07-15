@@ -1,8 +1,9 @@
-import { Constructor } from '../types/shared.type';
 import ENV from '../env';
 const Airtable = require('airtable');
 
-const base = new Airtable({ apiKey: ENV.AT_KEY }).base('apppSjiUMTolFIo1P');
+const atObj = new Airtable({ apiKey: ENV.AT_KEY }); 
+const suppliesBase = atObj.base('apppSjiUMTolFIo1P');
+const supportBase = atObj.base('appOzIsZ9yJckwyo6');
 
 const VIEWS = {
   GRID_VIEW: 'Grid view',
@@ -13,46 +14,58 @@ const VIEWS = {
 export interface AirtableData {
   all: () => Promise<any[]>
 }
-export type AirtableCallKeys = keyof typeof AirtableCalls;
+export type AirtableCalls = typeof AirtableSupplyCalls & typeof AirtableSupportingCalls;
+export type AirtableCallKeys = keyof typeof AirtableSupplyCalls | keyof typeof AirtableSupportingCalls;
 
 async function getCategoryInfo(): Promise<AirtableData> {
-  return base('Category Information').select({ view: VIEWS.GRID_VIEW });
+  return suppliesBase('Category Information').select({ view: VIEWS.GRID_VIEW });
 }
 
-async function getCategorySupply() {
-  return base('Medical Supply Categories').select({view: VIEWS.DEFAULT_GRID});
+async function getCategorySupply(): Promise<AirtableData> {
+  return suppliesBase('Medical Supply Categories').select({ view: VIEWS.DEFAULT_GRID });
 }
 
 async function getProjects(): Promise<AirtableData> {
-  return base('Engineered Project Pages').select({ view: VIEWS.DEFAULT_VIEW });
+  return suppliesBase('Engineered Project Pages').select({ view: VIEWS.DEFAULT_VIEW });
 }
 
 async function getFilterMenu(): Promise<AirtableData> {
-  return base('ProjectsFilterMenu').select({view: VIEWS.GRID_VIEW});
+  return suppliesBase('ProjectsFilterMenu').select({ view: VIEWS.GRID_VIEW });
 }
 
 async function getBoM(): Promise<AirtableData> {
-  return base('Bill of Materials').select({view: VIEWS.GRID_VIEW});
+  return suppliesBase('Bill of Materials').select({ view: VIEWS.GRID_VIEW });
 }
 
-export const AirtableCalls = {
+export const AirtableSupplyCalls = {
   getProjects,
   getFilterMenu,
   getCategoryInfo,
   getCategorySupply,
   getBoM
+};
+
+async function getStaticLanguage(): Promise<AirtableData> {
+  return supportBase('IETF Translations').select({ view: VIEWS.GRID_VIEW });
+}
+
+export const AirtableSupportingCalls = {
+  getStaticLanguage
 }
 
 const callATbase = async<T>(
-  apiCall: typeof AirtableCalls[AirtableCallKeys],
-  ctor?: Constructor<T>
+  apiCall: AirtableCalls[AirtableCallKeys],
+  mapper?: Function
 ): Promise<T[]> => {
   return await apiCall().then(
     // data is an AT object
     async data => {
       const vals = AirtableHelpers.filterRecords(await data.all());
-      if (ctor) {
-        return vals.map(v => new ctor(v));
+      if (mapper) {
+        if (mapper.prototype?.constructor) {
+          return vals.map(v => new mapper.prototype.constructor(v));
+        }
+          return mapper(vals);
       }
       return vals;
     },
