@@ -1,16 +1,11 @@
+import { BasicObject } from "../types/shared.type";
+
 export const SET_LANG = "setLang";
 
-export interface EnvType {
-  isProd: boolean;
-  isMobile: boolean;
-}
-const InitialState: EnvType = {
-  isProd: false,
-  isMobile: false,
-};
+export type LangType  = BasicObject<string>;
 
-export const langReducer = async (
-  state: EnvType = InitialState,
+export const langReducer = (
+  state: LangType = {},
   action: {
     type: typeof SET_LANG;
     payload: any;
@@ -18,9 +13,7 @@ export const langReducer = async (
 ) => {
   switch (action.type) {
     case SET_LANG:
-      return {
-        staticLanguage: action.payload
-      };
+      return action.payload;
     default:
       return state;
   }

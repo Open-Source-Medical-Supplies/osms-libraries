@@ -1,6 +1,9 @@
 import { Button } from 'primereact/button';
 import { Card } from 'primereact/card';
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../redux/root.reducer';
+import { LangType } from '../../redux/lang.reducer';
 
 export interface TileCardAction {
   fn: Function;
@@ -28,9 +31,7 @@ const TileCard = ({
   children?: React.ReactNode;
   actionOnCard?: boolean;
 }) => {
-  if (actionOnCard && actions && actions.length > 1) {
-    console.warn('Only the first action can be used!');
-  }
+  const Lang = useSelector<RootState, LangType>(({lang}) => lang);
   className = 'grayscale ' + className; 
 
   const headerImage = (
@@ -46,7 +47,7 @@ const TileCard = ({
         return <Button
           key={mainText + i}
           onClick={() => a.fn()}
-          label={a.label || 'View'}
+          label={a.label || Lang['view']}
           icon={icon}
           iconPos='right'
           style={{marginRight: i < actions.length ? '0.5rem' : ''}}
