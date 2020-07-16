@@ -1,4 +1,5 @@
 export type BasicObject<T> = {[key: string]: T};
+export type NestedBasicObject<T> = BasicObject<BasicObject<T>>;
 
 export type valueof<T> = T[keyof T];
 

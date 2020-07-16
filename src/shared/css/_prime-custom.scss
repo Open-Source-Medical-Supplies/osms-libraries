@@ -12,8 +12,9 @@
   overflow: auto;
 }
 
-.p-panel .p-dataview-content {
-  padding: 0.571em 0 !important;
+.p-panel .p-dataview-content,
+div.p-dataview .p-dataview-content {
+  padding: 0.571em 0.25em !important;
 }
 
 div.p-dataview.p-component.p-dataview-grid > div.p-dataview-content {
@@ -28,6 +29,8 @@ div.p-dataview.p-component.p-dataview-grid > div.p-dataview-content {
 
     .p-tree {
       border: none;
+      width: 100%;
+      padding: 0.571em 0;
     }
   }
 
@@ -45,7 +48,11 @@ div.p-grid, .p-dataview.p-component.p-dataview-grid {
   width: 100%;
 }
 
-.p-sidebar-right {
+.p-grid {
+  margin: 0 !important;
+}
+
+.p-sidebar-right-custom {
   position: relative !important;
   height: 100vh;
   width: calc(100% - 0.5rem) !important;

@@ -12,6 +12,9 @@
 .divider-1 {
   margin-bottom: 1rem;
 }
+.divider-2 {
+  margin-bottom: 2rem;
+}
 
 .sticky-top-0 {
   top: 0;
@@ -49,20 +52,21 @@
   width: 100%;
 }
 
-.close-button {
-  padding: 0.5rem !important;
-  background: $primary !important;
-  border-radius: 4px !important;
+.p-sidebar-close {
   position: absolute;
-  top: 0.5rem;
+  top: 1rem;
   right: 1rem;
   z-index: 10000;
-
-  &:hover {
-    opacity: 0.5;
-  }
-  span {
+  
+  span.p-sidebar-close-icon.pi.pi-times {
+    padding: 0.5rem !important;
+    background: $primary !important;
+    border-radius: 4px !important;
     color: white;
+
+    &:hover {
+      opacity: 0.5;
+    }
   }
 }
 
@@ -105,5 +109,23 @@ $new-updated-max: 100px;
 
 .library-container {
   display: flex;
-  background-color: lightgray;
+  background-color: $gray;
+}
+
+.button__ {
+  &square {
+    @include btn-sq;
+  }
+  &rec {
+    @include btn-rec;
+  }
+}
+
+.scroll-to-top {
+  position: fixed;
+  z-index: 100;
+  bottom: 1rem;
+  right: 1rem;
+  -webkit-transition: opacity 250ms ease-in-out !important;
+  transition: opacity 250ms ease-in-out !important;
 }

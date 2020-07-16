@@ -16,4 +16,5 @@ export interface FilterState {
   searchBar: string;
   previousFilters: PreviousFilterState;
   isFiltering: boolean;
+  showMobileFilters: boolean;
 };

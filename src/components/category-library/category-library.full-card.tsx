@@ -1,6 +1,9 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { CategoryInfo } from "../../classes/category-info.class";
 import { Project } from "../../classes/project.class";
+import { LangType } from "../../redux/lang.reducer";
+import { RootState } from "../../redux/root.reducer";
 import ImageCarousel from "../../shared/components/detail-window/image-carousel";
 import { MarkdownSection } from "../../shared/components/markdown-section";
 import TileCard from "../../shared/components/tile-card";
@@ -16,7 +19,8 @@ const CategoryLibFullCard = ({
 	selected: CategoryInfo;
 	links: Project[];
 }) => {
-	if (!selected) return <div></div>;
+  const Lang = useSelector<RootState, LangType>(({lang}) => lang);
+  if (!selected) return <div></div>;
 	const { displayName, imageURL } = selected;
 	const headerImage =
 		typeof imageURL !== "string" ? (
@@ -37,12 +41,12 @@ const CategoryLibFullCard = ({
 		const linkAcross = genLocalParam( ActiveLib.PROJECT, displayName );
 		const actions = [
 			{
-				label: "View Source",
+				label: Lang['viewSource'],
 				icon: "external-link",
 				fn: openExternal(externalLink),
 			},
 			{
-				label: "View Details",
+				label: Lang['viewDetails'],
 				icon: "eye",
 				fn: openExternal(linkAcross),
 			},

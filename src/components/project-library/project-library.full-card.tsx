@@ -12,6 +12,9 @@ import {
 } from "../../shared/utility/general.utility";
 import { genLocalParam } from '../../shared/utility/param-handling';
 import ActiveLib from "../../types/lib.enum";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/root.reducer";
+import { LangType } from "../../redux/lang.reducer";
 
 const ProjectFullCard = ({
 	selected,
@@ -20,6 +23,7 @@ const ProjectFullCard = ({
 	selected: Project;
 	materials: Material[];
 }) => {
+  const Lang = useSelector<RootState, LangType>(({lang}) => lang);
   if (!selected) return <div></div>;
 
 	const {
@@ -67,7 +71,7 @@ const ProjectFullCard = ({
 				<Button
 					onClick={openExternal(externalLinks[0])}
 					tooltip="Link will open in a new tab"
-					label="Make it!"
+					label={Lang['makeIt']}
 					icon="pi pi-external-link"
 					iconPos="right"
 					className="p-button-raised p-button-rounded margin-z-auto"

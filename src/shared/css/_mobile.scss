@@ -1,0 +1,9 @@
+.mobile-button {
+  &__square {
+    @include btn-sq;
+  }
+
+  &__rec {
+    @include btn-rec;
+  }
+}

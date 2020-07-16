@@ -20,3 +20,14 @@
     }
   }
 }
+
+$btn-dm: 3rem;
+@mixin btn-sq {
+  min-height: $btn-dm !important;
+  height: $btn-dm !important;
+  min-width: $btn-dm !important;
+}
+@mixin btn-rec {
+  min-height: $btn-dm !important;
+  height: $btn-dm !important;
+}
