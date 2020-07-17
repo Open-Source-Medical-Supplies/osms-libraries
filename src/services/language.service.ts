@@ -7,10 +7,10 @@ const loadStaticLanguage = async (dispatch: Dispatch<any>): Promise<void>  => {
   const locale = navigator.language;
 	const langData = await AirtableHelpers.callATbase(
 		AirtableSupportingCalls.getStaticLanguage,
-		(data: any) => data.reduce((a: BasicObject<string>, v: BasicObject<string>) => {
-      const {key, ...vals} = v;
-      a[key] = vals[locale];
-      return a;
+		(data: any) => data.reduce((acc: BasicObject<string>, val: BasicObject<string>) => {
+      const {key, ...langs} = val;
+      acc[key] = langs[locale] || langs['en-US'];
+      return acc;
     }, {})
 	);
 	dispatch({type: SET_LANG, payload: langData})
