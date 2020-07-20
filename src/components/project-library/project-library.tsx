@@ -86,7 +86,6 @@ const ProjectLibrary: React.FC = () => {
   );
 
   const MobileFormat = (
-
     <React.Fragment>
       <div className='flex-column' style={{width: '100%'}}>
         <FilterMenu state={state} setState={setState}/>
