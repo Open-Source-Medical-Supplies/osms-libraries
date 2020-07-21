@@ -132,6 +132,6 @@ $new-updated-max: 100px;
 
 .markdown-section {
   ul, li, ol {
-    list-style: inside disc;
+    list-style: inside disc !important;
   }
 }
