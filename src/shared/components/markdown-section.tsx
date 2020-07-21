@@ -2,7 +2,7 @@ import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import { fixMdUrls } from '../utility/general.utility';
 
-export const MarkdownSection = (sectionName: string, md: string, className = '', force = false) => (
+const MarkdownSection = (sectionName: string, md: string, className = '', force = false) => (
   md || force ?
   <div key={sectionName} className={className || ''}>
     <h3>{sectionName}</h3>
