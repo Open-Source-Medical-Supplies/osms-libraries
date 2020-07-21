@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { PureComponent, ReactElement } from 'react';
+import { PureComponent, ReactElement } from 'react';
 import ReactMarkdown, { Renderer } from 'react-markdown';
 
 function isParagraphChild(el: ListItemHandler): boolean {
