@@ -8,6 +8,9 @@ export const openExternal = (link: string) => () => window.open(link, OpenExtern
 
 export const AopenExternal = (href: string, children: React.ReactNode) => <a href={href} target='_blank' rel='noopener noreferrer nofollow'>{children}</a>
 
+export const notEmptyStr = (s: string): boolean => /\w|\d/.test(s);
+export const emptyStr = (s: string) => !notEmptyStr(s);
+
 export const empty = (o: object): boolean => !!o && !Object.keys(o).length;
 
 export const notEmpty = (o: {}): boolean => !empty(o);

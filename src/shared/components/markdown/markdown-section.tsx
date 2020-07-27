@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
-import { fixMdUrls } from '../../utility/general.utility';
+import { fixMdUrls, notEmptyStr } from '../../utility/general.utility';
 import ListItemHandler from './list-item-handler';
 
 const MarkdownSection = (sectionName: string, md: string, className = '', force = false) => (
-  md || force ?
+  notEmptyStr(md) || force ?
   <div
     key={sectionName}
     className={className + ' markdown-section'}>

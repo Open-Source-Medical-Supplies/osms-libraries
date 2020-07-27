@@ -68,15 +68,20 @@ const CategoryLibFullCard = ({
 			<div className="full-card__content">
 				{headerImage}
 				<h1>{displayName}</h1>
-				{Array.from(CategoryInfo.CardSections, ([key, label]) =>
-					(selected as Indexable)[key]
-						? MarkdownSection(label, (selected as Indexable)[key])
-						: null
-				)}
-        {ImageCarousel<Project>({
-          links,
-          cardTemplate: ICCardTemplate
-        })}
+        {
+          Array.from(CategoryInfo.CardSections, ([key, label]) => {
+            MarkdownSection(label, (selected as Indexable)[key])
+          })
+        }
+        { links.length ?
+          <React.Fragment>
+            <h3>Projects</h3>
+            {ImageCarousel<Project>({
+              links,
+              cardTemplate: ICCardTemplate
+            })}
+          </React.Fragment> : null
+        }
 			</div>
 		</div>
 	);
