@@ -20,5 +20,9 @@ export const FilterSearchBar = ({
     });
   };
 
-  return <SearchBar className={className} onStateChange={update} id="search-bar-container"/>;
+  return <SearchBar
+    providedStr={searchBarText}
+    className={className}
+    onStateChange={update}
+    id="search-bar-container"/>;
 };

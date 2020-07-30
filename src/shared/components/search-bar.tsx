@@ -22,10 +22,12 @@ const SearchBar = (props: {
     }
   }, [ searchState ]);
 	useEffect(() => {
-		// value provided is empty but the internal state is not => reset
-		if (props.providedStr && !props.providedStr.length && searchState.length > 1) {
+    // value provided is empty but the internal state is not => reset
+		if (props.providedStr === '' && searchState.length > 0) {
 			setSearchState('');
-		}
+		} else if (props.providedStr && props.providedStr.length ) {
+      setSearchState(props.providedStr);
+    }
   }, [props.providedStr]);
   
 	return (
