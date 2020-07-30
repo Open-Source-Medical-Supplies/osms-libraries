@@ -18,13 +18,27 @@ const RawMap = {
 };
 
 const CardSections = [
-	['disclaimer', 'Disclaimer'],
-	['problem', 'The Problem'],
-	['currentGlobalResources', 'Current Global Resources'],
-	['engReqs', 'Engineering Requirements'],
-	['fabReqs', 'Assembly/Fabrication Requirements'],
-	['resources', 'Resources'],
-	['designDisclaimers', 'Disclaimer Designs']
+	{
+    key: 'disclaimer',
+    value: 'Disclaimer'},
+	{
+    key: 'problem',
+    value: 'The Problem'},
+	{
+    key: 'currentGlobalResources',
+    value: 'Current Global Resources'},
+	{
+    key: 'engReqs',
+    value: 'Engineering Requirements'},
+	{
+    key: 'fabReqs',
+    value: 'Assembly/Fabrication Requirements'},
+	{
+    key: 'resources',
+    value: 'Resources'},
+	{
+    key: 'designDisclaimers',
+    value: 'Disclaimer Designs'}
 ];
 
 export class CategoryInfo {

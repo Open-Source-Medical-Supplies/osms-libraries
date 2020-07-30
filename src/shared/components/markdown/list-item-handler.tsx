@@ -28,11 +28,6 @@ class ListItemHandler extends PureComponent {
   };
 
   props: any;
-
-  constructor(props: any) {
-    super(props);
-    console.log(this)
-  }
   
   render() {
     const renderProps = isParagraphChild(this) ?
