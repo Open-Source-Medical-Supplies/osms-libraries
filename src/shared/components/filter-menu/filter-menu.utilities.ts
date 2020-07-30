@@ -2,6 +2,7 @@ import { Project } from "../../../classes/project.class";
 import { allNotEmpty, notEmpty } from "../../utility/general.utility";
 import { FilterState } from "./filter-menu.interface";
 import { FilterNodeData } from "../../../types/filter-node.type";
+import { QueryParams } from "../../utility/param-handling";
 
 interface FilerDatum {
   key?: string;
@@ -235,3 +236,15 @@ export const filterBy = (
   }
   return _records;
 };
+
+export const filtersToParams = (filterState: FilterState): QueryParams  => {
+  const { nodeFilters, categoriesFilters, searchBar } = filterState;
+  return {
+    key: 'filterState',
+    val: JSON.stringify({
+      nodeFilters,
+      categoriesFilters,
+      searchBar
+    })
+  }
+}

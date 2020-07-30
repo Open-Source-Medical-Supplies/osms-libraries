@@ -1,53 +1,62 @@
 import ActiveLib from "../../types/lib.enum";
+import { valueof } from "../../types/shared.type";
 
-export const getParam = (splitOn: ActiveLib) =>
-	window.location && window.location.search
-		? decodeURI(window.location.search.split(splitOn + "=")[1])
-		: undefined;
+enum Params {
+  FILTERSTATE = 'filterState',
+}
 
-// window.location.href = "https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams?foo=baz";
-// url = new URL(window.location.href)
-// url.searchParams.toString()
-// "foo=baz"
-export const genParamURL = (param: {key: string, val: string}, path?: string) => [
-  window.location.protocol,
-  '//',
-  window.location.host,
-  path ? path + '-library' : window.location.pathname,
-  '?',
-  param.key,
-  '=',
-  encodeURI(param.val),
-].join('');
+export const PARAMS = {
+  ...Params,
+  ...ActiveLib
+}; 
 
+export const getParam = (key: valueof<typeof PARAMS>, onlyVal = false) => {
+  const url = new URL(window.location.href);
+  let val = url.searchParams.get(key);
+  try {
+    if (val) {
+      val = JSON.parse(val);
+    }
+  } catch {}
+
+  return val ? (
+    onlyVal ? val : { [key]: val }
+  ) : undefined;
+};
+
+// used for creating links between libs
 export const genLocalParam = (
   destinationLib: ActiveLib,
   param: string,
   originLib?: ActiveLib
-): string => [
-    '/libraries/',
+): string =>
+  [
+    "/libraries/",
     destinationLib,
-    '-library?',
-    (originLib || destinationLib),
-    '=',
-    encodeURI(param)
-  ].join('');
+    "-library?",
+    originLib || destinationLib,
+    "=",
+    encodeURI(param),
+  ].join("");
 
-export const updateQueryParam = (activeLib: ActiveLib) => ({
-  key,
-  val
-}: {
+export interface QueryParams {
   key?: string;
   val: string;
-}): void => {
+}
+type UpdateQueryParm = (
+  activeLib: ActiveLib
+) => ({ key, val }: QueryParams) => void;
+export const updateQueryParam: UpdateQueryParm = (activeLib) => ({
+  key,
+  val,
+}) => {
   // update url w/o page reload
-	if (!key || !val) return;
-	if (window.history && window.history.pushState) {
-    const keyVal = key || activeLib;
-    const newurl = genParamURL({key: keyVal, val});
-		window.history.pushState({ path: newurl }, '', newurl);
-	} else {
-		alert('Please update your browser version');
-	}
+  if (!val) return;
+  if (window.history && window.history.pushState) {
+    const url = new URL(window.location.href);
+    url.searchParams.set(key || activeLib, val);
+    window.history.pushState(null, "", url.href);
+  } else {
+    alert("Please update your browser");
+  }
 };
-

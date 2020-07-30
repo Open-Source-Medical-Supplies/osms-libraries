@@ -66,7 +66,7 @@ export const fetchData = async <T, S extends Function>(
 		callKeys.map((k: AppServiceKeys) => AppServices[k]()) as Promise<any>[]
 	).then(
 		(res) => {
-			const param = getParam(splitOn);
+			const param = getParam(splitOn, true);
 			const flatRes = flattenPromiseAll(res);
 			if (!param) {
 				setState(flatRes);
