@@ -26,7 +26,7 @@ const ProjectCard: React.FC<{
   const cardIsSelected = !!selectedName && selectedName === displayName;
 
   const selectCard = () => {
-    setQueryParam(displayName);
+    setQueryParam({val: displayName});
     setCard({selected: data, visible: true});
   };
   
