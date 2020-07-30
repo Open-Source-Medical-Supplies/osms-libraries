@@ -40,7 +40,9 @@ const ProjectFullCard = ({
 		externalLink,
   } = selected;
 
-  const linkAcross = genLocalParam( ActiveLib.CATEGORY, name );
+  const linkAcross = name instanceof Array ? 
+    genLocalParam( ActiveLib.CATEGORY, name[0] ) :
+    genLocalParam( ActiveLib.CATEGORY, name );
 
 	const headerImage =
 		typeof imageURL !== "string" ? (

@@ -124,12 +124,18 @@ const checkSearchString = (target: string, projectJSON: Project): boolean => {
   if (target.length) {
     const { name, displayName } = projectJSON;
     let status = false;
-    try {
+
+    if (name instanceof Array) {
+      status = !!(
+        name.some(nom => strMatches(nom, target)) ||
+        (displayName && strMatches(displayName, target))
+      );
+    } else {
       status = !!(
         (name && strMatches(name, target)) ||
         (displayName && strMatches(displayName, target))
       );
-    } catch {}
+    }
 
     return status;
   }
@@ -138,7 +144,11 @@ const checkSearchString = (target: string, projectJSON: Project): boolean => {
 
 const checkCategories = (cats: any, projectJSON: Project) => {
   if (Object.keys(cats).length) {
-    return cats[projectJSON.name];
+    if (projectJSON.name instanceof Array) {
+      return projectJSON.name.some(nom => cats[nom]);
+    } else {
+      return cats[projectJSON.name];
+    }
   }
   return false;
 };

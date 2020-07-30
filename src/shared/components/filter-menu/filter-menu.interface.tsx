@@ -7,6 +7,7 @@ export interface PreviousFilterState {
 }
 
 export interface FilterState {
+  loaded: boolean;
   nodes: FilterNodes; // attributes
   flatNodes: {};
   nodeFilters: FilterNodeData;

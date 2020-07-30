@@ -1,22 +1,22 @@
 import { Button } from "primereact/button";
+import { Sidebar } from "primereact/sidebar";
 import React, { useEffect, useState } from "react";
-import { useSelector, shallowEqual } from "react-redux";
+import { shallowEqual, useSelector } from "react-redux";
 import { RootState } from "../../../redux/root.reducer";
 import {
   parseCategories,
-  parseFilterMenu,
+  parseFilterMenu
 } from "../../../services/filter-menu.service";
+import ActiveLib from "../../../types/lib.enum";
 import { CategoryComparator, createUUID } from "../../utility/general.utility";
+import { getParam, PARAMS, updateQueryParam } from "../../utility/param-handling";
 import AttributesList from "./attributes-list";
 import CategoriesList from "./categories-list";
 import ClearFilters from "./clear-filers";
 import { FilterState } from "./filter-menu.interface";
 import { filterBy, filtersToParams } from "./filter-menu.utilities";
 import { FilterSearchBar } from "./filter-search-bar";
-import { Sidebar } from "primereact/sidebar";
 import "./_filter-menu.scss";
-import { updateQueryParam, getParam, PARAMS } from "../../utility/param-handling";
-import ActiveLib from "../../../types/lib.enum";
 
 /* eslint-disable react-hooks/exhaustive-deps */
 
@@ -25,6 +25,7 @@ const catCompare = new CategoryComparator();
 export type SetFilterFn = (props: Partial<FilterState>) => void;
 
 const FilterStateDefault: FilterState = {
+  loaded: false,
   nodes: [], // attributes
   flatNodes: {},
   nodeFilters: {},
@@ -85,13 +86,14 @@ const FilterMenu = ({
 
   // load menu
   useEffect(() => {
+    const params = getParam(PARAMS.FILTERSTATE, true) as Partial<FilterState> || {};
+    
     (async function fetch() {
       Promise.all([
         parseFilterMenu(),
         parseCategories()
       ]).then((res: any) => {
-        const params = getParam(PARAMS.FILTERSTATE, true) as Partial<FilterState>;
-        setFilterState({ ...res[0], ...res[1], ...params });
+        setFilterState({ loaded: true, ...res[0], ...res[1], ...params });
       });
     })();
   }, []);
@@ -103,17 +105,20 @@ const FilterMenu = ({
     filterState.previousFilters.categoriesFilters || {}
   ) ? createUUID() : false;
 
+  useEffect(() => {
+    doFilter();
+  }, [_records])
+  
   // filter-changes
   useEffect(() => {
+    if (!filterState.loaded) return;
     if (
       filterState.nodeFilters ||
       filterState.categoriesFilters ||
       filterState.searchBar
     ) {
-      const filteredRecords = filterBy(filterState, _records, records);
       setQueryParam(filtersToParams(filterState));
-      setState({ records: filteredRecords });
-      setFilterState({ isFiltering: _records.length > filteredRecords.length });
+      doFilter();
     }
   }, [
     catFilterBool,
@@ -122,6 +127,19 @@ const FilterMenu = ({
     filterState.nodeFilters,
     filterState.categoriesFilters,
   ]);
+
+  const doFilter = (state?: FilterState) => {
+    // currently a race condition where _records don't exist when called from the async data fetch
+    let filteredRecords;
+    if (state) {
+      filteredRecords = filterBy(state, _records, records);
+      setFilterState({...state, isFiltering: _records.length > filteredRecords.length });
+    } else {
+      filteredRecords = filterBy(filterState, _records, records);
+      setFilterState({ isFiltering: _records.length > filteredRecords.length })
+    }
+    setState({ records: filteredRecords });
+  }
 
   const Filters = (
     <React.Fragment>

@@ -8,6 +8,7 @@ import TileCard from "../tile-card";
 
 /* eslint-disable react-hooks/exhaustive-deps */
 type MouseEvent = React.MouseEvent<HTMLElement>;
+type CategoryState = {[k: string]: boolean};
 
 const CategoriesList = (
   {
@@ -18,20 +19,24 @@ const CategoriesList = (
     categories: CategorySupply[]
   }
 ) => {
-  const [toggleState, setToggleState] = useState<{[k: string]: boolean}>({});
+  const [toggleState, setToggleState] = useState<CategoryState>({});
 
   // ensure category list is sorted alphabetically
   categories = categories.sort((a, b) => a.name.localeCompare(b.name));
 
   useEffect(() => {
+    let tempState: CategoryState = {};
     // ensure deactivated toggles on selection-clear
     if (empty(categoriesFilters) && notEmpty(toggleState)) {
-      const tempState = Object.assign({}, toggleState);
+      tempState = Object.assign({}, toggleState);
       for (const k in tempState) {
         tempState[k] = false;
       }
-      setToggleState(tempState);
+    } else if ( notEmpty(categoriesFilters) ) {
+      // loaded from params
+      tempState = categoriesFilters;
     }
+    setToggleState(tempState);
   }, [categoriesFilters])
   
   const handleClick = (e: MouseEvent, k: string) => {
