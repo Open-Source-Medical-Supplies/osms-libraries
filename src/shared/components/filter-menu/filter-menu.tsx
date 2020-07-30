@@ -89,9 +89,7 @@ const FilterMenu = ({
   const catFilterBool = catCompare.compareKeys(
     filterState.categoriesFilters,
     filterState.previousFilters.categoriesFilters || {}
-  )
-    ? createUUID()
-    : false;
+  ) ? createUUID() : false;
 
   // filter-changes
   useEffect(() => {

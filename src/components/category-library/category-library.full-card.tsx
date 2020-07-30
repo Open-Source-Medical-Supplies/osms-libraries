@@ -70,7 +70,7 @@ const CategoryLibFullCard = ({
 				<h1>{displayName}</h1>
         {
           Array.from(CategoryInfo.CardSections, ([key, label]) => {
-            MarkdownSection(label, (selected as Indexable)[key])
+            return MarkdownSection(label, (selected as Indexable)[key])
           })
         }
         { links.length ?

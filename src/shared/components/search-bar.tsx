@@ -17,7 +17,7 @@ const SearchBar = (props: {
 	const [searchState, setSearchState] = useState('');
 
 	useEffect(() => {
-    if (!!searchState && searchState.length) {
+    if ((!!searchState && searchState.length) || searchState === '') {
       props.onStateChange(searchState);
     }
   }, [ searchState ]);
