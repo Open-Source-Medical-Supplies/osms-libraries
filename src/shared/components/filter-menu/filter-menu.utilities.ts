@@ -1,8 +1,8 @@
 import { Project } from "../../../classes/project.class";
-import { allNotEmpty, notEmpty } from "../../utility/general.utility";
-import { FilterState } from "./filter-menu.interface";
 import { FilterNodeData } from "../../../types/filter-node.type";
-import { QueryParams } from "../../utility/param-handling";
+import { allNotEmpty, notEmpty } from "../../utility/general.utility";
+import { getParam, PARAMS, QueryParams, updateQueryParam } from "../../utility/param-handling";
+import { FilterState } from "./filter-menu.interface";
 
 interface FilerDatum {
   key?: string;
@@ -142,7 +142,7 @@ const checkSearchString = (target: string, projectJSON: Project): boolean => {
   return false;
 };
 
-const checkCategories = (cats: any, projectJSON: Project) => {
+const checkCategories = (cats: any, projectJSON: Project): boolean => {
   if (Object.keys(cats).length) {
     if (projectJSON.name instanceof Array) {
       return projectJSON.name.some(nom => cats[nom]);
@@ -194,23 +194,6 @@ const filteringLevel = (filters: Filters, filterState: FilterState) => {
   };
 };
 
-const getFilterLevels = ({
-  checkAttrs,
-  checkText,
-  checkCats,
-}: {
-  checkAttrs: boolean;
-  checkText: boolean;
-  checkCats: boolean;
-}): { [key: number]: boolean } => ({
-  1: checkAttrs || checkText || checkCats,
-  2:
-    (checkAttrs && checkText) ||
-    (checkAttrs && checkCats) ||
-    (checkText && checkCats),
-  3: checkAttrs && checkText && checkCats,
-});
-
 export const filterBy = (
   filterState: FilterState,
   _records: Project[],
@@ -231,11 +214,7 @@ export const filterBy = (
       const checkText = checkSearchString(filters.searchBar, project);
       const checkCats = checkCategories(filters.categories, project);
 
-      const projectMatches = getFilterLevels({
-        checkAttrs,
-        checkText,
-        checkCats,
-      })[filterLevel.numFilters];
+      const projectMatches = (+checkAttrs + +checkText + +checkCats) === filterLevel.numFilters;
 
       if (projectMatches) {
         acc.push(project);
@@ -258,3 +237,13 @@ export const filtersToParams = (filterState: FilterState): QueryParams  => {
     })
   }
 }
+
+export const setFilterParams = (
+  filterState: FilterState
+): void => {
+  const currentParams = getParam(PARAMS.FILTERSTATE, true);
+  const createdParams = filtersToParams(filterState);
+  if (!currentParams || (currentParams !== createdParams.val)) {
+    updateQueryParam(createdParams);
+  }
+};

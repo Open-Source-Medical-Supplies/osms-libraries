@@ -3,8 +3,7 @@ import { CategoryInfo } from "../classes/category-info.class";
 import { Material } from "../classes/material.class";
 import { Project } from "../classes/project.class";
 import { toDict } from "../shared/utility/general.utility";
-import { getParam } from "../shared/utility/param-handling";
-import ActiveLib from "../types/lib.enum";
+import { getParam, PARAMS } from "../shared/utility/param-handling";
 import { BasicObject } from "../types/shared.type";
 import { AirtableHelpers, AirtableSupplyCalls } from "./airtable";
 
@@ -59,14 +58,13 @@ type AppServiceKeys = keyof typeof AppServices;
 export const fetchData = async <T, S extends Function>(
 	callKeys: AppServiceKeys[],
 	selector: keyof T,
-	splitOn: ActiveLib,
 	setState: S
 ): Promise<void> => {
 	Promise.all(
 		callKeys.map((k: AppServiceKeys) => AppServices[k]()) as Promise<any>[]
 	).then(
 		(res) => {
-			const param = getParam(splitOn, true);
+			const param = getParam(PARAMS.SELECTED, true);
 			const flatRes = flattenPromiseAll(res);
 			if (!param) {
 				setState(flatRes);

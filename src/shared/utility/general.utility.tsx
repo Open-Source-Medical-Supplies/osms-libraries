@@ -1,6 +1,8 @@
 import React from 'react';
 import { BasicObject } from '../../types/shared.type';
 import get from 'lodash.get';
+import { HIDE_SELECTED } from '../constants/general.constants';
+import { removeParam, PARAMS } from './param-handling';
 
 export const OpenExternalSafely = '_blank noopener noreferrer nofollow';
 
@@ -126,3 +128,8 @@ export const toDict = <T extends any> (data: T[], index: string) => {
 		return acc;
 	}, {});
 }
+
+export const hideSelected = (setState: Function) => () => {
+  removeParam(PARAMS.SELECTED);
+  setState(HIDE_SELECTED);
+};

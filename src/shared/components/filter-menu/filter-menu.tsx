@@ -1,20 +1,19 @@
 import { Button } from "primereact/button";
 import { Sidebar } from "primereact/sidebar";
 import React, { useEffect, useState } from "react";
-import { shallowEqual, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/root.reducer";
 import {
   parseCategories,
   parseFilterMenu
 } from "../../../services/filter-menu.service";
-import ActiveLib from "../../../types/lib.enum";
 import { CategoryComparator, createUUID } from "../../utility/general.utility";
-import { getParam, PARAMS, updateQueryParam } from "../../utility/param-handling";
+import { getParam, PARAMS } from "../../utility/param-handling";
 import AttributesList from "./attributes-list";
 import CategoriesList from "./categories-list";
 import ClearFilters from "./clear-filers";
 import { FilterState } from "./filter-menu.interface";
-import { filterBy, filtersToParams } from "./filter-menu.utilities";
+import { filterBy, setFilterParams } from "./filter-menu.utilities";
 import { FilterSearchBar } from "./filter-search-bar";
 import "./_filter-menu.scss";
 
@@ -42,11 +41,6 @@ const FilterStateDefault: FilterState = {
   showMobileFilters: false,
 };
 
-interface ThisSelectorVal {
-  isMobile: boolean;
-  lib: ActiveLib
-}
-
 const FilterMenu = ({
   state,
   setState,
@@ -54,13 +48,8 @@ const FilterMenu = ({
   state: any;
   setState: Function;
 }) => {
-  const { isMobile, lib } = useSelector<RootState, ThisSelectorVal>(({ env, lib }) => ({
-    isMobile: env.isMobile,
-    lib
-  }), shallowEqual); // +shallowEqual -> fixes (seemingly?) a rerendering issue
-
-  const setQueryParam = updateQueryParam(lib);
-
+  const isMobile = useSelector<RootState, boolean>(({ env }) => env.isMobile);
+  
   const { _records, records } = state;
   const [filterState, baseSetFilterState] = useState(FilterStateDefault);
   const setFilterState: SetFilterFn = (props: Partial<FilterState>) => {
@@ -87,13 +76,14 @@ const FilterMenu = ({
   // load menu
   useEffect(() => {
     const params = getParam(PARAMS.FILTERSTATE, true) as Partial<FilterState> || {};
-    
+    console.log(params);
     (async function fetch() {
       Promise.all([
         parseFilterMenu(),
         parseCategories()
       ]).then((res: any) => {
         setFilterState({ loaded: true, ...res[0], ...res[1], ...params });
+        console.log('set filter')
       });
     })();
   }, []);
@@ -117,7 +107,8 @@ const FilterMenu = ({
       filterState.categoriesFilters ||
       filterState.searchBar
     ) {
-      setQueryParam(filtersToParams(filterState));
+      console.log('filtering')
+      setFilterParams(filterState)
       doFilter();
     }
   }, [
@@ -136,6 +127,7 @@ const FilterMenu = ({
       setFilterState({...state, isFiltering: _records.length > filteredRecords.length });
     } else {
       filteredRecords = filterBy(filterState, _records, records);
+      console.log(filteredRecords)
       setFilterState({ isFiltering: _records.length > filteredRecords.length })
     }
     setState({ records: filteredRecords });

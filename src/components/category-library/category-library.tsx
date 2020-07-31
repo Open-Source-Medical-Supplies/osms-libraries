@@ -1,22 +1,23 @@
+import { Sidebar } from 'primereact/sidebar';
 import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { CategoryInfo } from '../../classes/category-info.class';
 import { CrossLinks, Project } from '../../classes/project.class';
 import { RootState } from "../../redux/root.reducer";
 import { fetchData } from '../../services/app.service';
 import CardContainer from '../../shared/components/card-container/card-container';
 import DetailWindow from '../../shared/components/detail-window/detail-window';
+import Loading from '../../shared/components/loading';
+import { hideSelected } from '../../shared/utility/general.utility';
+import ActiveLib from '../../types/lib.enum';
 import CategoryLibFullCard from './category-library.full-card';
 import CategorySearchBar from './category-search-bar';
-import { CategoryInfo } from '../../classes/category-info.class';
-import Loading from '../../shared/components/loading';
-import ActiveLib from '../../types/lib.enum';
-import { Sidebar } from 'primereact/sidebar';
 
 const StateDefault: {
   _records: []; // immutable
   records: [];
   selected: undefined | CategoryInfo;
-  visible: false;
+  visible: boolean;
   projectsByCategory: CrossLinks;
   selectedProjects: Project[];
   loading: boolean;
@@ -38,14 +39,13 @@ const CategoryLibrary: React.FC = () => {
   const isMobile = useSelector<RootState, boolean>(({env}) => env.isMobile);
   const setState = (props: Partial<typeof StateDefault>) => baseSetState({...state, ...props});
   const setLoadingState = (d: Partial<typeof StateDefault>) => setState({loading: false, ...d});
-  const hide = () => setState({selected: undefined, visible: false});
+  const hide = hideSelected(setState);
 
   useEffect(() => {
     (async() => {
       fetchData<CategoryInfo, typeof setLoadingState>(
         ['getCategories', 'getLinks'],
         "displayName",
-        ActiveLib.CATEGORY,
         setLoadingState
         );
       })()
