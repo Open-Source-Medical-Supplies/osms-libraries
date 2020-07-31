@@ -55,17 +55,17 @@ export const AirtableSupportingCalls = {
 
 const callATbase = async<T>(
   apiCall: AirtableCalls[AirtableCallKeys],
-  mapper?: Function
+  mapper?: Function,
+  isCtor = true
 ): Promise<T[]> => {
   return await apiCall().then(
     // data is an AT object
     async data => {
       const vals = AirtableHelpers.filterRecords(await data.all());
       if (mapper) {
-        if (mapper.prototype?.constructor) {
-          return vals.map(v => new mapper.prototype.constructor(v));
-        }
-          return mapper(vals);
+        return isCtor ?
+          vals.map(v => new mapper.prototype.constructor(v)) :
+          mapper(vals);
       }
       return vals;
     },

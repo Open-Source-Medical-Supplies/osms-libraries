@@ -1,42 +1,65 @@
 import ActiveLib from "../../types/lib.enum";
 
-export const getParam = (splitOn: ActiveLib) =>
-	window.location && window.location.search
-		? decodeURI(window.location.search.split(splitOn + "=")[1])
-		: undefined;
+export enum PARAMS {
+  FILTERSTATE = 'filterState',
+  SELECTED = 'selected'
+}
 
-export const genParamURL = (lib: ActiveLib, param: string, path?: string) => [
-  window.location.protocol,
-  '//',
-  window.location.host,
-  path ? path + '-library' : window.location.pathname,
-  '?',
-  lib,
-  '=',
-  encodeURI(param),
-].join('');
+const getUrl = () => {
+  return new URL(window.location.href);
+}
+const getParamFromUrl = (k: PARAMS) => getUrl().searchParams.get(k);
 
-export const genLocalParam = (
-  destinationLib: ActiveLib,
-  param: string,
-  originLib?: ActiveLib
-): string => [
-    '/libraries/',
-    destinationLib,
-    '-library?',
-    (originLib || destinationLib),
-    '=',
-    encodeURI(param)
-  ].join('');
+export const getParam = (key: PARAMS, onlyVal = false) => {
+  let val = getParamFromUrl(key);
+  try {
+    if (val) {
+      val = JSON.parse(val);
+    }
+  } catch {}
 
-export const updateQueryParam = (activeLib: ActiveLib) => (param: string): void => {
-	// update url w/o page reload
-	if (!param) return;
-	if (window.history && window.history.pushState) {
-    const newurl = genParamURL(activeLib, param);
-		window.history.pushState({ path: newurl }, '', newurl);
-	} else {
-		alert('Please update your browser version');
-	}
+  return val ? (
+    onlyVal ? val : { [key]: val }
+  ) : undefined;
 };
 
+export const removeParam = (key: PARAMS): void => {
+  const url = getUrl();
+  url.searchParams.delete(key);
+  softUpdateURL(url);
+}
+
+// used for creating links between libs
+export const genLocalParam = (
+  lib: ActiveLib,
+  param: string,
+): string =>
+  [
+    "/libraries/",
+    lib,
+    "-library?",
+    PARAMS.SELECTED,
+    "=",
+    encodeURI(param),
+  ].join("");
+
+export interface QueryParams {
+  key?: string;
+  val: string;
+}
+
+export const updateQueryParam = ({ key, val }: QueryParams): void => {
+  if (!key || !val) return;
+  if (window.history && window.history.pushState) {
+    const url = getUrl();
+    url.searchParams.set(key, val);
+    softUpdateURL(url);
+  } else {
+    alert("Please update your browser");
+  }
+};
+
+const softUpdateURL = (url: URL): void=> {
+  // update url w/o page reload
+  window.history.pushState(null, "", url.href);
+}

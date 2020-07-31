@@ -5,7 +5,7 @@ import { CategoryInfo } from "../../../classes/category-info.class";
 import { Project } from '../../../classes/project.class';
 import { RootState } from "../../../redux/root.reducer";
 import ActiveLib from "../../../types/lib.enum";
-import { updateQueryParam } from "../../utility/param-handling";
+import { PARAMS, updateQueryParam } from "../../utility/param-handling";
 import NewUpdatedBanner from "../new-updated-banner";
 import TileCard from "../tile-card";
 
@@ -18,7 +18,6 @@ const ProjectCard: React.FC<{
   data, setCard, selected, isMobile
 }) => {
   const lib = useSelector<RootState, ActiveLib>(({lib}) => lib)
-  const setQueryParam = updateQueryParam(lib);
   const thisRef = useRef<HTMLDivElement>(null);
   
   const { displayName, imageURL } = data;
@@ -26,7 +25,7 @@ const ProjectCard: React.FC<{
   const cardIsSelected = !!selectedName && selectedName === displayName;
 
   const selectCard = () => {
-    setQueryParam(displayName);
+    updateQueryParam({key: PARAMS.SELECTED, val: displayName});
     setCard({selected: data, visible: true});
   };
   

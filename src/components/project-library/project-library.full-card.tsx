@@ -4,7 +4,7 @@ import ReactMarkdown from "react-markdown";
 import { Material } from "../../classes/material.class";
 import { Project } from "../../classes/project.class";
 import ImageCarousel from "../../shared/components/detail-window/image-carousel";
-import { MarkdownSection } from "../../shared/components/markdown-section";
+import MarkdownSection from "../../shared/components/markdown/markdown-section";
 import TileCard from "../../shared/components/tile-card";
 import {
   AopenExternal,
@@ -40,7 +40,9 @@ const ProjectFullCard = ({
 		externalLink,
   } = selected;
 
-  const linkAcross = genLocalParam( ActiveLib.CATEGORY, name );
+  const linkAcross = name instanceof Array ? 
+    genLocalParam( ActiveLib.CATEGORY, name[0] ) :
+    genLocalParam( ActiveLib.CATEGORY, name );
 
 	const headerImage =
 		typeof imageURL !== "string" ? (

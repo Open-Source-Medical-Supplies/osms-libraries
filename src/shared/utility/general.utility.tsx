@@ -1,12 +1,17 @@
 import React from 'react';
 import { BasicObject } from '../../types/shared.type';
 import get from 'lodash.get';
+import { HIDE_SELECTED } from '../constants/general.constants';
+import { removeParam, PARAMS } from './param-handling';
 
 export const OpenExternalSafely = '_blank noopener noreferrer nofollow';
 
 export const openExternal = (link: string) => () => window.open(link, OpenExternalSafely);
 
 export const AopenExternal = (href: string, children: React.ReactNode) => <a href={href} target='_blank' rel='noopener noreferrer nofollow'>{children}</a>
+
+export const notEmptyStr = (s: string): boolean => /\w|\d/.test(s);
+export const emptyStr = (s: string) => !notEmptyStr(s);
 
 export const empty = (o: object): boolean => !!o && !Object.keys(o).length;
 
@@ -123,3 +128,8 @@ export const toDict = <T extends any> (data: T[], index: string) => {
 		return acc;
 	}, {});
 }
+
+export const hideSelected = (setState: Function) => () => {
+  removeParam(PARAMS.SELECTED);
+  setState(HIDE_SELECTED);
+};

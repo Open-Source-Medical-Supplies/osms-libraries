@@ -5,7 +5,7 @@ import { Project } from "../../classes/project.class";
 import { LangType } from "../../redux/lang.reducer";
 import { RootState } from "../../redux/root.reducer";
 import ImageCarousel from "../../shared/components/detail-window/image-carousel";
-import { MarkdownSection } from "../../shared/components/markdown-section";
+import MarkdownSection from "../../shared/components/markdown/markdown-section";
 import TileCard from "../../shared/components/tile-card";
 import { openExternal } from "../../shared/utility/general.utility";
 import { genLocalParam } from "../../shared/utility/param-handling";
@@ -68,15 +68,20 @@ const CategoryLibFullCard = ({
 			<div className="full-card__content">
 				{headerImage}
 				<h1>{displayName}</h1>
-				{Array.from(CategoryInfo.CardSections, ([key, label]) =>
-					(selected as Indexable)[key]
-						? MarkdownSection(label, (selected as Indexable)[key])
-						: null
-				)}
-        {ImageCarousel<Project>({
-          links,
-          cardTemplate: ICCardTemplate
-        })}
+        {
+          CategoryInfo.CardSections.map(({key, value}) => {
+            return MarkdownSection(value, (selected as Indexable)[key])
+          })
+        }
+        { links && links.length ?
+          <React.Fragment>
+            <h3>Projects</h3>
+            {ImageCarousel<Project>({
+              links,
+              cardTemplate: ICCardTemplate
+            })}
+          </React.Fragment> : null
+        }
 			</div>
 		</div>
 	);

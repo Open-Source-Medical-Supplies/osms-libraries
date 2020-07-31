@@ -1,3 +1,4 @@
+import { Sidebar } from 'primereact/sidebar';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { CategorySupply } from '../../classes/category-supply.class';
@@ -9,16 +10,16 @@ import CardContainer from "../../shared/components/card-container/card-container
 import DetailWindow from "../../shared/components/detail-window/detail-window";
 import FilterMenu from "../../shared/components/filter-menu/filter-menu";
 import Loading from '../../shared/components/loading';
+import { hideSelected } from '../../shared/utility/general.utility';
 import ActiveLib from '../../types/lib.enum';
 import { BasicObject } from '../../types/shared.type';
 import ProjectFullCard from './project-library.full-card';
-import { Sidebar } from 'primereact/sidebar';
 
 const StateDefault: {
   _records: []; // immutable
   records: [];
   selected: undefined | Project;
-  visible: false;
+  visible: boolean;
   categories: BasicObject<CategorySupply>;
   materials: BasicObject<Material[]>;
   selectedMaterials: Material[];
@@ -34,31 +35,35 @@ const StateDefault: {
   loading: true
 };
 
+type PartialState = Partial<typeof StateDefault>;
+
 const ProjectLibrary: React.FC = () => {
   const dispatch = useDispatch();
   dispatch({type: ActiveLib.PROJECT});
 
-  let [state, baseSetState] = useState(StateDefault);
   const isMobile = useSelector<RootState, boolean>(({env}) => env.isMobile);
-  const setState = (props: Partial<typeof StateDefault>) => baseSetState({...state, ...props});
-  const setLoadingState = (d: Partial<typeof StateDefault>) => setState({loading: false, ...d});
-  const hide = () => setState({selected: undefined, visible: false});
+
+  let [state, baseSetState] = useState(StateDefault);
+  const setState = (props: PartialState, async = false) => {
+    const updateState = () => baseSetState(() => ({...state, ...props}));
+    async ? setTimeout(updateState) : updateState();
+  };
+
+  const setLoadingState = (d: PartialState) => setState({loading: false, ...d});
+  const hide = hideSelected(setState);
 
   useEffect(() => {
     (async() => {
       fetchData<Project, typeof setLoadingState>(
         ['getProjects', 'getBoM'],
         'displayName',
-        ActiveLib.PROJECT,
         setLoadingState
       );
     })()
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    if (!state.selected) {
-     return;
-    }
+    if (!state.selected) {return;}
     const selectedMaterials = state.materials[state.selected.displayName] || [];
     setState({selectedMaterials});
   }, [state.selected]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -86,7 +91,6 @@ const ProjectLibrary: React.FC = () => {
   );
 
   const MobileFormat = (
-
     <React.Fragment>
       <div className='flex-column' style={{width: '100%'}}>
         <FilterMenu state={state} setState={setState}/>

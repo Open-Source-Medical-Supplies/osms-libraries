@@ -41,7 +41,7 @@ export class Project {
   description!: string;
   difficulty!: string;
   displayName!: string;
-  name!: string;
+  name!: string | string[];
   generalSkillsTools!: string;
   imageURL!: string;
   hyperLinkText!: string;

@@ -1,7 +1,8 @@
 import { Project } from "../../../classes/project.class";
-import { allNotEmpty, notEmpty } from "../../utility/general.utility";
-import { FilterState } from "./filter-menu.interface";
 import { FilterNodeData } from "../../../types/filter-node.type";
+import { allNotEmpty, notEmpty } from "../../utility/general.utility";
+import { getParam, PARAMS, QueryParams, updateQueryParam } from "../../utility/param-handling";
+import { FilterState } from "./filter-menu.interface";
 
 interface FilerDatum {
   key?: string;
@@ -97,7 +98,10 @@ const checkAttributes = (attrs: string[], projectJSON: any, flatNodes: any) => {
       const pVal: string | string[] = projectJSON[pKey];
       if (!pVal?.length) {
         return false;
-      } else if (typeof pVal === 'string' && (pVal === target || pVal.includes(target))) {
+      } else if (
+        typeof pVal === "string" &&
+        (pVal === target || pVal.includes(target))
+      ) {
         return true;
       } else if (Array.isArray(pVal)) {
         // cycle through the object's attributes to test against the current one
@@ -113,28 +117,38 @@ const checkAttributes = (attrs: string[], projectJSON: any, flatNodes: any) => {
   return false;
 };
 
-const strMatches = (match: string, target: string) => match.toLowerCase().includes(target.toLowerCase());
+const strMatches = (match: string, target: string) =>
+  match.toLowerCase().includes(target.toLowerCase());
 
-const checkSearchString = (
-  target: string,
-  projectJSON: Project
-): boolean => {
+const checkSearchString = (target: string, projectJSON: Project): boolean => {
   if (target.length) {
     const { name, displayName } = projectJSON;
-    return !!(
-      (name && strMatches(name, target)) ||
-      (displayName && strMatches(displayName, target))
-    );
+    let status = false;
+
+    if (name instanceof Array) {
+      status = !!(
+        name.some(nom => strMatches(nom, target)) ||
+        (displayName && strMatches(displayName, target))
+      );
+    } else {
+      status = !!(
+        (name && strMatches(name, target)) ||
+        (displayName && strMatches(displayName, target))
+      );
+    }
+
+    return status;
   }
   return false;
 };
 
-const checkCategories = (
-  cats: any,
-  projectJSON: Project
-) => {
+const checkCategories = (cats: any, projectJSON: Project): boolean => {
   if (Object.keys(cats).length) {
-    return cats[projectJSON.name];
+    if (projectJSON.name instanceof Array) {
+      return projectJSON.name.some(nom => cats[nom]);
+    } else {
+      return cats[projectJSON.name];
+    }
   }
   return false;
 };
@@ -168,31 +182,17 @@ const filteringLevel = (filters: Filters, filterState: FilterState) => {
     filters.attributes,
     filterState.previousFilters.nodeFilters || {}
   );
-  const prevByCategories = notEmpty(filterState.previousFilters.categoriesFilters || {});
-  const prevByText = !!(filterState.previousFilters.searchBar || '').length;
+  const prevByCategories = notEmpty(
+    filterState.previousFilters.categoriesFilters || {}
+  );
+  const prevByText = !!(filterState.previousFilters.searchBar || "").length;
   const prev = +prevByAttributes + +prevByCategories;
-  
+
   return {
     stricter: current > prev && byText > prevByText,
     numFilters: current + +byText,
   };
 };
-
-const getFilterLevels = ({
-  checkAttrs,
-  checkText,
-  checkCats,
-}: {
-  checkAttrs: boolean;
-  checkText: boolean;
-  checkCats: boolean;
-}): { [key: number]: boolean } => ({
-  1: checkAttrs || checkText || checkCats,
-  2: (checkAttrs && checkText) ||
-    (checkAttrs && checkCats) ||
-    (checkText && checkCats),
-  3: checkAttrs && checkText && checkCats,
-});
 
 export const filterBy = (
   filterState: FilterState,
@@ -206,11 +206,15 @@ export const filterBy = (
     const recordsBase = filterLevel.stricter ? records : _records;
 
     return recordsBase.reduce((acc: Project[], project: Project) => {
-      const checkAttrs = checkAttributes(filters.attributes, project, filterState.flatNodes);
+      const checkAttrs = checkAttributes(
+        filters.attributes,
+        project,
+        filterState.flatNodes
+      );
       const checkText = checkSearchString(filters.searchBar, project);
       const checkCats = checkCategories(filters.categories, project);
 
-      const projectMatches = getFilterLevels({checkAttrs, checkText, checkCats})[filterLevel.numFilters];
+      const projectMatches = (+checkAttrs + +checkText + +checkCats) === filterLevel.numFilters;
 
       if (projectMatches) {
         acc.push(project);
@@ -220,4 +224,26 @@ export const filterBy = (
     }, []);
   }
   return _records;
+};
+
+export const filtersToParams = (filterState: FilterState): QueryParams  => {
+  const { nodeFilters, categoriesFilters, searchBar } = filterState;
+  return {
+    key: 'filterState',
+    val: JSON.stringify({
+      nodeFilters,
+      categoriesFilters,
+      searchBar
+    })
+  }
+}
+
+export const setFilterParams = (
+  filterState: FilterState
+): void => {
+  const currentParams = getParam(PARAMS.FILTERSTATE, true);
+  const createdParams = filtersToParams(filterState);
+  if (!currentParams || (currentParams !== createdParams.val)) {
+    updateQueryParam(createdParams);
+  }
 };
