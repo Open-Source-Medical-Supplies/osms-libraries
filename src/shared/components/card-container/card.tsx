@@ -5,7 +5,7 @@ import { CategoryInfo } from "../../../classes/category-info.class";
 import { Project } from '../../../classes/project.class';
 import { RootState } from "../../../redux/root.reducer";
 import ActiveLib from "../../../types/lib.enum";
-import { updateQueryParam, PARAMS } from "../../utility/param-handling";
+import { PARAMS, updateQueryParam } from "../../utility/param-handling";
 import NewUpdatedBanner from "../new-updated-banner";
 import TileCard from "../tile-card";
 

@@ -76,14 +76,12 @@ const FilterMenu = ({
   // load menu
   useEffect(() => {
     const params = getParam(PARAMS.FILTERSTATE, true) as Partial<FilterState> || {};
-    console.log(params);
     (async function fetch() {
       Promise.all([
         parseFilterMenu(),
         parseCategories()
       ]).then((res: any) => {
         setFilterState({ loaded: true, ...res[0], ...res[1], ...params });
-        console.log('set filter')
       });
     })();
   }, []);
@@ -107,7 +105,6 @@ const FilterMenu = ({
       filterState.categoriesFilters ||
       filterState.searchBar
     ) {
-      console.log('filtering')
       setFilterParams(filterState)
       doFilter();
     }
@@ -120,17 +117,15 @@ const FilterMenu = ({
   ]);
 
   const doFilter = (state?: FilterState) => {
-    // currently a race condition where _records don't exist when called from the async data fetch
     let filteredRecords;
     if (state) {
       filteredRecords = filterBy(state, _records, records);
       setFilterState({...state, isFiltering: _records.length > filteredRecords.length });
     } else {
       filteredRecords = filterBy(filterState, _records, records);
-      console.log(filteredRecords)
       setFilterState({ isFiltering: _records.length > filteredRecords.length })
     }
-    setState({ records: filteredRecords });
+    setState({ records: filteredRecords }, true); // when loading from a param, had a race condition. Kinda hacky
   }
 
   const Filters = (

@@ -35,17 +35,21 @@ const StateDefault: {
   loading: true
 };
 
+type PartialState = Partial<typeof StateDefault>;
+
 const ProjectLibrary: React.FC = () => {
   const dispatch = useDispatch();
   dispatch({type: ActiveLib.PROJECT});
 
-  let [state, baseSetState] = useState(StateDefault);
   const isMobile = useSelector<RootState, boolean>(({env}) => env.isMobile);
-  const setState = (props: Partial<typeof StateDefault>) => {
-    console.log('set root state', props)
-    baseSetState({...state, ...props})
+
+  let [state, baseSetState] = useState(StateDefault);
+  const setState = (props: PartialState, async = false) => {
+    const updateState = () => baseSetState(() => ({...state, ...props}));
+    async ? setTimeout(updateState) : updateState();
   };
-  const setLoadingState = (d: Partial<typeof StateDefault>) => setState({loading: false, ...d});
+
+  const setLoadingState = (d: PartialState) => setState({loading: false, ...d});
   const hide = hideSelected(setState);
 
   useEffect(() => {
@@ -59,10 +63,7 @@ const ProjectLibrary: React.FC = () => {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    if (!state.selected) {
-     return;
-    }
-    console.log('setting selected')
+    if (!state.selected) {return;}
     const selectedMaterials = state.materials[state.selected.displayName] || [];
     setState({selectedMaterials});
   }, [state.selected]); // eslint-disable-line react-hooks/exhaustive-deps
