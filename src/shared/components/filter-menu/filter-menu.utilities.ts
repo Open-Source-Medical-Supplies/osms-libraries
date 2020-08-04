@@ -1,7 +1,12 @@
 import { Project } from "../../../classes/project.class";
 import { FilterNodeData } from "../../../types/filter-node.type";
 import { allNotEmpty, notEmpty } from "../../utility/general.utility";
-import { getParam, PARAMS, QueryParams, updateQueryParam } from "../../utility/param-handling";
+import {
+  getParam,
+  PARAMS,
+  QueryParams,
+  updateQueryParam,
+} from "../../utility/param-handling";
 import { FilterState } from "./filter-menu.interface";
 
 interface FilerDatum {
@@ -15,6 +20,7 @@ type Filters = {
   categories: {};
   attributes: string[];
   searchBar: string;
+  previousFilters: FilterState["previousFilters"];
 };
 
 const buildTree = (data: FilerDatum, acc: any = {}) => {
@@ -44,6 +50,7 @@ const buildTree = (data: FilerDatum, acc: any = {}) => {
 };
 
 export const parseFilterData = (filterData: FitlerData) => {
+  // filter data comes in as a flat tree with pointers b/w parent / child
   const mappedRecords = (filterData.reduce((acc, record) => {
     if (record.icon) {
       record.icon = "pi " + record.icon;
@@ -51,7 +58,7 @@ export const parseFilterData = (filterData: FitlerData) => {
     buildTree(record, acc);
     return acc;
   }, {}) as unknown) as { [key: string]: FilerDatum };
-
+  // object to array
   return Object.keys(mappedRecords).map((nodeKey) => mappedRecords[nodeKey]);
 };
 
@@ -80,11 +87,18 @@ const processAttributes = (nodeFilters: any, flatNodes: any) => {
 };
 
 const combineFilters = (filterState: FilterState): Filters => {
-  const { categoriesFilters, searchBar, nodeFilters, flatNodes } = filterState;
+  const {
+    categoriesFilters,
+    searchBar,
+    nodeFilters,
+    flatNodes,
+    previousFilters,
+  } = filterState;
   return {
     categories: categoriesFilters,
     attributes: processAttributes(nodeFilters, flatNodes),
     searchBar,
+    previousFilters,
   };
 };
 
@@ -127,7 +141,7 @@ const checkSearchString = (target: string, projectJSON: Project): boolean => {
 
     if (name instanceof Array) {
       status = !!(
-        name.some(nom => strMatches(nom, target)) ||
+        name.some((nom) => strMatches(nom, target)) ||
         (displayName && strMatches(displayName, target))
       );
     } else {
@@ -145,7 +159,7 @@ const checkSearchString = (target: string, projectJSON: Project): boolean => {
 const checkCategories = (cats: any, projectJSON: Project): boolean => {
   if (Object.keys(cats).length) {
     if (projectJSON.name instanceof Array) {
-      return projectJSON.name.some(nom => cats[nom]);
+      return projectJSON.name.some((nom) => cats[nom]);
     } else {
       return cats[projectJSON.name];
     }
@@ -153,11 +167,9 @@ const checkCategories = (cats: any, projectJSON: Project): boolean => {
   return false;
 };
 
-const deepCheckAttributes = (attrs: string[], primeAttrs: FilterNodeData) => {
-  return notEmpty(attrs) && noFalsePositives(primeAttrs);
-};
+const noFalsePositives = (attrs: FilterNodeData | undefined) => {
+  if (!attrs || !Object.keys(attrs)) return true;
 
-const noFalsePositives = (attrs: FilterNodeData) => {
   let check = false;
   for (const k in attrs) {
     const { checked, partialChecked } = attrs[k];
@@ -169,29 +181,25 @@ const noFalsePositives = (attrs: FilterNodeData) => {
 };
 
 const filteringLevel = (filters: Filters, filterState: FilterState) => {
-  // if there are more filters than the previous state
-  const byAttributes = deepCheckAttributes(
-    filters.attributes,
-    filterState.nodeFilters
-  );
+  // Checks if there are more filters active than the previous state
+  /**
+   * If debugging, don't compare 'current' to 'prev' since they don't account for the search string
+   * Instead, look at 'stricter' && 'numFilters'
+   */
+  const byAttributes = notEmpty(filters.attributes) && noFalsePositives(filterState.nodeFilters);
   const byCategories = notEmpty(filters.categories);
-  const byText = !!filters.searchBar.length;
+  const byText = filters.searchBar.length;
   const current = +byAttributes + +byCategories;
 
-  const prevByAttributes = deepCheckAttributes(
-    filters.attributes,
-    filterState.previousFilters.nodeFilters || {}
-  );
-  const prevByCategories = notEmpty(
-    filterState.previousFilters.categoriesFilters || {}
-  );
-  const prevByText = !!(filterState.previousFilters.searchBar || "").length;
+  const prevByAttributes = noFalsePositives(filterState.previousFilters.nodeFilters);
+  const prevByCategories = notEmpty(filterState.previousFilters.categoriesFilters);
+  const prevByText = (filterState.previousFilters.searchBar || "").length
   const prev = +prevByAttributes + +prevByCategories;
+  
+  const stricter = (current > prev) && (prevByText < byText);
+  const activeFilters = current + +(!!byText);
 
-  return {
-    stricter: current > prev && byText > prevByText,
-    numFilters: current + +byText,
-  };
+  return { stricter, activeFilters };
 };
 
 export const filterBy = (
@@ -202,8 +210,8 @@ export const filterBy = (
   const filters = combineFilters(filterState);
 
   if (allNotEmpty(filters)) {
-    const filterLevel = filteringLevel(filters, filterState);
-    const recordsBase = filterLevel.stricter ? records : _records;
+    const { stricter, activeFilters } = filteringLevel(filters, filterState);
+    const recordsBase = stricter ? records : _records;
 
     return recordsBase.reduce((acc: Project[], project: Project) => {
       const checkAttrs = checkAttributes(
@@ -211,10 +219,10 @@ export const filterBy = (
         project,
         filterState.flatNodes
       );
-      const checkText = checkSearchString(filters.searchBar, project);
       const checkCats = checkCategories(filters.categories, project);
-
-      const projectMatches = (+checkAttrs + +checkText + +checkCats) === filterLevel.numFilters;
+      const checkText = checkSearchString(filters.searchBar, project);
+      const matchedFilters = +checkAttrs + +checkText + +checkCats 
+      const projectMatches = matchedFilters === activeFilters;
 
       if (projectMatches) {
         acc.push(project);
@@ -226,24 +234,23 @@ export const filterBy = (
   return _records;
 };
 
-export const filtersToParams = (filterState: FilterState): QueryParams  => {
+export const filtersToParams = (filterState: FilterState): QueryParams => {
   const { nodeFilters, categoriesFilters, searchBar } = filterState;
   return {
-    key: 'filterState',
+    key: "filterState",
     val: JSON.stringify({
       nodeFilters,
       categoriesFilters,
       searchBar
     })
-  }
-}
+  };
+};
 
-export const setFilterParams = (
-  filterState: FilterState
-): void => {
+export const setFilterParams = (filterState: FilterState): void => {
+  // some logic to reduce potential times params would be updated
   const currentParams = getParam(PARAMS.FILTERSTATE, true);
   const createdParams = filtersToParams(filterState);
-  if (!currentParams || (currentParams !== createdParams.val)) {
+  if (!currentParams || currentParams !== createdParams.val) {
     updateQueryParam(createdParams);
   }
 };

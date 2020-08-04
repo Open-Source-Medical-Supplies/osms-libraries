@@ -1,6 +1,6 @@
 import { Button } from "primereact/button";
 import { Sidebar } from "primereact/sidebar";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/root.reducer";
 import {
@@ -63,12 +63,18 @@ const FilterMenu = ({
     baseSetFilterState({ ...filterState, ...update });
   };
 
+  const doFilter = useCallback(() => {
+    const filteredRecords = filterBy(filterState, _records, records);
+    setFilterState({ isFiltering: _records.length > filteredRecords.length })
+    setState({ records: filteredRecords }, true); // when loading from a param, had a race condition. Kinda hacky
+  }, [filterState, records]);
+
   // used by the attribute list component
   const setSelection = (event: any) => {
     setFilterState({
       nodeFilters: event.value,
       previousFilters: {
-        nodeFilters: filterState.nodeFilters,
+        nodeFilters: filterState.nodeFilters
       },
     });
   };
@@ -93,21 +99,19 @@ const FilterMenu = ({
     filterState.previousFilters.categoriesFilters || {}
   ) ? createUUID() : false;
 
-  useEffect(() => {
-    doFilter();
-  }, [_records])
+  useEffect(() => doFilter(), [_records])
   
   // filter-changes
   useEffect(() => {
     if (!filterState.loaded) return;
-    if (
-      filterState.nodeFilters ||
-      filterState.categoriesFilters ||
-      filterState.searchBar
-    ) {
+    // if (
+    //   filterState.nodeFilters ||
+    //   filterState.categoriesFilters ||
+    //   filterState.searchBar
+    // ) {
       setFilterParams(filterState)
       doFilter();
-    }
+    // }
   }, [
     catFilterBool,
     nodeFiltersBool,
@@ -115,18 +119,6 @@ const FilterMenu = ({
     filterState.nodeFilters,
     filterState.categoriesFilters,
   ]);
-
-  const doFilter = (state?: FilterState) => {
-    let filteredRecords;
-    if (state) {
-      filteredRecords = filterBy(state, _records, records);
-      setFilterState({...state, isFiltering: _records.length > filteredRecords.length });
-    } else {
-      filteredRecords = filterBy(filterState, _records, records);
-      setFilterState({ isFiltering: _records.length > filteredRecords.length })
-    }
-    setState({ records: filteredRecords }, true); // when loading from a param, had a race condition. Kinda hacky
-  }
 
   const Filters = (
     <React.Fragment>
