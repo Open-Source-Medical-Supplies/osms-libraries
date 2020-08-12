@@ -12,6 +12,7 @@ import ProjectLibrary from "./components/project-library/project-library";
 import { SET_ENV } from "./redux/env.reducer";
 import LanguageService from "./services/language.service";
 import ScrollToTop from "./shared/utility/scroll-to-top";
+import loadTables from "./services/google-bucket.service";
 
 /* '20-06-28 * Can't get working due to bad path names after build + hosting */
 // const LazyCategoryLib = React.lazy(() =>
@@ -27,6 +28,7 @@ function App() {
 
   useEffect(() => {
     LanguageService.loadStaticLanguage(dispatch);
+    loadTables(dispatch);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 

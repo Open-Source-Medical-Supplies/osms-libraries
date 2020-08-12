@@ -3,6 +3,9 @@ import { BasicObject } from "../types/shared.type";
 const DataConverter = {
   // keyMap = { [airtableKey: string]: [frontendKey: string], ... }
   format: function(klass: any, data: BasicObject<any>, keyMap: BasicObject<string>): any {
+    if (data.fields) {
+      data = data.fields;
+    }
     Object.entries(data).forEach(([atKey, val]) => {
       if (keyMap.hasOwnProperty(atKey)) {
         if (atKey.toLowerCase().includes('image')) {

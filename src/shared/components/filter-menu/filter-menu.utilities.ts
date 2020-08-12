@@ -8,14 +8,15 @@ import {
   updateQueryParam,
 } from "../../utility/param-handling";
 import { FilterState } from "./filter-menu.interface";
+import { AirtableRecords } from "../../../types/airtable.type";
 
-interface FilerDatum {
+interface FilterDatum {
   key?: string;
   parentKey?: string;
   icon?: string;
-  children?: FilerDatum[];
+  children?: FilterDatum[];
 }
-type FitlerData = FilerDatum[];
+type FilterData = FilterDatum[];
 type Filters = {
   categories: {};
   attributes: string[];
@@ -23,11 +24,11 @@ type Filters = {
   previousFilters: FilterState["previousFilters"];
 };
 
-const buildTree = (data: FilerDatum, acc: any = {}) => {
+const buildTree = (data: FilterDatum, acc: any = {}) => {
   const { key, parentKey } = data;
   if (parentKey) {
     if (acc[parentKey]) {
-      (acc[parentKey].children as FilerDatum[]).push(data);
+      (acc[parentKey].children as FilterDatum[]).push(data);
     } else {
       acc[parentKey] = { children: [data] };
     }
@@ -49,21 +50,21 @@ const buildTree = (data: FilerDatum, acc: any = {}) => {
   return acc;
 };
 
-export const parseFilterData = (filterData: FitlerData) => {
+export const parseFilterData = (filterData: AirtableRecords<FilterDatum>) => {
   // filter data comes in as a flat tree with pointers b/w parent / child
-  const mappedRecords = (filterData.reduce((acc, record) => {
+  const mappedRecords = (filterData.reduce((acc, {fields: record}) => {
     if (record.icon) {
       record.icon = "pi " + record.icon;
     }
     buildTree(record, acc);
     return acc;
-  }, {}) as unknown) as { [key: string]: FilerDatum };
+  }, {}) as unknown) as { [key: string]: FilterDatum };
   // object to array
   return Object.keys(mappedRecords).map((nodeKey) => mappedRecords[nodeKey]);
 };
 
-export const flattenRecords = (records: FitlerData) => {
-  return records.reduce((acc: any, val) => {
+export const flattenRecords = (records: AirtableRecords<FilterDatum>) => {
+  return records.reduce((acc: any, {fields: val}) => {
     if (val && val.key) {
       const vk = val.key;
       acc[vk] = val;
@@ -73,6 +74,12 @@ export const flattenRecords = (records: FitlerData) => {
     return acc;
   }, {});
 };
+
+export const mapFilterData = (data: AirtableRecords<FilterDatum>) => {
+  const nodes: {}[] = parseFilterData(Object.assign([], data));
+  const flatNodes: {}[] = flattenRecords(Object.assign([], data));
+  return { nodes, flatNodes };
+}
 
 const processAttributes = (nodeFilters: any, flatNodes: any) => {
   const attrs = [];
