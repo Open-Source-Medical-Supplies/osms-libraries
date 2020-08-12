@@ -1,6 +1,6 @@
 import { Sidebar } from 'primereact/sidebar';
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from "react-redux";
+import { useDispatch, shallowEqual } from "react-redux";
 import { CategoryInfo } from '../../classes/category-info.class';
 import { useTypedSelector } from "../../redux/root.reducer";
 import { SelectAction, SELECTED_ACTIONS } from '../../redux/selected.reducer';
@@ -37,17 +37,17 @@ const CategoryLibrary: React.FC = () => {
     isMobile: env.isMobile,
     tables,
     selected
-  }));
+  }), shallowEqual);
 
   // local state
-  let [state, baseSetState] = useState(DefaultState);
-  const setState = (props: Partial<typeof DefaultState>) => baseSetState({...state, ...props});
+  let [state, setState] = useState(DefaultState);
   const hide = () => dispatch<SelectAction>({
     type: SELECTED_ACTIONS.CLEAR
   });
 
   useEffect(() => {
     if (tables.completed) {
+      console.log(selected)
       setState({
         records: tables.loaded[TABLE_MAPPING.CategoryInfo] as CategoryInfo[],
         _records: tables.loaded[TABLE_MAPPING.CategoryInfo] as CategoryInfo[]

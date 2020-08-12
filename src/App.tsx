@@ -13,6 +13,7 @@ import { SET_ENV } from "./redux/env.reducer";
 import loadTables from "./services/google-bucket.service";
 import LanguageService from "./services/language.service";
 import ScrollToTop from "./shared/utility/scroll-to-top";
+import ErrorBoundary from "./shared/components/error-boundary";
 
 /* '20-06-28 * Can't get working due to bad path names after build + hosting */
 // const LazyCategoryLib = React.lazy(() =>
@@ -36,11 +37,13 @@ function App() {
   return (
     <React.Fragment>
       <BrowserRouter basename="/libraries">
-        <Switch>
-          <Route path="/category" component={CategoryLibrary} />
-          <Route path="/project" component={ProjectLibrary} />
-          <Redirect from="*" to="/category" />
-        </Switch>
+        <ErrorBoundary>
+          <Switch>
+            <Route path="/category" component={CategoryLibrary} />
+            <Route path="/project" component={ProjectLibrary} />
+            <Redirect from="*" to="/category" />
+          </Switch>
+        </ErrorBoundary>
       </BrowserRouter>
       <ScrollToTop />
     </React.Fragment>
