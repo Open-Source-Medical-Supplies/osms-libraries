@@ -1,49 +1,51 @@
 import { Action } from "redux";
 
 interface DefaultState {
+  [table: string]: any | TableData;
   loaded: boolean;
-  tableList: string[];
-  tableCount: number;
+  list: string[];
+  countLoaded: number;
 }
 const defaultState: DefaultState = {
   loaded: false,
-  tableList: [],
-  tableCount: 0
+  list: [],
+  countLoaded: 0
 };
 
-export enum TableActionsType {
+export enum TableActions {
   LOAD_TABLE,
   SET_TABLE_LIST
 }
 
-export interface TableActions extends Action<TableActionsType> {
-  data: any[];
+export interface TableData {
+  data: any;
+  name: string;
+}
+
+export interface TableAction extends Action<TableActions> {
+  data: any;
   tableType?: string;
   table?: string;
 }
 
 export const tablesReducer = (
   state = defaultState,
-  action: TableActions
+  action: TableAction
 ) => {
-  const tableCount = state.tableCount + 1;
-  const loaded = state.tableList.length === tableCount; 
-
   switch (action.type) {
-    case TableActionsType.LOAD_TABLE:
-      const newState = {
+    case TableActions.LOAD_TABLE:
+      const countLoaded = state.countLoaded + 1;
+      const loaded = state.list.length === countLoaded; 
+      return {
         ...state,
         [action.tableType as string]:{
           data: action.data,
           name: action.table
         },
-        tableCount,
+        countLoaded,
         loaded
       };
-      console.log(state);
-      console.log(newState)
-      return newState
-    case TableActionsType.SET_TABLE_LIST:
+    case TableActions.SET_TABLE_LIST:
       return {
         ...state,
         tableList: action.data 

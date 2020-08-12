@@ -5,11 +5,12 @@ import { CategoryInfo } from "../classes/category-info.class";
 import { CategorySupply } from "../classes/category-supply.class";
 import { Material } from "../classes/material.class";
 import { Project } from "../classes/project.class";
-import { TableActionsType, TableActions } from "../redux/tables.reducer";
+import { TableActions, TableAction } from "../redux/tables.reducer";
 import { mapFilterData } from "../shared/components/filter-menu/filter-menu.utilities";
 import { BasicObject } from "../types/shared.type";
 import { AirtableRecords } from "../types/airtable.type";
 
+/** TableListItem based on the gBucket / gFunction setup */
 interface TableListItem {
   encoded: string;
   spaced: string;
@@ -18,8 +19,9 @@ interface TableListItem {
 }
 type TableList = TableListItem[];
 
+const BUCKET_NAME = 'opensourcemedicalsupplies.org';
 const url = (table: string) =>
-  `https://storage.googleapis.com/opensourcemedicalsupplies.org/${table}.json`;
+  `https://storage.googleapis.com/${BUCKET_NAME}/${table}.json`;
 const config: AxiosRequestConfig = {
   headers: {
     "Content-Type": "application/json"
@@ -42,11 +44,11 @@ const TableMapping: BasicObject<Function> = {
   Material,
 };
 
-const loadTables = (dispatch: Dispatch<TableActions>): void => {
+const loadTables = (dispatch: Dispatch<TableAction>): void => {
   axiosGet<TableList>("table_list").then(
     ({ data: tableList }) => {
       dispatch({
-        type: TableActionsType.SET_TABLE_LIST,
+        type: TableActions.SET_TABLE_LIST,
         data: tableList
       });
 
@@ -66,7 +68,7 @@ const loadTables = (dispatch: Dispatch<TableActions>): void => {
             }
 
             dispatch({
-              type: TableActionsType.LOAD_TABLE,
+              type: TableActions.LOAD_TABLE,
               table: camelCase(spaced),
               data,
               tableType: camelCase(type)
