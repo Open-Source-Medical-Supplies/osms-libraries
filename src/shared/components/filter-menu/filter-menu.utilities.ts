@@ -1,14 +1,15 @@
 import { Project } from "../../../classes/project.class";
+import { AirtableRecords } from "../../../types/airtable.type";
 import { FilterNodeData } from "../../../types/filter-node.type";
+import { BasicObject } from "../../../types/shared.type";
 import { allNotEmpty, notEmpty } from "../../utility/general.utility";
 import {
   getParam,
   PARAMS,
   QueryParams,
-  updateQueryParam,
+  updateQueryParam
 } from "../../utility/param-handling";
 import { FilterState } from "./filter-menu.interface";
-import { AirtableRecords } from "../../../types/airtable.type";
 
 interface FilterDatum {
   key?: string;
@@ -16,7 +17,6 @@ interface FilterDatum {
   icon?: string;
   children?: FilterDatum[];
 }
-type FilterData = FilterDatum[];
 type Filters = {
   categories: {};
   attributes: string[];
@@ -50,35 +50,32 @@ const buildTree = (data: FilterDatum, acc: any = {}) => {
   return acc;
 };
 
-export const parseFilterData = (filterData: AirtableRecords<FilterDatum>) => {
-  // filter data comes in as a flat tree with pointers b/w parent / child
-  const mappedRecords = (filterData.reduce((acc, {fields: record}) => {
-    if (record.icon) {
-      record.icon = "pi " + record.icon;
-    }
-    buildTree(record, acc);
-    return acc;
-  }, {}) as unknown) as { [key: string]: FilterDatum };
-  // object to array
-  return Object.keys(mappedRecords).map((nodeKey) => mappedRecords[nodeKey]);
-};
-
-export const flattenRecords = (records: AirtableRecords<FilterDatum>) => {
-  return records.reduce((acc: any, {fields: val}) => {
-    if (val && val.key) {
-      const vk = val.key;
-      acc[vk] = val;
-      // I was going to delete the 'key' b/c of redundancy,
-      // but the pointers refused to detach and were deleting it elsewhere
-    }
-    return acc;
-  }, {});
-};
-
 export const mapFilterData = (data: AirtableRecords<FilterDatum>) => {
-  const nodes: {}[] = parseFilterData(Object.assign([], data));
-  const flatNodes: {}[] = flattenRecords(Object.assign([], data));
-  return { nodes, flatNodes };
+  // filter data comes in as a flat tree with pointers b/w parent / child
+  const tempNodes: BasicObject<any> = {};
+  const flatNodes: BasicObject<any> = {};
+  data.forEach((data) => {
+    const fields = data.fields || data; // patch during transition from AirtableJS to gBucket
+    
+    // nodes handling
+    if (fields.icon) {
+      fields.icon = "pi " + fields.icon;
+    }
+    buildTree(fields, tempNodes);
+    // end nodes
+
+    // flatNodes handling
+    if (fields && fields.key) {
+      const vk = fields.key;
+      flatNodes[vk] = fields;
+    }
+    // end flatNodes
+  })
+
+  // object to array
+  const nodes = Object.keys(tempNodes).map((nodeKey) => tempNodes[nodeKey])
+
+  return {nodes, flatNodes};
 }
 
 const processAttributes = (nodeFilters: any, flatNodes: any) => {
