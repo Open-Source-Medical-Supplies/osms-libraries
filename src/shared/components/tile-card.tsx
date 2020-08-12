@@ -1,9 +1,7 @@
 import { Button } from 'primereact/button';
 import { Card } from 'primereact/card';
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../redux/root.reducer';
-import { LangType } from '../../redux/lang.reducer';
+import { useTypedSelector } from '../../redux/root.reducer';
 
 export interface TileCardAction {
   fn: Function;
@@ -31,7 +29,7 @@ const TileCard = ({
   children?: React.ReactNode;
   actionOnCard?: boolean;
 }) => {
-  const Lang = useSelector<RootState, LangType>(({lang}) => lang);
+  const Lang = useTypedSelector(({lang}) => lang);
   className = 'grayscale ' + className; 
 
   const headerImage = (

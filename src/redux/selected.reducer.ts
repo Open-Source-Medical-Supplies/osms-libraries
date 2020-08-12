@@ -1,0 +1,78 @@
+import loGet from "lodash.get";
+import { Action } from "redux";
+import { CategoryInfo } from "../classes/category-info.class";
+import { Project, CrossLinks } from "../classes/project.class";
+import {
+  getParam,
+  PARAMS,
+  updateQueryParam,
+  removeParam,
+} from "../shared/utility/param-handling";
+
+const defaultState = {
+  data: undefined,
+  projects: undefined,
+};
+
+export enum SELECTED_ACTIONS {
+  SET,
+  CHECK,
+  CLEAR,
+}
+
+type Selected = undefined | CategoryInfo | Project;
+
+interface SelectedStateCheck {
+  dataSet?: Selected[];
+  selector?: string;
+}
+export interface SelectedState extends SelectedStateCheck {
+  data?: Selected;
+  projects?: Project[];
+  projectSet?: CrossLinks;
+}
+export interface SelectAction extends Action<SELECTED_ACTIONS>, SelectedState {}
+
+export const selectedReducer = (
+  state = defaultState,
+  action: SelectAction
+) => {
+  const getProjects = (name: string | undefined) =>
+    name && action.projectSet ? action.projectSet[name] : [];
+
+  switch (action.type) {
+    case SELECTED_ACTIONS.CHECK:
+      const selector = action.selector || "displayName";
+      const param = getParam(PARAMS.SELECTED, true);
+      let selected: Selected = undefined;
+
+      if (param && action.dataSet) {
+        selected = action.dataSet.find(
+          (r: any) => loGet(r, selector) === param
+        );
+      }
+      return selected
+        ? {
+            data: selected,
+            projects: getProjects(selected.displayName),
+          }
+        : defaultState;
+
+    case SELECTED_ACTIONS.SET:
+      if (!action.data) {
+        return defaultState;
+      }
+      const { displayName } = action.data;
+      updateQueryParam({ key: PARAMS.SELECTED, val: displayName });
+
+      return {
+        data: action.data,
+        projects: getProjects(displayName),
+      };
+    case SELECTED_ACTIONS.CLEAR:
+      removeParam(PARAMS.SELECTED);
+      return defaultState;
+    default:
+      return state;
+  }
+};

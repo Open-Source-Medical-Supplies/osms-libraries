@@ -3,17 +3,17 @@ import { envReducer } from './env.reducer';
 import { libReducer } from './lib.reducer';
 import { langReducer } from "./lang.reducer";
 import { tablesReducer } from "./tables.reducer";
+import { selectedReducer } from "./selected.reducer";
+import { TypedUseSelectorHook, useSelector } from "react-redux";
 
 export const rootReducer = combineReducers({
   lib: libReducer,
   env: envReducer,
   lang: langReducer,
-  tables: tablesReducer
+  tables: tablesReducer,
+  selected: selectedReducer
 })
 
-export interface RootState {
-  lib: ReturnType<typeof libReducer>;
-  env: ReturnType<typeof envReducer>;
-  lang: ReturnType<typeof langReducer>;
-  tables: ReturnType<typeof tablesReducer>
-};
+export type RootState = ReturnType<typeof rootReducer>;
+
+export const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector;

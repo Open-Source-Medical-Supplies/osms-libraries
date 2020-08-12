@@ -1,8 +1,6 @@
 import { InputText } from "primereact/inputtext";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux/root.reducer";
-import { LangType } from "../../redux/lang.reducer";
+import { useTypedSelector } from "../../redux/root.reducer";
 /* eslint-disable react-hooks/exhaustive-deps */
 
 export type SearchBarStateChange = (searchState: string) => any;
@@ -13,7 +11,7 @@ const SearchBar = (props: {
   id?: string;
   className?: string;
 }) => {
-  const Lang = useSelector<RootState, LangType>(({lang}) => lang);
+  const Lang = useTypedSelector(({lang}) => lang);
 	const [searchState, setSearchState] = useState('');
 
 	useEffect(() => {
