@@ -1,20 +1,20 @@
 import axios, { AxiosRequestConfig } from "axios";
-import camelCase from "lodash.camelcase";
 import { Dispatch } from "react";
 import { CategoryInfo } from "../classes/category-info.class";
 import { CategorySupply } from "../classes/category-supply.class";
 import { Material } from "../classes/material.class";
 import { Project } from "../classes/project.class";
-import { TableActions, TableAction } from "../redux/tables.reducer";
+import { TableAction, TableActions } from "../redux/tables.reducer";
 import { mapFilterData } from "../shared/components/filter-menu/filter-menu.utilities";
-import { BasicObject } from "../types/shared.type";
 import { AirtableRecords } from "../types/airtable.type";
+import { BasicObject } from "../types/shared.type";
 
 /** TableListItem based on the gBucket / gFunction setup */
 interface TableListItem {
   encoded: string;
   spaced: string;
   underscored: string;
+  camelCased: string;
   type: string;
 }
 type TableList = TableListItem[];
@@ -52,7 +52,7 @@ const loadTables = (dispatch: Dispatch<TableAction>): void => {
         data: tableList
       });
 
-      tableList.forEach(({ underscored, spaced, type }) => {
+      tableList.forEach(({ underscored, spaced, type, camelCased }) => {
         axiosGet<AirtableRecords>(underscored).then(
           ({ data }) => {
             const mapper = TableMapping[type];
@@ -69,14 +69,21 @@ const loadTables = (dispatch: Dispatch<TableAction>): void => {
 
             dispatch({
               type: TableActions.LOAD_TABLE,
-              table: camelCase(spaced),
+              table: camelCased,
               data,
-              tableType: camelCase(type)
+              tableType: type
             });
           },
           (e) => {
             // catch for each table's data request
             console.warn(e);
+
+            dispatch({
+              type: TableActions.LOAD_TABLE,
+              table: camelCased,
+              data: {error: true},
+              tableType: type
+            });
           }
         );
       });
@@ -84,6 +91,11 @@ const loadTables = (dispatch: Dispatch<TableAction>): void => {
     (e) => {
       // catch for table-list data request
       console.warn(e);
+
+      dispatch({
+        type: TableActions.SET_TABLE_LIST,
+        data: {error: true}
+      });
     }
   );
 };

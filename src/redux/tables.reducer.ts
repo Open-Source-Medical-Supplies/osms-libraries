@@ -1,15 +1,18 @@
 import { Action } from "redux";
 
 interface DefaultState {
-  [table: string]: any | TableData;
-  loaded: boolean;
+  loaded: {
+    [table: string]: TableData;
+  };
+  completed: boolean;
   list: string[];
   countLoaded: number;
 }
 const defaultState: DefaultState = {
-  loaded: false,
+  completed: false,
   list: [],
-  countLoaded: 0
+  countLoaded: 0,
+  loaded: {}
 };
 
 export enum TableActions {
@@ -18,7 +21,7 @@ export enum TableActions {
 }
 
 export interface TableData {
-  data: any;
+  data: any[] | {} | {error: true};
   name: string;
 }
 
@@ -35,15 +38,18 @@ export const tablesReducer = (
   switch (action.type) {
     case TableActions.LOAD_TABLE:
       const countLoaded = state.countLoaded + 1;
-      const loaded = state.list.length === countLoaded; 
+      const completed = state.list.length === countLoaded; 
       return {
         ...state,
-        [action.tableType as string]:{
-          data: action.data,
-          name: action.table
+        loaded: {
+          ...state.loaded,
+          [action.tableType as string]:{
+            data: action.data,
+            name: action.table
+          }
         },
         countLoaded,
-        loaded
+        completed
       };
     case TableActions.SET_TABLE_LIST:
       return {
