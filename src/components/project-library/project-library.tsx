@@ -80,7 +80,6 @@ const ProjectLibrary: React.FC = () => {
             <CardContainer
               isMobile={isMobile}
               records={state.records}
-              cardChange={setState}
               selected={state.selected as Project} />
           </Loading>
       </div>
@@ -100,7 +99,6 @@ const ProjectLibrary: React.FC = () => {
           <CardContainer
             isMobile={isMobile}
             records={state.records}
-            cardChange={setState}
             selected={state.selected as Project} />
         </Loading>
       </div>

@@ -1,17 +1,16 @@
 import { Sidebar } from 'primereact/sidebar';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from "react-redux";
 import { CategoryInfo } from '../../classes/category-info.class';
 import { useTypedSelector } from "../../redux/root.reducer";
-import { SelectAction, SelectedState, SELECTED_ACTIONS } from '../../redux/selected.reducer';
-import { TableState } from '../../redux/tables.reducer';
+import { SelectAction, SELECTED_ACTIONS } from '../../redux/selected.reducer';
+import { TABLE_MAPPING } from '../../services/google-bucket.service';
 import CardContainer from '../../shared/components/card-container/card-container';
 import DetailWindow from '../../shared/components/detail-window/detail-window';
 import Loading from '../../shared/components/loading';
 import ActiveLib from '../../types/lib.enum';
 import CategoryLibFullCard from './category-library.full-card';
 import CategorySearchBar from './category-search-bar';
-import { TABLE_MAPPING } from '../../services/google-bucket.service';
 
 const DefaultState: {
   _records: CategoryInfo[]; // immutable
@@ -48,10 +47,12 @@ const CategoryLibrary: React.FC = () => {
   });
 
   useEffect(() => {
-    setState({
-      records: tables.loaded[TABLE_MAPPING.CategoryInfo],
-      _records: tables.loaded[TABLE_MAPPING.CategoryInfo]
-    })
+    if (tables.completed) {
+      setState({
+        records: tables.loaded[TABLE_MAPPING.CategoryInfo] as CategoryInfo[],
+        _records: tables.loaded[TABLE_MAPPING.CategoryInfo] as CategoryInfo[]
+      })
+    }
   }, [tables.completed]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const leftFlex  = `${selected.data ? 1 : 6} 0 ${selected.data ? '20%' : '100%'}`;
@@ -84,7 +85,6 @@ const CategoryLibrary: React.FC = () => {
           <CardContainer
             isMobile={isMobile}
             records={state.records}
-            cardChange={setState}
             selected={selected.data as CategoryInfo} />
         </Loading>
       </div>

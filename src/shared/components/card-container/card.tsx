@@ -8,6 +8,7 @@ import { SelectAction, SELECTED_ACTIONS } from "../../../redux/selected.reducer"
 import ActiveLib from "../../../types/lib.enum";
 import NewUpdatedBanner from "../new-updated-banner";
 import TileCard from "../tile-card";
+import { BasicObject } from "../../../types/shared.type";
 
 const ProjectCard: React.FC<{
   data: Project | CategoryInfo;
@@ -34,7 +35,7 @@ const ProjectCard: React.FC<{
     dispatch({
       type: SELECTED_ACTIONS.SET,
       data,
-      projectSet: projectsByCategory
+      projectSet: projectsByCategory as BasicObject<Project[]>
     });
   };
   

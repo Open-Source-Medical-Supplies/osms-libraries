@@ -1,15 +1,13 @@
 import { Action } from "redux";
 import { Material } from "../classes/material.class";
 import { Project } from "../classes/project.class";
+import { TABLE_MAPPING } from "../services/google-bucket.service";
 import { toDict } from "../shared/utility/general.utility";
 import { BasicObject } from "../types/shared.type";
-import { TABLE_MAPPING } from "../services/google-bucket.service";
 
 export interface TableState {
   loaded: {
-    [k in TABLE_MAPPING]: TableData;
-  } | {
-    projectsByCategory?: BasicObject<Project[]>;
+    [key: string]: TableData;
   };
   completed: boolean;
   list: string[];
@@ -27,7 +25,7 @@ export enum TABLE_ACTIONS {
   SET_TABLE_LIST
 }
 
-export type TableData = undefined | any[] | BasicObject<any> | {error: true};
+export type TableData = any[] | BasicObject<any> | {error: true};
 
 export interface TableAction extends Action<TABLE_ACTIONS> {
   data: any;

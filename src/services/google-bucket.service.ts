@@ -7,7 +7,7 @@ import { Project } from "../classes/project.class";
 import { TableAction, TABLE_ACTIONS } from "../redux/tables.reducer";
 import { mapFilterData } from "../shared/components/filter-menu/filter-menu.utilities";
 import { AirtableRecords } from "../types/airtable.type";
-import { MappedObject } from "../types/shared.type";
+import { valueof } from "../types/shared.type";
 
 /** TableListItem based on the gBucket / gFunction setup */
 interface TableListItem {
@@ -15,7 +15,7 @@ interface TableListItem {
   spaced: string;
   underscored: string;
   camelCased: string;
-  type: TABLE_MAPPING;
+  type: valueof<typeof TABLE_MAPPING>;
 }
 type TableList = TableListItem[];
 
@@ -36,14 +36,14 @@ const axiosGet = <T = any>(urlString: string) =>
  * or
  * provide a function that can handle an Array<{}>
  */
-export enum TABLE_MAPPING {
-  Project = "Project",
-  CategoryInfo = "CategoryInfo",
-  CategorySupply = "CategorySupply",
-  FilterMenu = "FilterMenu",
-  Material = "Material",
+export const TABLE_MAPPING = {
+  Project: "Project",
+  CategoryInfo: "CategoryInfo",
+  CategorySupply: "CategorySupply",
+  FilterMenu: "FilterMenu",
+  Material: "Material",
 }
-export const TableMapping: MappedObject<TABLE_MAPPING, Function> = {
+export const TableMap: {[key in valueof<typeof TABLE_MAPPING>]: Function} = {
   Project,
   CategoryInfo,
   CategorySupply,
@@ -62,7 +62,7 @@ const loadTables = (dispatch: Dispatch<TableAction>): void => {
       tableList.forEach(({ underscored, type, camelCased }) => {
         axiosGet<AirtableRecords>(underscored).then(
           ({ data }) => {
-            const mapper = TableMapping[type];
+            const mapper = TableMap[type];
 
             if (mapper) {
               if (mapper.prototype) {
