@@ -4,10 +4,10 @@ import { CategoryInfo } from "../classes/category-info.class";
 import { CategorySupply } from "../classes/category-supply.class";
 import { Material } from "../classes/material.class";
 import { Project } from "../classes/project.class";
-import { TableAction, TableActions } from "../redux/tables.reducer";
+import { TableAction, TABLE_ACTIONS } from "../redux/tables.reducer";
 import { mapFilterData } from "../shared/components/filter-menu/filter-menu.utilities";
 import { AirtableRecords } from "../types/airtable.type";
-import { BasicObject } from "../types/shared.type";
+import { MappedObject } from "../types/shared.type";
 
 /** TableListItem based on the gBucket / gFunction setup */
 interface TableListItem {
@@ -15,16 +15,16 @@ interface TableListItem {
   spaced: string;
   underscored: string;
   camelCased: string;
-  type: string;
+  type: TABLE_MAPPING;
 }
 type TableList = TableListItem[];
 
-const BUCKET_NAME = 'opensourcemedicalsupplies.org';
+const BUCKET_NAME = "opensourcemedicalsupplies.org";
 const url = (table: string) =>
   `https://storage.googleapis.com/${BUCKET_NAME}/${table}.json`;
 const config: AxiosRequestConfig = {
   headers: {
-    "Content-Type": "application/json"
+    "Content-Type": "application/json",
   },
 };
 const axiosGet = <T = any>(urlString: string) =>
@@ -36,7 +36,14 @@ const axiosGet = <T = any>(urlString: string) =>
  * or
  * provide a function that can handle an Array<{}>
  */
-const TableMapping: BasicObject<Function> = {
+export enum TABLE_MAPPING {
+  Project = "Project",
+  CategoryInfo = "CategoryInfo",
+  CategorySupply = "CategorySupply",
+  FilterMenu = "FilterMenu",
+  Material = "Material",
+}
+export const TableMapping: MappedObject<TABLE_MAPPING, Function> = {
   Project,
   CategoryInfo,
   CategorySupply,
@@ -48,11 +55,11 @@ const loadTables = (dispatch: Dispatch<TableAction>): void => {
   axiosGet<TableList>("table_list").then(
     ({ data: tableList }) => {
       dispatch({
-        type: TableActions.SET_TABLE_LIST,
-        data: tableList
+        type: TABLE_ACTIONS.SET_TABLE_LIST,
+        data: tableList,
       });
 
-      tableList.forEach(({ underscored, spaced, type, camelCased }) => {
+      tableList.forEach(({ underscored, type, camelCased }) => {
         axiosGet<AirtableRecords>(underscored).then(
           ({ data }) => {
             const mapper = TableMapping[type];
@@ -68,10 +75,10 @@ const loadTables = (dispatch: Dispatch<TableAction>): void => {
             }
 
             dispatch({
-              type: TableActions.LOAD_TABLE,
+              type: TABLE_ACTIONS.LOAD_TABLE,
               table: camelCased,
               data,
-              tableType: type
+              tableType: type,
             });
           },
           (e) => {
@@ -79,10 +86,10 @@ const loadTables = (dispatch: Dispatch<TableAction>): void => {
             console.warn(e);
 
             dispatch({
-              type: TableActions.LOAD_TABLE,
+              type: TABLE_ACTIONS.LOAD_TABLE,
               table: camelCased,
-              data: {error: true},
-              tableType: type
+              data: { error: true },
+              tableType: type,
             });
           }
         );
@@ -93,8 +100,8 @@ const loadTables = (dispatch: Dispatch<TableAction>): void => {
       console.warn(e);
 
       dispatch({
-        type: TableActions.SET_TABLE_LIST,
-        data: {error: true}
+        type: TABLE_ACTIONS.SET_TABLE_LIST,
+        data: { error: true },
       });
     }
   );

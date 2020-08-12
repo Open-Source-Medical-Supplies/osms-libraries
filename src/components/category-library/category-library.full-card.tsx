@@ -1,9 +1,7 @@
 import React from "react";
-import { useSelector } from "react-redux";
 import { CategoryInfo } from "../../classes/category-info.class";
 import { Project } from "../../classes/project.class";
-import { LangType } from "../../redux/lang.reducer";
-import { RootState } from "../../redux/root.reducer";
+import { useTypedSelector } from "../../redux/root.reducer";
 import ImageCarousel from "../../shared/components/detail-window/image-carousel";
 import MarkdownSection from "../../shared/components/markdown/markdown-section";
 import TileCard from "../../shared/components/tile-card";
@@ -14,12 +12,14 @@ import { Indexable } from "../../types/shared.type";
 
 const CategoryLibFullCard = ({
 	selected,
-	links,
+	links
 }: {
-	selected: CategoryInfo;
-	links: Project[];
+	selected: CategoryInfo | undefined;
+	links: Project[] | undefined;
 }) => {
-  const Lang = useSelector<RootState, LangType>(({lang}) => lang);
+  const Lang = useTypedSelector(({lang}) => lang);
+  
+  if (!links) { links = []; }
   if (!selected) return <div></div>;
 	const { displayName, imageURL } = selected;
 	const headerImage =

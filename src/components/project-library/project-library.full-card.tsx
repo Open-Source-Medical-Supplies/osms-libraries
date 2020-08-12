@@ -3,6 +3,7 @@ import React from "react";
 import ReactMarkdown from "react-markdown";
 import { Material } from "../../classes/material.class";
 import { Project } from "../../classes/project.class";
+import { useTypedSelector } from "../../redux/root.reducer";
 import ImageCarousel from "../../shared/components/detail-window/image-carousel";
 import MarkdownSection from "../../shared/components/markdown/markdown-section";
 import TileCard from "../../shared/components/tile-card";
@@ -12,9 +13,6 @@ import {
 } from "../../shared/utility/general.utility";
 import { genLocalParam } from '../../shared/utility/param-handling';
 import ActiveLib from "../../types/lib.enum";
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux/root.reducer";
-import { LangType } from "../../redux/lang.reducer";
 
 const ProjectFullCard = ({
 	selected,
@@ -23,7 +21,7 @@ const ProjectFullCard = ({
 	selected: Project;
 	materials: Material[];
 }) => {
-  const Lang = useSelector<RootState, LangType>(({lang}) => lang);
+  const Lang = useTypedSelector(({lang}) => lang);
   if (!selected) return <div></div>;
 
 	const {

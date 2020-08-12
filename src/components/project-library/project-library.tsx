@@ -1,16 +1,16 @@
 import { Sidebar } from 'primereact/sidebar';
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { CategorySupply } from '../../classes/category-supply.class';
 import { Material } from '../../classes/material.class';
 import { Project } from '../../classes/project.class';
-import { RootState } from "../../redux/root.reducer";
+import { useTypedSelector } from "../../redux/root.reducer";
+import { SelectAction, SELECTED_ACTIONS } from '../../redux/selected.reducer';
 import { fetchData } from '../../services/app.service';
 import CardContainer from "../../shared/components/card-container/card-container";
 import DetailWindow from "../../shared/components/detail-window/detail-window";
 import FilterMenu from "../../shared/components/filter-menu/filter-menu";
 import Loading from '../../shared/components/loading';
-import { hideSelected } from '../../shared/utility/general.utility';
 import ActiveLib from '../../types/lib.enum';
 import { BasicObject } from '../../types/shared.type';
 import ProjectFullCard from './project-library.full-card';
@@ -41,7 +41,7 @@ const ProjectLibrary: React.FC = () => {
   const dispatch = useDispatch();
   dispatch({type: ActiveLib.PROJECT});
 
-  const isMobile = useSelector<RootState, boolean>(({env}) => env.isMobile);
+  const isMobile = useTypedSelector(({env}) => env.isMobile);
 
   let [state, baseSetState] = useState(StateDefault);
   const setState = (props: PartialState, async = false) => {
@@ -50,7 +50,9 @@ const ProjectLibrary: React.FC = () => {
   };
 
   const setLoadingState = (d: PartialState) => setState({loading: false, ...d});
-  const hide = hideSelected(setState);
+  const hide = () => dispatch<SelectAction>({
+    type: SELECTED_ACTIONS.CLEAR
+  });
 
   useEffect(() => {
     (async() => {

@@ -1,23 +1,29 @@
 import classNames from "classnames";
-import React, { useRef } from 'react';
-import { useSelector } from "react-redux";
+import React, { Dispatch, useRef } from 'react';
+import { useDispatch } from "react-redux";
 import { CategoryInfo } from "../../../classes/category-info.class";
 import { Project } from '../../../classes/project.class';
-import { RootState } from "../../../redux/root.reducer";
+import { useTypedSelector } from "../../../redux/root.reducer";
+import { SelectAction, SELECTED_ACTIONS } from "../../../redux/selected.reducer";
 import ActiveLib from "../../../types/lib.enum";
-import { PARAMS, updateQueryParam } from "../../utility/param-handling";
 import NewUpdatedBanner from "../new-updated-banner";
 import TileCard from "../tile-card";
 
 const ProjectCard: React.FC<{
   data: Project | CategoryInfo;
-  setCard: Function;
   selected: Project | CategoryInfo;
   isMobile: boolean;
 }> = ({
-  data, setCard, selected, isMobile
+  data, selected, isMobile
 }) => {
-  const lib = useSelector<RootState, ActiveLib>(({lib}) => lib)
+  const dispatch = useDispatch<Dispatch<SelectAction>>();
+  const {
+    lib,
+    projectsByCategory
+  } = useTypedSelector(({lib, tables}) => ({
+    lib,
+    projectsByCategory: tables.loaded.projectsByCategory
+  }))
   const thisRef = useRef<HTMLDivElement>(null);
   
   const { displayName, imageURL } = data;
@@ -25,8 +31,11 @@ const ProjectCard: React.FC<{
   const cardIsSelected = !!selectedName && selectedName === displayName;
 
   const selectCard = () => {
-    updateQueryParam({key: PARAMS.SELECTED, val: displayName});
-    setCard({selected: data, visible: true});
+    dispatch({
+      type: SELECTED_ACTIONS.SET,
+      data,
+      projectSet: projectsByCategory
+    });
   };
   
   const highlight = classNames({ "card-selected": cardIsSelected });

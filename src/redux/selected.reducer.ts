@@ -9,18 +9,13 @@ import {
   removeParam,
 } from "../shared/utility/param-handling";
 
-const defaultState = {
-  data: undefined,
-  projects: undefined,
-};
-
 export enum SELECTED_ACTIONS {
   SET,
   CHECK,
   CLEAR,
 }
 
-type Selected = undefined | CategoryInfo | Project;
+type Selected = null | undefined | CategoryInfo | Project;
 
 interface SelectedStateCheck {
   dataSet?: Selected[];
@@ -31,12 +26,14 @@ export interface SelectedState extends SelectedStateCheck {
   projects?: Project[];
   projectSet?: CrossLinks;
 }
-export interface SelectAction extends Action<SELECTED_ACTIONS>, SelectedState {}
+export type SelectAction = Action<SELECTED_ACTIONS> & SelectedState;
+
+const defaultState: SelectedState = {};
 
 export const selectedReducer = (
   state = defaultState,
   action: SelectAction
-) => {
+): SelectedState => {
   const getProjects = (name: string | undefined) =>
     name && action.projectSet ? action.projectSet[name] : [];
 

@@ -1,78 +1,75 @@
 import { Sidebar } from 'primereact/sidebar';
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState, useEffect } from 'react';
+import { useDispatch } from "react-redux";
 import { CategoryInfo } from '../../classes/category-info.class';
-import { CrossLinks, Project } from '../../classes/project.class';
-import { RootState } from "../../redux/root.reducer";
-import { fetchData } from '../../services/app.service';
+import { useTypedSelector } from "../../redux/root.reducer";
+import { SelectAction, SelectedState, SELECTED_ACTIONS } from '../../redux/selected.reducer';
+import { TableState } from '../../redux/tables.reducer';
 import CardContainer from '../../shared/components/card-container/card-container';
 import DetailWindow from '../../shared/components/detail-window/detail-window';
 import Loading from '../../shared/components/loading';
-import { hideSelected } from '../../shared/utility/general.utility';
 import ActiveLib from '../../types/lib.enum';
 import CategoryLibFullCard from './category-library.full-card';
 import CategorySearchBar from './category-search-bar';
+import { TABLE_MAPPING } from '../../services/google-bucket.service';
 
-const StateDefault: {
-  _records: []; // immutable
-  records: [];
-  selected: undefined | CategoryInfo;
-  visible: boolean;
-  projectsByCategory: CrossLinks;
-  selectedProjects: Project[];
-  loading: boolean;
+const DefaultState: {
+  _records: CategoryInfo[]; // immutable
+  records: CategoryInfo[];
 } = {
   _records: [], // immutable
   records: [],
-  selected: undefined,
-  visible: false,
-  projectsByCategory: {},
-  selectedProjects: [],
-  loading: true
 };
 
 const CategoryLibrary: React.FC = () => {
+  // Redux
   const dispatch = useDispatch();
   dispatch({type: ActiveLib.CATEGORY});
-  
-  let [state, baseSetState] = useState(StateDefault);
-  const isMobile = useSelector<RootState, boolean>(({env}) => env.isMobile);
-  const setState = (props: Partial<typeof StateDefault>) => baseSetState({...state, ...props});
-  const setLoadingState = (d: Partial<typeof StateDefault>) => setState({loading: false, ...d});
-  const hide = hideSelected(setState);
+
+  const {
+    isMobile,
+    tables,
+    selected
+   } = useTypedSelector(({
+    env,
+    tables,
+    selected
+  }) => ({
+    isMobile: env.isMobile,
+    tables,
+    selected
+  }));
+
+  // local state
+  let [state, baseSetState] = useState(DefaultState);
+  const setState = (props: Partial<typeof DefaultState>) => baseSetState({...state, ...props});
+  const hide = () => dispatch<SelectAction>({
+    type: SELECTED_ACTIONS.CLEAR
+  });
 
   useEffect(() => {
-    (async() => {
-      fetchData<CategoryInfo, typeof setLoadingState>(
-        ['getCategories', 'getLinks'],
-        "displayName",
-        setLoadingState
-        );
-      })()
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-  
-  useEffect(() => {
-    if (!state.selected) { return; }
-    const key = state.selected.displayName;
-    setState({selectedProjects: state.projectsByCategory[key]});
-  }, [state.selected]); // eslint-disable-line react-hooks/exhaustive-deps
+    setState({
+      records: tables.loaded[TABLE_MAPPING.CategoryInfo],
+      _records: tables.loaded[TABLE_MAPPING.CategoryInfo]
+    })
+  }, [tables.completed]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const leftFlex = `${state.visible ? 1 : 6} 0 ${state.visible ? '20%' : '100%'}`;
-  const rightFlex = `${state.visible ? 5 : 0} 0 ${isMobile ? '0%' : '80%'}`;
+  const leftFlex  = `${selected.data ? 1 : 6} 0 ${selected.data ? '20%' : '100%'}`;
+  const rightFlex = `${selected.data ? 5 : 0} 0 ${isMobile ? '0%' : '80%'}`;
 
   const MobileDetailWindow = (
     <Sidebar
       position='right'
       fullScreen={true}
-      visible={state.visible}
+      visible={!!selected.data}
       onHide={hide}>
-      <CategoryLibFullCard selected={state.selected as CategoryInfo} links={state.selectedProjects} />
+      <CategoryLibFullCard selected={selected.data as CategoryInfo} links={selected.projects} />
     </Sidebar>
   );
 
   const DesktopDetailWindow = (
-    <DetailWindow visible={state.visible} onHide={hide} className='p-sidebar-lg'>
-      <CategoryLibFullCard selected={state.selected as CategoryInfo} links={state.selectedProjects} />
+    <DetailWindow visible={!!selected.data} onHide={hide} className='p-sidebar-lg'>
+      <CategoryLibFullCard selected={selected.data as CategoryInfo} links={selected.projects} />
     </DetailWindow>
   );
   
@@ -83,12 +80,12 @@ const CategoryLibrary: React.FC = () => {
       <div id='app__left-column' className='flex-column' style={{ flex: leftFlex }}>
         <CategorySearchBar _records={state._records} setState={setState} />
         <div className='divider-1'></div>
-        <Loading loading={state.loading}>
+        <Loading loading={tables.completed}>
           <CardContainer
             isMobile={isMobile}
             records={state.records}
             cardChange={setState}
-            selected={state.selected as CategoryInfo} />
+            selected={selected.data as CategoryInfo} />
         </Loading>
       </div>
       <div id='app__detail-window' style={{ flex: rightFlex, maxWidth: '79vw' }}>

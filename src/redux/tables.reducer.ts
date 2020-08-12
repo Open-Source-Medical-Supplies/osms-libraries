@@ -2,10 +2,14 @@ import { Action } from "redux";
 import { Material } from "../classes/material.class";
 import { Project } from "../classes/project.class";
 import { toDict } from "../shared/utility/general.utility";
+import { BasicObject } from "../types/shared.type";
+import { TABLE_MAPPING } from "../services/google-bucket.service";
 
 export interface TableState {
   loaded: {
-    [table: string]: TableData;
+    [k in TABLE_MAPPING]: TableData;
+  } | {
+    projectsByCategory?: BasicObject<Project[]>;
   };
   completed: boolean;
   list: string[];
@@ -23,14 +27,13 @@ export enum TABLE_ACTIONS {
   SET_TABLE_LIST
 }
 
-export type TableData = any[] | {} | {error: true};
+export type TableData = undefined | any[] | BasicObject<any> | {error: true};
 
 export interface TableAction extends Action<TABLE_ACTIONS> {
   data: any;
   tableType?: string;
   table?: string;
 }
-
 export const tablesReducer = (
   state = defaultState,
   action: TableAction
@@ -41,13 +44,14 @@ export const tablesReducer = (
       const completed = state.list.length === countLoaded;
       let loadNewData: TableState['loaded'];
 
+      // I'm not a fan of this part
       switch (action.table) {
-        case 'Material':
+        case TABLE_MAPPING.Material:
           loadNewData = {
             [action.tableType as string]: toDict<Material>(action.data, 'name')
           }
           break;
-        case 'Project':
+        case TABLE_MAPPING.Project:
           loadNewData = {
             [action.tableType as string]: action.data,
             projectsByCategory: toDict<Project>(action.data, 'name'),

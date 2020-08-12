@@ -1,8 +1,7 @@
 import { Button } from "primereact/button";
 import { Sidebar } from "primereact/sidebar";
-import React, { useEffect, useState, useCallback } from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../redux/root.reducer";
+import React, { useCallback, useEffect, useState } from "react";
+import { useTypedSelector } from "../../../redux/root.reducer";
 import {
   parseCategories,
   parseFilterMenu
@@ -48,7 +47,7 @@ const FilterMenu = ({
   state: any;
   setState: Function;
 }) => {
-  const isMobile = useSelector<RootState, boolean>(({ env }) => env.isMobile);
+  const isMobile = useTypedSelector(({ env }) => env.isMobile);
   
   const { _records, records } = state;
   const [filterState, baseSetFilterState] = useState(FilterStateDefault);
