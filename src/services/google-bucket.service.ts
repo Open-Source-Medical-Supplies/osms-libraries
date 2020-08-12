@@ -18,17 +18,22 @@ interface TableListItem {
 }
 type TableList = TableListItem[];
 
-
 const url = (table: string) =>
   `https://storage.googleapis.com/opensourcemedicalsupplies.org/${table}.json`;
 const config: AxiosRequestConfig = {
   headers: {
-    "Content-Type": "application/json",
+    "Content-Type": "application/json"
   },
 };
 const axiosGet = <T = any>(urlString: string) =>
   axios.get<T>(url(urlString), config);
 
+/**
+ * Either
+ * provide a Ctor to map the retrieved Array<{}> -> Array<classInstance>
+ * or
+ * provide a function that can handle an Array<{}>
+ */
 const TableMapping: BasicObject<Function> = {
   Project,
   CategoryInfo,
