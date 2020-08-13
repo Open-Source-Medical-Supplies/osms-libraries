@@ -10,18 +10,12 @@ import { genLocalParam } from "../../shared/utility/param-handling";
 import ActiveLib from "../../shared/types/lib.enum";
 import { Indexable } from "../../shared/types/shared.type";
 
-const CategoryLibFullCard = ({
-	selected,
-	links
-}: {
-	selected: CategoryInfo | undefined;
-	links: Project[] | undefined;
-}) => {
-  const Lang = useTypedSelector(({lang}) => lang);
-  
-  if (!links) { links = []; }
-  if (!selected) return <div></div>;
-	const { displayName, imageURL } = selected;
+const CategoryLibFullCard = () => {
+  const {lang, selected} = useTypedSelector(({lang, selected}) => ({lang, selected}));
+  if (!selected.data) return <div></div>;
+  console.log(selected.data)
+  const links = selected.projects;
+	const { displayName, imageURL } = selected.data as CategoryInfo;
 	const headerImage =
 		typeof imageURL !== "string" ? (
 			<div className="center-flex" style={{ height: "150px" }}>
@@ -41,12 +35,12 @@ const CategoryLibFullCard = ({
 		const linkAcross = genLocalParam( ActiveLib.PROJECT, displayName );
 		const actions = [
 			{
-				label: Lang['viewSource'],
+				label: lang['viewSource'],
 				icon: "external-link",
 				fn: openExternal(externalLink),
 			},
 			{
-				label: Lang['viewDetails'],
+				label: lang['viewDetails'],
 				icon: "eye",
 				fn: openExternal(linkAcross),
 			},
@@ -70,7 +64,7 @@ const CategoryLibFullCard = ({
 				<h1>{displayName}</h1>
         {
           CategoryInfo.CardSections.map(({key, value}) => {
-            return MarkdownSection(value, (selected as Indexable)[key])
+            return MarkdownSection(value, (selected.data as Indexable)[key])
           })
         }
         { links && links.length ?
