@@ -4,7 +4,7 @@ const DataConverter = {
   // keyMap = { [airtableKey: string]: [frontendKey: string], ... }
   format: function(klass: any, data: BasicObject<any>, keyMap: BasicObject<string>): any {
     if (data.fields) {
-      data = data.fields;
+      throw TypeError('Data should be handled better before this point');
     }
     Object.entries(data).forEach(([atKey, val]) => {
       if (keyMap.hasOwnProperty(atKey)) {
