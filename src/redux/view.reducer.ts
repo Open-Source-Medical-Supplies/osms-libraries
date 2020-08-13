@@ -3,9 +3,9 @@ import { CategoryInfo } from '../shared/classes/category-info.class';
 import { Project } from '../shared/classes/project.class';
 
 export enum VIEW_ACTION {
-  SET,
-  UPDATE, // update based on filtering
-  RESET   // reset to an unfiltered state
+  SET = 'SET',
+  UPDATE = 'UPDATE', // update based on filtering
+  RESET = 'RESET'   // reset to an unfiltered state
 }
 
 export interface ViewAction extends Action<VIEW_ACTION> {

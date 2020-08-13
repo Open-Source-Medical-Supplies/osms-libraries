@@ -21,8 +21,8 @@ const defaultState: TableState = {
 };
 
 export enum TABLE_ACTIONS {
-  LOAD_TABLE,
-  SET_TABLE_LIST
+  LOAD_TABLE = 'LOAD_TABLE',
+  SET_TABLE_LIST = 'SET_TABLE_LIST'
 }
 
 export type TableData = any[] | BasicObject<any> | {error: true};

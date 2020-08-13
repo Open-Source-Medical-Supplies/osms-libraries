@@ -10,9 +10,9 @@ import {
 } from "../shared/utility/param-handling";
 
 export enum SELECTED_ACTIONS {
-  SET,
-  CHECK,
-  CLEAR,
+  SET = 'SET',
+  CHECK = 'CHECK',
+  CLEAR = 'CLEAR',
 }
 
 type Selected = null | undefined | CategoryInfo | Project;
