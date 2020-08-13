@@ -2,7 +2,7 @@ import TreeNode from "primereact/components/treenode/TreeNode";
 import { Panel } from "primereact/panel";
 import { Tree, TreeProps } from "primereact/tree";
 import React from "react";
-import { FilterNodes, FilterNodeData } from "../../../types/filter-node.type";
+import { FilterNodes, FilterNodeData } from "../../types/filter-node.type";
 
 const AttributesList = ({
   nodes, nodeFilters, setSelection

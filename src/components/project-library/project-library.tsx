@@ -1,9 +1,9 @@
 import { Sidebar } from 'primereact/sidebar';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from "react-redux";
-import { CategorySupply } from '../../classes/category-supply.class';
-import { Material } from '../../classes/material.class';
-import { Project } from '../../classes/project.class';
+import { CategorySupply } from '../../shared/classes/category-supply.class';
+import { Material } from '../../shared/classes/material.class';
+import { Project } from '../../shared/classes/project.class';
 import { useTypedSelector } from "../../redux/root.reducer";
 import { SelectAction, SELECTED_ACTIONS } from '../../redux/selected.reducer';
 import { fetchData } from '../../services/app.service';
@@ -11,8 +11,8 @@ import CardContainer from "../../shared/components/card-container/card-container
 import DetailWindow from "../../shared/components/detail-window/detail-window";
 import FilterMenu from "../../shared/components/filter-menu/filter-menu";
 import Loading from '../../shared/components/loading';
-import ActiveLib from '../../types/lib.enum';
-import { BasicObject } from '../../types/shared.type';
+import ActiveLib from '../../shared/types/lib.enum';
+import { BasicObject } from '../../shared/types/shared.type';
 import ProjectFullCard from './project-library.full-card';
 
 const StateDefault: {

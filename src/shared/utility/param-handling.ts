@@ -1,4 +1,4 @@
-import ActiveLib from "../../types/lib.enum";
+import ActiveLib from "../types/lib.enum";
 
 export enum PARAMS {
   FILTERSTATE = 'filterState',

@@ -1,4 +1,4 @@
-import { BasicObject } from "../types/shared.type";
+import { BasicObject } from "../shared/types/shared.type";
 
 export const SET_LANG = "setLang";
 

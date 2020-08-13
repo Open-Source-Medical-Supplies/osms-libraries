@@ -1,4 +1,4 @@
-import { FilterNodes, FilterNodeData } from "../../../types/filter-node.type";
+import { FilterNodes, FilterNodeData } from "../../types/filter-node.type";
 
 export interface PreviousFilterState {
   nodeFilters?: FilterNodeData;

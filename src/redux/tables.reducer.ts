@@ -1,9 +1,9 @@
 import { Action } from "redux";
-import { Material } from "../classes/material.class";
-import { Project } from "../classes/project.class";
-import { TABLE_MAPPING } from "../services/google-bucket.service";
+import { Material } from "../shared/classes/material.class";
+import { Project } from "../shared/classes/project.class";
 import { toDict } from "../shared/utility/general.utility";
-import { BasicObject } from "../types/shared.type";
+import { BasicObject } from "../shared/types/shared.type";
+import { TABLE_MAPPING } from "../shared/constants/google-bucket.constants";
 
 export interface TableState {
   loaded: {

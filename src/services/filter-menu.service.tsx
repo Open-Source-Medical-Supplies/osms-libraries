@@ -1,4 +1,4 @@
-import { CategorySupply } from "../classes/category-supply.class";
+import { CategorySupply } from "../shared/classes/category-supply.class";
 import { mapFilterData } from "../shared/components/filter-menu/filter-menu.utilities";
 import { AirtableHelpers, AirtableSupplyCalls } from "./airtable";
 

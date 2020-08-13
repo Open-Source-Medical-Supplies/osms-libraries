@@ -1,7 +1,7 @@
 import loGet from "lodash.get";
 import { Action } from "redux";
-import { CategoryInfo } from "../classes/category-info.class";
-import { Project, CrossLinks } from "../classes/project.class";
+import { CategoryInfo } from "../shared/classes/category-info.class";
+import { Project, CrossLinks } from "../shared/classes/project.class";
 import {
   getParam,
   PARAMS,
@@ -70,6 +70,7 @@ export const selectedReducer = (
       removeParam(PARAMS.SELECTED);
       return defaultState;
     default:
-      return state;
+      // TODO console.log('I dunno about this. Shouldn\'t it be state?')      
+      return defaultState;
   }
 };

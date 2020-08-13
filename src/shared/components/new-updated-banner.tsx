@@ -1,6 +1,6 @@
 import React from 'react';
-import { CategoryInfo } from "../../classes/category-info.class";
-import { Project } from "../../classes/project.class";
+import { CategoryInfo } from "../classes/category-info.class";
+import { Project } from "../classes/project.class";
 import { useTypedSelector } from '../../redux/root.reducer';
 import FormatHostingURL from '../../services/url-format.service';
 import newSvgUrl from '../assets/new-outline.svg';

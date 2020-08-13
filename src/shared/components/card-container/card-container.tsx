@@ -1,7 +1,7 @@
 import { DataView } from 'primereact/dataview';
 import React from 'react';
-import { CategoryInfo } from '../../../classes/category-info.class';
-import { Project } from '../../../classes/project.class';
+import { CategoryInfo } from '../../classes/category-info.class';
+import { Project } from '../../classes/project.class';
 import ProjectCard from './card';
 
 interface CardContainerType {

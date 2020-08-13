@@ -1,6 +1,6 @@
 import { Dispatch } from "react";
 import { SET_LANG } from "../redux/lang.reducer";
-import { BasicObject } from "../types/shared.type";
+import { BasicObject } from "../shared/types/shared.type";
 import { AirtableHelpers, AirtableSupportingCalls } from "./airtable";
 
 const langReducer = (data: any) => {

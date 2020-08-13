@@ -1,14 +1,14 @@
 import classNames from "classnames";
 import React, { Dispatch, useRef } from 'react';
 import { useDispatch } from "react-redux";
-import { CategoryInfo } from "../../../classes/category-info.class";
-import { Project } from '../../../classes/project.class';
+import { CategoryInfo } from "../../classes/category-info.class";
+import { Project } from '../../classes/project.class';
 import { useTypedSelector } from "../../../redux/root.reducer";
 import { SelectAction, SELECTED_ACTIONS } from "../../../redux/selected.reducer";
-import ActiveLib from "../../../types/lib.enum";
+import ActiveLib from "../../types/lib.enum";
 import NewUpdatedBanner from "../new-updated-banner";
 import TileCard from "../tile-card";
-import { BasicObject } from "../../../types/shared.type";
+import { BasicObject } from "../../types/shared.type";
 
 const ProjectCard: React.FC<{
   data: Project | CategoryInfo;

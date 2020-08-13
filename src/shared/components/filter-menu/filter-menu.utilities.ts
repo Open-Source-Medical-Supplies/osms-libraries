@@ -1,7 +1,7 @@
-import { Project } from "../../../classes/project.class";
-import { AirtableRecords } from "../../../types/airtable.type";
-import { FilterNodeData } from "../../../types/filter-node.type";
-import { BasicObject } from "../../../types/shared.type";
+import { Project } from "../../classes/project.class";
+import { AirtableRecords } from "../../types/airtable.type";
+import { FilterNodeData } from "../../types/filter-node.type";
+import { BasicObject } from "../../types/shared.type";
 import { allNotEmpty, notEmpty } from "../../utility/general.utility";
 import {
   getParam,

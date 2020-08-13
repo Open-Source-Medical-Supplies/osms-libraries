@@ -1,5 +1,5 @@
 import React from 'react';
-import { BasicObject } from '../../types/shared.type';
+import { BasicObject } from '../types/shared.type';
 import get from 'lodash.get';
 import { HIDE_SELECTED } from '../constants/general.constants';
 import { removeParam, PARAMS } from './param-handling';

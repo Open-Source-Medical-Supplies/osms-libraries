@@ -1,14 +1,14 @@
 import React from "react";
-import { CategoryInfo } from "../../classes/category-info.class";
-import { Project } from "../../classes/project.class";
+import { CategoryInfo } from "../../shared/classes/category-info.class";
+import { Project } from "../../shared/classes/project.class";
 import { useTypedSelector } from "../../redux/root.reducer";
 import ImageCarousel from "../../shared/components/detail-window/image-carousel";
 import MarkdownSection from "../../shared/components/markdown/markdown-section";
 import TileCard from "../../shared/components/tile-card";
 import { openExternal } from "../../shared/utility/general.utility";
 import { genLocalParam } from "../../shared/utility/param-handling";
-import ActiveLib from "../../types/lib.enum";
-import { Indexable } from "../../types/shared.type";
+import ActiveLib from "../../shared/types/lib.enum";
+import { Indexable } from "../../shared/types/shared.type";
 
 const CategoryLibFullCard = ({
 	selected,
