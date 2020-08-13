@@ -16,6 +16,11 @@ interface TableListItem {
 }
 type TableList = TableListItem[];
 
+interface AirtableStaging {
+  staging?: boolean | [boolean]; // airtable, I swear
+  Staging?: boolean | [boolean];
+}
+
 const BUCKET_NAME = "opensourcemedicalsupplies.org";
 const url = (table: string) =>
   `https://storage.googleapis.com/${BUCKET_NAME}/${table}.json`;
@@ -27,6 +32,12 @@ const config: AxiosRequestConfig = {
 const axiosGet = <T = any>(urlString: string) =>
   axios.get<T>(url(urlString), config);
 
+const notInStaging = (v: AirtableStaging): boolean => {
+  // returns true if staging is undefined || false
+  const val = v.staging || v.Staging;
+  return !(val && val instanceof Array ? val[0] : val);
+}
+
 const loadTables = (dispatch: Dispatch<TableAction>): void => {
   axiosGet<TableList>("table_list").then(
     ({ data: tableList }) => {
@@ -36,17 +47,20 @@ const loadTables = (dispatch: Dispatch<TableAction>): void => {
       });
 
       tableList.forEach(({ underscored, type, camelCased }) => {
-        axiosGet<AirtableRecords>(underscored).then(
+        axiosGet<AirtableRecords<AirtableStaging>>(underscored).then(
           ({ data }) => {
             const mapper = TableMap[type];
 
             if (mapper) {
               if (mapper.prototype) {
-                data = data.map((v) => {
-                  return new mapper.prototype.constructor(v);
-                });
+                data = data.reduce((acc: any[], {fields}) => {
+                  if (notInStaging(fields)) {
+                    acc.push(new mapper.prototype.constructor(fields));
+                  }
+                  return acc;
+                }, []);
               } else {
-                data = mapper(data);
+                data = mapper(data.filter(v => notInStaging(v.fields)));
               }
             }
 
