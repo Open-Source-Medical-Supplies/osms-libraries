@@ -1,18 +1,20 @@
 import { Sidebar } from 'primereact/sidebar';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { shallowEqual, useDispatch } from "react-redux";
+import { useTypedSelector } from "../../redux/root.reducer";
 import { CategoryInfo } from '../../shared/classes/category-info.class';
 import { Project } from '../../shared/classes/project.class';
-import { useTypedSelector } from "../../redux/root.reducer";
-import { SelectAction, SELECTED_ACTIONS } from '../../redux/selected.reducer';
 import CardContainer from '../../shared/components/card-container/card-container';
 import DetailWindow from '../../shared/components/detail-window/detail-window';
 import Loading from '../../shared/components/loading';
+import { TABLE_MAPPING } from '../../shared/constants/google-bucket.constants';
 import ActiveLib from '../../shared/types/lib.enum';
-import { BasicObject } from '../../shared/types/shared.type';
+import { PARAMS, setQueryParam } from '../../shared/utility/param-handling';
 import CategoryLibFullCard from './category-library.full-card';
 import CategorySearchBar from './category-search-bar';
-import { TABLE_MAPPING } from '../../shared/constants/google-bucket.constants';
+import { parseTablesToSupportingData } from '../../shared/utility/selected.utility';
+import { SelectAction } from '../../shared/types/selected.type';
+import { SELECTED_ACTIONS } from '../../shared/constants/selected.constants';
 
 const DefaultState: {
   _records: CategoryInfo[]; // immutable
@@ -27,7 +29,7 @@ const CategoryLibrary: React.FC = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch({type: ActiveLib.CATEGORY});
+    setQueryParam({key: PARAMS.LIBRARY, val: ActiveLib.CATEGORY});
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const {
@@ -53,16 +55,16 @@ const CategoryLibrary: React.FC = () => {
 
   useEffect(() => {
     if (tables.completed) {
-      console.log(tables.loaded)
-      dispatch<SelectAction>({
-        type: SELECTED_ACTIONS.CHECK,
-        dataSet: tables.loaded[TABLE_MAPPING.CategoryInfo] as CategoryInfo[],
-        projectSet: tables.loaded.projectsByCategory as BasicObject<Project[]>
-      });
       setState({
         records: tables.loaded[TABLE_MAPPING.CategoryInfo] as CategoryInfo[],
         _records: tables.loaded[TABLE_MAPPING.CategoryInfo] as CategoryInfo[],
       })
+
+      dispatch<SelectAction>({
+        type: SELECTED_ACTIONS.CHECK,
+        dataSet: tables.loaded[TABLE_MAPPING.CategoryInfo] as CategoryInfo[],
+        supportingDataSet: tables.loaded
+      });
     }
   }, [tables.completed]) // eslint-disable-line react-hooks/exhaustive-deps
 

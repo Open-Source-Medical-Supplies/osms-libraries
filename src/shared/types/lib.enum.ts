@@ -1,5 +1,6 @@
 enum ActiveLib {
   PROJECT = 'project',
-  CATEGORY = 'category'
+  CATEGORY = 'category',
 }
+
 export default ActiveLib;

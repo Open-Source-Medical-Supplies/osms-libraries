@@ -1,14 +1,15 @@
 import classNames from "classnames";
 import React, { Dispatch, useRef } from 'react';
 import { useDispatch } from "react-redux";
+import { useTypedSelector } from "../../../redux/root.reducer";
 import { CategoryInfo } from "../../classes/category-info.class";
 import { Project } from '../../classes/project.class';
-import { useTypedSelector } from "../../../redux/root.reducer";
-import { SelectAction, SELECTED_ACTIONS } from "../../../redux/selected.reducer";
+import { SELECTED_ACTIONS } from "../../constants/selected.constants";
 import ActiveLib from "../../types/lib.enum";
+import { SelectAction } from "../../types/selected.type";
+import { getParam, PARAMS } from "../../utility/param-handling";
 import NewUpdatedBanner from "../new-updated-banner";
 import TileCard from "../tile-card";
-import { BasicObject } from "../../types/shared.type";
 
 const ProjectCard: React.FC<{
   data: Project | CategoryInfo;
@@ -18,13 +19,9 @@ const ProjectCard: React.FC<{
   data, selected, isMobile
 }) => {
   const dispatch = useDispatch<Dispatch<SelectAction>>();
-  const {
-    lib,
-    projectsByCategory
-  } = useTypedSelector(({lib, tables}) => ({
-    lib,
-    projectsByCategory: tables.loaded.projectsByCategory
-  }))
+  const tables = useTypedSelector(({ tables }) => tables);
+  const activeLib = getParam<ActiveLib>(PARAMS.LIBRARY);
+
   const thisRef = useRef<HTMLDivElement>(null);
   
   const { displayName, imageURL } = data;
@@ -35,7 +32,7 @@ const ProjectCard: React.FC<{
     dispatch({
       type: SELECTED_ACTIONS.SET,
       data,
-      projectSet: projectsByCategory as BasicObject<Project[]>
+      supportingDataSet: tables.loaded
     });
   };
   
@@ -52,7 +49,7 @@ const ProjectCard: React.FC<{
   let sizing = isMobile ? 'p-col-6' : 'p-col-2'; // show all
   if (!isMobile && !!selectedName) {
     // not mobile, card selected -> condense to share w/ fullcard
-    sizing = lib === ActiveLib.PROJECT ? 'p-col-6': 'p-col-12';
+    sizing = activeLib === ActiveLib.PROJECT ? 'p-col-6': 'p-col-12';
   }
 
   return (

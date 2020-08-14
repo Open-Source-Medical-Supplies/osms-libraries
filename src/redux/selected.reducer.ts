@@ -1,78 +1,57 @@
 import loGet from "lodash.get";
-import { Action } from "redux";
-import { CategoryInfo } from "../shared/classes/category-info.class";
-import { Project, CrossLinks } from "../shared/classes/project.class";
+import { SELECTED_ACTIONS } from "../shared/constants/selected.constants";
+import { SelectAction, Selected, SelectedState, SupportingData } from "../shared/types/selected.type";
 import {
   getParam,
   PARAMS,
-  updateQueryParam,
-  removeParam,
+  removeParam, setQueryParam
 } from "../shared/utility/param-handling";
+import { parseTablesToSupportingData } from "../shared/utility/selected.utility";
 
-export enum SELECTED_ACTIONS {
-  SET = 'SET',
-  CHECK = 'CHECK',
-  CLEAR = 'CLEAR',
-}
-
-type Selected = null | undefined | CategoryInfo | Project;
-
-interface SelectedStateCheck {
-  dataSet?: Selected[];
-  selector?: string;
-}
-export interface SelectedState extends SelectedStateCheck {
-  data?: Selected;
-  projects?: Project[];
-  projectSet?: CrossLinks;
-}
-export type SelectAction = Action<SELECTED_ACTIONS> & SelectedState;
-
-const defaultState: SelectedState = {};
+const defaultState = {};
 
 export const selectedReducer = (
-  state = defaultState,
+  _ = defaultState,
   action: SelectAction
 ): SelectedState => {
-  const getProjects = (name: string | undefined) =>
-    name && action.projectSet ? action.projectSet[name] : [];
-    switch (action.type) {
-      case SELECTED_ACTIONS.CHECK:
+  let supportingData: SupportingData;
+  
+  switch (action.type) {
+    case SELECTED_ACTIONS.CHECK:
       const selector = action.selector || "displayName";
       const param = getParam(PARAMS.SELECTED);
-      let selected: Selected = undefined;
-      let projects: Project[] = [];
-
+      
       if (param && action.dataSet) {
+        let selected: Selected = null;
         selected = action.dataSet.find(
           (r: any) => loGet(r, selector) === param
         );
-        projects = getProjects(selected?.displayName);
-      }
-
-      return selected
-        ? {
+        if (selected && action.supportingDataSet) {
+          supportingData = parseTablesToSupportingData(action.supportingDataSet, selected.displayName);
+          return {
             data: selected,
-            projects
+            supportingData
           }
-        : defaultState;
-
+        }
+      }
+      return defaultState;
     case SELECTED_ACTIONS.SET:
-      if (!action.data) {
+      if (!action.data || !action.supportingDataSet) {
+        console.warn('Attempted to set selected view without enough data');
         return defaultState;
       }
       const { displayName } = action.data;
-      updateQueryParam({ key: PARAMS.SELECTED, val: displayName });
+      setQueryParam({ key: PARAMS.SELECTED, val: displayName });
+      supportingData = parseTablesToSupportingData(action.supportingDataSet, displayName);
 
       return {
         data: action.data,
-        projects: getProjects(displayName),
+        supportingData,
       };
     case SELECTED_ACTIONS.CLEAR:
       removeParam(PARAMS.SELECTED);
       return defaultState;
     default:
-      // TODO console.log('I dunno about this. Shouldn\'t it be state?')      
       return defaultState;
   }
 };

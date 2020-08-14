@@ -7,7 +7,7 @@ import {
   getParam,
   PARAMS,
   QueryParams,
-  updateQueryParam
+  setQueryParam
 } from "../../utility/param-handling";
 import { FilterState } from "./filter-menu.interface";
 
@@ -255,6 +255,6 @@ export const setFilterParams = (filterState: FilterState): void => {
   const currentParams = getParam(PARAMS.FILTERSTATE);
   const createdParams = filtersToParams(filterState);
   if (!currentParams || currentParams !== createdParams.val) {
-    updateQueryParam(createdParams);
+    setQueryParam(createdParams);
   }
 };

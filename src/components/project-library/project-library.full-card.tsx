@@ -14,16 +14,13 @@ import {
 import { genLocalParam } from '../../shared/utility/param-handling';
 import ActiveLib from "../../shared/types/lib.enum";
 
-const ProjectFullCard = ({
-	selected,
-	materials,
-}: {
-	selected: Project;
-	materials: Material[];
-}) => {
-  const Lang = useTypedSelector(({lang}) => lang);
-  if (!selected) return <div></div>;
-
+const ProjectFullCard = () => {
+  const { lang, selected } = useTypedSelector(({ lang, selected }) => ({
+    lang,
+    selected,
+  }));
+  if (!selected || !(selected.data instanceof Project)) return <div></div>;
+  const links = selected.supportingData as Material[];
 	const {
 		name,
 		displayName,
@@ -36,7 +33,7 @@ const ProjectFullCard = ({
 		creator,
 		osmsNotes,
 		externalLink,
-  } = selected;
+  } = selected.data;
 
   const linkAcross = name instanceof Array ? 
     genLocalParam( ActiveLib.CATEGORY, name[0] ) :
@@ -71,7 +68,7 @@ const ProjectFullCard = ({
 				<Button
 					onClick={openExternal(externalLinks[0])}
 					tooltip="Link will open in a new tab"
-					label={Lang['makeIt']}
+					label={lang['makeIt']}
 					icon="pi pi-external-link"
 					iconPos="right"
 					className="p-button-raised p-button-rounded margin-z-auto"
@@ -105,7 +102,7 @@ const ProjectFullCard = ({
 				{MarkdownSection(medicalStatus, reviewedBy, "", true)}
 				{MarkdownSection("Sources", hyperLinkText)}
         {ImageCarousel<Material>({
-          links: materials,
+          links,
           cardTemplate: ICCardTemplate
         })}
 			</div>

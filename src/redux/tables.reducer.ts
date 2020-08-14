@@ -1,9 +1,5 @@
 import { Action } from "redux";
-import { Material } from "../shared/classes/material.class";
-import { Project } from "../shared/classes/project.class";
-import { toDict } from "../shared/utility/general.utility";
 import { BasicObject } from "../shared/types/shared.type";
-import { TABLE_MAPPING } from "../shared/constants/google-bucket.constants";
 
 export interface TableState {
   loaded: {
@@ -40,32 +36,12 @@ export const tablesReducer = (
     case TABLE_ACTIONS.LOAD_TABLE:
       const countLoaded = state.countLoaded + 1;
       const completed = state.list.length === countLoaded;
-      let loadNewData: TableState['loaded'];
-
-      // I'm not a fan of this part
-      switch (action.tableType) {
-        case TABLE_MAPPING.Material:
-          loadNewData = {
-            [action.tableType as string]: toDict<Material>(action.data, 'name')
-          }
-          break;
-        case TABLE_MAPPING.Project:
-          loadNewData = {
-            [action.tableType as string]: action.data,
-            projectsByCategory: toDict<Project>(action.data, 'name'),
-          }
-          break;
-        default:
-          loadNewData = {
-            [action.tableType as string]: action.data,
-          }
-      }
 
       return {
         ...state,
         loaded: {
           ...state.loaded,
-          ...loadNewData
+          [action.tableType as string]: action.data
         },
         countLoaded,
         completed

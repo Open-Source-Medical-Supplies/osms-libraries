@@ -25,7 +25,7 @@ const CategoryLibFullCard = () => {
     return false;
   }, [selected.data]);
   if (!selected.data) return <div></div>;
-  const links = selected.projects;
+  const links = selected.supportingData as Project[];
   const { displayName, imageURL } = selected.data as CategoryInfo;
   const headerImage =
     typeof imageURL !== "string" ? (

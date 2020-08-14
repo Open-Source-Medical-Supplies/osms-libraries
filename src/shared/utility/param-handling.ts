@@ -3,7 +3,8 @@ import { BasicObject } from "../types/shared.type";
 
 export enum PARAMS {
   FILTERSTATE = 'filterState',
-  SELECTED = 'selected'
+  SELECTED = 'selected',
+  LIBRARY = 'library'
 }
 export enum PARAM_TYPES {
   STRING = 'STRING',
@@ -11,11 +12,11 @@ export enum PARAM_TYPES {
   DICT = 'DICT'
 }
 
-type GetParamReturn = null
+type GetParamReturn<T> = null
   | string
-  | Array<string
-  | null>
-  | BasicObject<string | null>;
+  | T
+  | Array<T | string | null>
+  | BasicObject<T | string | null>
 
 const getUrl = () => new URL(window.location.href);
 const getParamFromUrl = (k: PARAMS) => getUrl().searchParams.get(k);
@@ -28,13 +29,14 @@ const parseParam = (key: PARAMS) => {
 }
 
 /**
- * Retrieves 1+ params and can return either a string, string array, or dict
+ * Retrieves 1+ params and can return either a string [default], string array, or dict
+ * 
  * Does not perform any null-checking
  */
-export const getParam = (
+export const getParam = <T> (
   keys: PARAMS | PARAMS[],
   returnType: PARAM_TYPES = PARAM_TYPES.STRING
-): GetParamReturn => {
+): GetParamReturn<T> => {
   switch (returnType) {
     case PARAM_TYPES.STRING:
       if (keys instanceof Array) {
@@ -102,7 +104,7 @@ export interface QueryParams {
   val: string;
 }
 
-export const updateQueryParam = ({ key, val }: QueryParams): void => {
+export const setQueryParam = ({ key, val }: QueryParams): void => {
   if (!key || !val) return;
   if (window.history && window.history.pushState) {
     const url = getUrl();
