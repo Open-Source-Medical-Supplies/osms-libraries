@@ -1,26 +1,80 @@
 import ActiveLib from "../types/lib.enum";
+import { BasicObject } from "../types/shared.type";
 
 export enum PARAMS {
   FILTERSTATE = 'filterState',
   SELECTED = 'selected'
 }
-
-const getUrl = () => {
-  return new URL(window.location.href);
+export enum PARAM_TYPES {
+  STRING = 'STRING',
+  ARRAY = 'ARRAY',
+  DICT = 'DICT'
 }
+
+type GetParamReturn = null
+  | string
+  | Array<string
+  | null>
+  | BasicObject<string | null>;
+
+const getUrl = () => new URL(window.location.href);
 const getParamFromUrl = (k: PARAMS) => getUrl().searchParams.get(k);
-
-export const getParam = (key: PARAMS, onlyVal = true) => {
+const parseParam = (key: PARAMS) => {
   let val = getParamFromUrl(key);
-  try {
-    if (val) {
-      val = JSON.parse(val);
-    }
-  } catch {}
+  try { if (val) {
+    val = JSON.parse(val);
+  } } catch {}
+  return val;
+}
 
-  return val ? (
-    onlyVal ? val : { [key]: val }
-  ) : undefined;
+/**
+ * Retrieves 1+ params and can return either a string, string array, or dict
+ * Does not perform any null-checking
+ */
+export const getParam = (
+  keys: PARAMS | PARAMS[],
+  returnType: PARAM_TYPES = PARAM_TYPES.STRING
+): GetParamReturn => {
+  switch (returnType) {
+    case PARAM_TYPES.STRING:
+      if (keys instanceof Array) {
+        console.warn('An array input cannot be a string output; defaulting to ARRAY');
+        return getParam(keys, PARAM_TYPES.ARRAY);
+      }
+      return parseParam(keys);
+    case PARAM_TYPES.ARRAY:
+      if (!(keys instanceof Array)) {
+        keys = [keys];
+      }
+      return keys.reduce((acc: Array<string | null> , key) => {
+        let val = getParamFromUrl(key);
+        try {
+          if (val) {
+            val = JSON.parse(val);
+          }
+        } catch {}
+      
+        acc.push(val)
+        return acc;
+      }, []);
+    case PARAM_TYPES.DICT:
+      if (!(keys instanceof Array)) {
+        keys = [keys];
+      }
+      return keys.reduce((acc: BasicObject<string | null> , key) => {
+        let val = getParamFromUrl(key);
+        try {
+          if (val) {
+            val = JSON.parse(val);
+          }
+        } catch {}
+      
+        acc[key] = val
+        return acc;
+      }, {});
+  }
+
+  
 };
 
 export const removeParam = (key: PARAMS): void => {
