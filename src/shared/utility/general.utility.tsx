@@ -118,6 +118,7 @@ export const fixMdUrls = (md: string): string => {
 }
 
 export const toDict = <T extends any> (data: T[], index: string) => {
+  // do NOT change the key name otherwise it won't match elsewhere
   return data.reduce((acc: BasicObject<T[]>, datum: T) => {
     const key = get(datum, index);
     if (acc[key]) {

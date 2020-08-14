@@ -36,22 +36,25 @@ export const selectedReducer = (
 ): SelectedState => {
   const getProjects = (name: string | undefined) =>
     name && action.projectSet ? action.projectSet[name] : [];
-
-  switch (action.type) {
-    case SELECTED_ACTIONS.CHECK:
+    switch (action.type) {
+      case SELECTED_ACTIONS.CHECK:
       const selector = action.selector || "displayName";
       const param = getParam(PARAMS.SELECTED, true);
       let selected: Selected = undefined;
+      let projects: Project[] = [];
 
       if (param && action.dataSet) {
         selected = action.dataSet.find(
           (r: any) => loGet(r, selector) === param
         );
+        projects = getProjects(selected?.displayName);
       }
+      console.log(action.projectSet)
+      console.log(projects)
       return selected
         ? {
             data: selected,
-            projects: getProjects(selected.displayName),
+            projects
           }
         : defaultState;
 

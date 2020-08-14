@@ -43,7 +43,7 @@ export const tablesReducer = (
       let loadNewData: TableState['loaded'];
 
       // I'm not a fan of this part
-      switch (action.table) {
+      switch (action.tableType) {
         case TABLE_MAPPING.Material:
           loadNewData = {
             [action.tableType as string]: toDict<Material>(action.data, 'name')

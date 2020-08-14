@@ -52,11 +52,11 @@ const CategoryLibrary: React.FC = () => {
   });
 
   useEffect(() => {
-    console.log('no')
     if (tables.completed) {
-      console.log('yes')
+      console.log(tables.loaded)
       dispatch<SelectAction>({
         type: SELECTED_ACTIONS.CHECK,
+        dataSet: tables.loaded[TABLE_MAPPING.CategoryInfo] as CategoryInfo[],
         projectSet: tables.loaded.projectsByCategory as BasicObject<Project[]>
       });
       setState({

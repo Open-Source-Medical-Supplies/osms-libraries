@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { CategoryInfo } from "../../shared/classes/category-info.class";
 import { Project } from "../../shared/classes/project.class";
 import { useTypedSelector } from "../../redux/root.reducer";
@@ -9,75 +9,107 @@ import { openExternal } from "../../shared/utility/general.utility";
 import { genLocalParam } from "../../shared/utility/param-handling";
 import ActiveLib from "../../shared/types/lib.enum";
 import { Indexable } from "../../shared/types/shared.type";
+import { Link } from "react-router-dom";
 
 const CategoryLibFullCard = () => {
-  const {lang, selected} = useTypedSelector(({lang, selected}) => ({lang, selected}));
+  const { lang, selected } = useTypedSelector(({ lang, selected }) => ({
+    lang,
+    selected,
+  }));
+  const countSections = useMemo(() => {
+    if (selected.data) {
+      return !!CategoryInfo.CardSections.reduce(
+        (a, v) => ((selected.data as Indexable)[v.key] ? (a += 1) : a),
+        0
+      );
+    }
+    return false;
+  }, [selected.data]);
   if (!selected.data) return <div></div>;
-  console.log(selected.data)
   const links = selected.projects;
-	const { displayName, imageURL } = selected.data as CategoryInfo;
-	const headerImage =
-		typeof imageURL !== "string" ? (
-			<div className="center-flex" style={{ height: "150px" }}>
-				No image available
-			</div>
-		) : (
-			<img
-				className="centered-image"
-				alt={displayName}
-				src={imageURL}
-				style={{ height: "250px" }}
-			/>
-		);
+  const { displayName, imageURL } = selected.data as CategoryInfo;
+  const headerImage =
+    typeof imageURL !== "string" ? (
+      <div className="center-flex" style={{ height: "150px" }}>
+        No image available
+      </div>
+    ) : (
+      <img
+        className="centered-image"
+        alt={displayName}
+        src={imageURL}
+        style={{ height: "250px" }}
+      />
+    );
 
-	const ICCardTemplate = (data: Project) => {
-		const { displayName, imageURL, externalLink } = data;
-		const linkAcross = genLocalParam( ActiveLib.PROJECT, displayName );
-		const actions = [
-			{
-				label: lang['viewSource'],
-				icon: "external-link",
-				fn: openExternal(externalLink),
-			},
-			{
-				label: lang['viewDetails'],
-				icon: "eye",
-				fn: openExternal(linkAcross),
-			},
-		];
+  const ICCardTemplate = (data: Project) => {
+    const { displayName, imageURL, externalLink } = data;
+    const linkAcross = genLocalParam(ActiveLib.PROJECT, displayName);
+    const actions = [
+      {
+        label: lang["viewSource"],
+        icon: "external-link",
+        fn: openExternal(externalLink),
+      },
+      {
+        label: lang["viewDetails"],
+        icon: "eye",
+        fn: openExternal(linkAcross),
+      },
+    ];
 
-		return (
-			<TileCard
-        className={'fullcard-carousel-cards'}
-				mainText={displayName}
-				imageURL={imageURL}
-				buttonIcon="external-link"
-				actions={actions}
-			/>
-		);
-	};
+    return (
+      <TileCard
+        className={"fullcard-carousel-cards"}
+        mainText={displayName}
+        imageURL={imageURL}
+        buttonIcon="external-link"
+        actions={actions}
+      />
+    );
+  };
 
-	return (
-		<div className="full-card">
-			<div className="full-card__content">
-				{headerImage}
-				<h1>{displayName}</h1>
+  const Links = () => {
+    return links && links.length ? (
+      <React.Fragment>
+        <h3>Projects</h3>
+        {ImageCarousel<Project>({
+          links,
+          cardTemplate: ICCardTemplate,
+        })}
+      </React.Fragment>
+    ) : (
+      <div>
+        No associated projects on file
+      </div>
+    )
+  }
+
+  const CardInfo = () => {
+    return (
+      <React.Fragment>
         {
-          CategoryInfo.CardSections.map(({key, value}) => {
-            return MarkdownSection(value, (selected.data as Indexable)[key])
-          })
+          countSections ? 
+          CategoryInfo.CardSections.map(({ key, value }) => {
+            return MarkdownSection(value, (selected.data as Indexable)[key]);
+          }) :
+          <div>
+            No category information on file
+          </div>
         }
-        { links && links.length ?
-          <React.Fragment>
-            <h3>Projects</h3>
-            {ImageCarousel<Project>({
-              links,
-              cardTemplate: ICCardTemplate
-            })}
-          </React.Fragment> : null
-        }
-			</div>
-		</div>
-	);
+      </React.Fragment>
+    )
+  }
+
+  return (
+    <div className="full-card">
+      <div className="full-card__content">
+        {headerImage}
+        <h1>{displayName}</h1>
+        <CardInfo />
+        <Links/>
+      </div>
+    </div>
+  );
 };
 export default CategoryLibFullCard;
