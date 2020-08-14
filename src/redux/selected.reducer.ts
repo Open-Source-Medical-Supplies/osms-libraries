@@ -39,7 +39,7 @@ export const selectedReducer = (
     switch (action.type) {
       case SELECTED_ACTIONS.CHECK:
       const selector = action.selector || "displayName";
-      const param = getParam(PARAMS.SELECTED, true);
+      const param = getParam(PARAMS.SELECTED);
       let selected: Selected = undefined;
       let projects: Project[] = [];
 
@@ -49,8 +49,7 @@ export const selectedReducer = (
         );
         projects = getProjects(selected?.displayName);
       }
-      console.log(action.projectSet)
-      console.log(projects)
+
       return selected
         ? {
             data: selected,

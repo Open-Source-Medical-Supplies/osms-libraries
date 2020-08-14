@@ -10,7 +10,7 @@ const getUrl = () => {
 }
 const getParamFromUrl = (k: PARAMS) => getUrl().searchParams.get(k);
 
-export const getParam = (key: PARAMS, onlyVal = false) => {
+export const getParam = (key: PARAMS, onlyVal = true) => {
   let val = getParamFromUrl(key);
   try {
     if (val) {

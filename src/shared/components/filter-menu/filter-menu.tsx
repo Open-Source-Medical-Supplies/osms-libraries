@@ -80,7 +80,7 @@ const FilterMenu = ({
 
   // load menu
   useEffect(() => {
-    const params = getParam(PARAMS.FILTERSTATE, true) as Partial<FilterState> || {};
+    const params = getParam(PARAMS.FILTERSTATE) as Partial<FilterState> || {};
     (async function fetch() {
       Promise.all([
         parseFilterMenu(),

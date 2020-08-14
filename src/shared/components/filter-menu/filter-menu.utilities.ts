@@ -252,7 +252,7 @@ export const filtersToParams = (filterState: FilterState): QueryParams => {
 
 export const setFilterParams = (filterState: FilterState): void => {
   // some logic to reduce potential times params would be updated
-  const currentParams = getParam(PARAMS.FILTERSTATE, true);
+  const currentParams = getParam(PARAMS.FILTERSTATE);
   const createdParams = filtersToParams(filterState);
   if (!currentParams || currentParams !== createdParams.val) {
     updateQueryParam(createdParams);

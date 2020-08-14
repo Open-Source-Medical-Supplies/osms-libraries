@@ -1,15 +1,14 @@
 import React, { useMemo } from "react";
+import { useTypedSelector } from "../../redux/root.reducer";
 import { CategoryInfo } from "../../shared/classes/category-info.class";
 import { Project } from "../../shared/classes/project.class";
-import { useTypedSelector } from "../../redux/root.reducer";
 import ImageCarousel from "../../shared/components/detail-window/image-carousel";
 import MarkdownSection from "../../shared/components/markdown/markdown-section";
 import TileCard from "../../shared/components/tile-card";
-import { openExternal } from "../../shared/utility/general.utility";
-import { genLocalParam } from "../../shared/utility/param-handling";
 import ActiveLib from "../../shared/types/lib.enum";
 import { Indexable } from "../../shared/types/shared.type";
-import { Link } from "react-router-dom";
+import { openExternal } from "../../shared/utility/general.utility";
+import { genLocalParam } from "../../shared/utility/param-handling";
 
 const CategoryLibFullCard = () => {
   const { lang, selected } = useTypedSelector(({ lang, selected }) => ({
