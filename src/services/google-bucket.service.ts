@@ -38,6 +38,16 @@ const notInStaging = (v: AirtableStaging): boolean => {
   return !(val && val instanceof Array ? val[0] : val);
 }
 
+const dataToClass = (
+  data: AirtableRecords<AirtableStaging>,
+  mapper: valueof<typeof TableMap>
+) => data.reduce((acc: any[], {fields}) => {
+  if (notInStaging(fields)) {
+    acc.push(new mapper.prototype.constructor(fields));
+  }
+  return acc;
+}, []);
+
 const loadTables = (dispatch: Dispatch<TableAction>): void => {
   axiosGet<TableList>("table_list").then(
     ({ data: tableList }) => {
@@ -52,16 +62,9 @@ const loadTables = (dispatch: Dispatch<TableAction>): void => {
             const mapper = TableMap[type];
 
             if (mapper) {
-              if (mapper.prototype) {
-                data = data.reduce((acc: any[], {fields}) => {
-                  if (notInStaging(fields)) {
-                    acc.push(new mapper.prototype.constructor(fields));
-                  }
-                  return acc;
-                }, []);
-              } else {
-                data = mapper(data.filter(v => notInStaging(v.fields)));
-              }
+              data = mapper.prototype ?
+                dataToClass(data, mapper) :
+                mapper(data.filter(v => notInStaging(v.fields)));
             }
 
             dispatch({

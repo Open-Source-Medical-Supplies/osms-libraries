@@ -3,18 +3,16 @@ import React, { useEffect, useState } from 'react';
 import { shallowEqual, useDispatch } from "react-redux";
 import { useTypedSelector } from "../../redux/root.reducer";
 import { CategoryInfo } from '../../shared/classes/category-info.class';
-import { Project } from '../../shared/classes/project.class';
 import CardContainer from '../../shared/components/card-container/card-container';
 import DetailWindow from '../../shared/components/detail-window/detail-window';
 import Loading from '../../shared/components/loading';
 import { TABLE_MAPPING } from '../../shared/constants/google-bucket.constants';
+import { SELECTED_ACTIONS } from '../../shared/constants/selected.constants';
 import ActiveLib from '../../shared/types/lib.enum';
+import { SelectAction } from '../../shared/types/selected.type';
 import { PARAMS, setQueryParam } from '../../shared/utility/param-handling';
 import CategoryLibFullCard from './category-library.full-card';
 import CategorySearchBar from './category-search-bar';
-import { parseTablesToSupportingData } from '../../shared/utility/selected.utility';
-import { SelectAction } from '../../shared/types/selected.type';
-import { SELECTED_ACTIONS } from '../../shared/constants/selected.constants';
 
 const DefaultState: {
   _records: CategoryInfo[]; // immutable

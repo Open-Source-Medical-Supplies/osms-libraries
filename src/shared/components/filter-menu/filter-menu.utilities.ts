@@ -9,20 +9,7 @@ import {
   QueryParams,
   setQueryParam
 } from "../../utility/param-handling";
-import { FilterState } from "./filter-menu.interface";
-
-interface FilterDatum {
-  key?: string;
-  parentKey?: string;
-  icon?: string;
-  children?: FilterDatum[];
-}
-type Filters = {
-  categories: {};
-  attributes: string[];
-  searchBar: string;
-  previousFilters: FilterState["previousFilters"];
-};
+import { FilterDatum, FilterState, Filters } from "../../types/filter.type";
 
 const buildTree = (data: FilterDatum, acc: any = {}) => {
   const { key, parentKey } = data;
@@ -54,13 +41,11 @@ export const mapFilterData = (data: AirtableRecords<FilterDatum>) => {
   // filter data comes in as a flat tree with pointers b/w parent / child
   const tempNodes: BasicObject<any> = {};
   const flatNodes: BasicObject<any> = {};
-  data.forEach((data) => {
-    const fields = data.fields || data; // patch during transition from AirtableJS to gBucket
-    
-    // nodes handling
+  data.forEach(({fields}) => {
     if (fields.icon) {
       fields.icon = "pi " + fields.icon;
     }
+    // nodes handling
     buildTree(fields, tempNodes);
     // end nodes
 

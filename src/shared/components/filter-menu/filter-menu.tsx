@@ -1,17 +1,16 @@
 import { Button } from "primereact/button";
 import { Sidebar } from "primereact/sidebar";
 import React, { useCallback, useEffect, useState } from "react";
+import { shallowEqual } from "react-redux";
 import { useTypedSelector } from "../../../redux/root.reducer";
-import {
-  parseCategories,
-  parseFilterMenu
-} from "../../../services/filter-menu.service";
+import { CategoryInfo } from "../../classes/category-info.class";
+import { TABLE_MAPPING } from "../../constants/google-bucket.constants";
+import { FilterState } from "../../types/filter.type";
 import { CategoryComparator, createUUID } from "../../utility/general.utility";
 import { getParam, PARAMS } from "../../utility/param-handling";
 import AttributesList from "./attributes-list";
 import CategoriesList from "./categories-list";
 import ClearFilters from "./clear-filers";
-import { FilterState } from "./filter-menu.interface";
 import { filterBy, setFilterParams } from "./filter-menu.utilities";
 import { FilterSearchBar } from "./filter-search-bar";
 import "./_filter-menu.scss";
@@ -47,7 +46,16 @@ const FilterMenu = ({
   state: any;
   setState: Function;
 }) => {
-  const isMobile = useTypedSelector(({ env }) => env.isMobile);
+  const {
+    isMobile,
+    tables,
+   } = useTypedSelector(({
+    env,
+    tables,
+  }) => ({
+    isMobile: env.isMobile,
+    tables,
+  }), shallowEqual);
   
   const { _records, records } = state;
   const [filterState, baseSetFilterState] = useState(FilterStateDefault);
@@ -68,28 +76,18 @@ const FilterMenu = ({
     setState({ records: filteredRecords }, true); // when loading from a param, had a race condition. Kinda hacky
   }, [filterState, records]);
 
-  // used by the attribute list component
-  const setSelection = (event: any) => {
-    setFilterState({
-      nodeFilters: event.value,
-      previousFilters: {
-        nodeFilters: filterState.nodeFilters
-      },
-    });
-  };
-
   // load menu
   useEffect(() => {
-    const params = getParam(PARAMS.FILTERSTATE) as Partial<FilterState> || {};
-    (async function fetch() {
-      Promise.all([
-        parseFilterMenu(),
-        parseCategories()
-      ]).then((res: any) => {
-        setFilterState({ loaded: true, ...res[0], ...res[1], ...params });
+    if (tables.completed) {
+      const params = getParam(PARAMS.FILTERSTATE) as Partial<FilterState> || {};
+      setFilterState({
+        loaded: true,
+        categories: tables.loaded[TABLE_MAPPING.CategorySupply] as CategoryInfo[],
+        ...tables.loaded[TABLE_MAPPING.FilterMenu],
+        ...params
       });
-    })();
-  }, []);
+    }
+  }, [tables.completed]);
 
   const nodeFiltersBool = Object.keys(filterState.nodeFilters).length;
 
@@ -103,14 +101,8 @@ const FilterMenu = ({
   // filter-changes
   useEffect(() => {
     if (!filterState.loaded) return;
-    // if (
-    //   filterState.nodeFilters ||
-    //   filterState.categoriesFilters ||
-    //   filterState.searchBar
-    // ) {
-      setFilterParams(filterState)
-      doFilter();
-    // }
+    setFilterParams(filterState)
+    doFilter();
   }, [
     catFilterBool,
     nodeFiltersBool,
@@ -130,7 +122,7 @@ const FilterMenu = ({
       <AttributesList
         nodes={filterState.nodes}
         nodeFilters={filterState.nodeFilters}
-        setSelection={setSelection}
+        setFilterState={setFilterState}
       />
     </React.Fragment>
   );
