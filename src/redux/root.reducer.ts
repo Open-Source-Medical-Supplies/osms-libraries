@@ -1,7 +1,6 @@
 import { TypedUseSelectorHook, useSelector } from "react-redux";
 import { combineReducers } from "redux";
 import { envReducer } from './env.reducer';
-import { langReducer } from "./lang.reducer";
 import { libReducer } from './lib.reducer';
 import { selectedReducer } from "./selected.reducer";
 import { tablesReducer } from "./tables.reducer";
@@ -9,7 +8,6 @@ import { tablesReducer } from "./tables.reducer";
 export const rootReducer = combineReducers({
   lib: libReducer,
   env: envReducer,
-  lang: langReducer,
   tables: tablesReducer,
   selected: selectedReducer
 })

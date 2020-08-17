@@ -1,6 +1,8 @@
 import { InputText } from "primereact/inputtext";
 import React, { useEffect, useState } from "react";
 import { useTypedSelector } from "../../redux/root.reducer";
+import { TABLE_MAPPING } from "../constants/google-bucket.constants";
+import { BasicObject } from "../types/shared.type";
 /* eslint-disable react-hooks/exhaustive-deps */
 
 export type SearchBarStateChange = (searchState: string) => any;
@@ -11,7 +13,7 @@ const SearchBar = (props: {
   id?: string;
   className?: string;
 }) => {
-  const Lang = useTypedSelector(({lang}) => lang);
+  const Lang = useTypedSelector(({tables}) => tables.loaded[TABLE_MAPPING.Translations] as BasicObject<string>);
 	const [searchState, setSearchState] = useState('');
 
 	useEffect(() => {

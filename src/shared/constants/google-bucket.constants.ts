@@ -5,6 +5,8 @@ import { CategorySupply } from "../classes/category-supply.class";
 import { Material } from "../classes/material.class";
 import { Project } from "../classes/project.class";
 import { valueof } from "../types/shared.type";
+import { mapLangData } from '../utility/language.utility';
+
 /**
  * Either
  * provide a Ctor to map the retrieved Array<{}> -> Array<classInstance>
@@ -17,6 +19,7 @@ export const TABLE_MAPPING = {
   CategorySupply: "CategorySupply",
   FilterMenu: "FilterMenu",
   Material: "Material",
+  Translations: "Translations"
 }
 export const TableMap: {[key in valueof<typeof TABLE_MAPPING>]: Function} = {
   Project,
@@ -24,4 +27,5 @@ export const TableMap: {[key in valueof<typeof TABLE_MAPPING>]: Function} = {
   CategorySupply,
   FilterMenu: mapFilterData,
   Material,
+  Translations: mapLangData
 };

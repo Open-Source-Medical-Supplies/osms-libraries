@@ -11,7 +11,6 @@ import CategoryLibrary from "./components/category-library/category-library";
 import ProjectLibrary from "./components/project-library/project-library";
 import { SET_ENV } from "./redux/env.reducer";
 import loadTables from "./services/google-bucket.service";
-import LanguageService from "./services/language.service";
 import ScrollToTop from "./shared/utility/scroll-to-top";
 import ErrorBoundary from "./shared/components/error-boundary";
 
@@ -27,10 +26,9 @@ import ErrorBoundary from "./shared/components/error-boundary";
 
 function App() {
   const dispatch = useDispatch();
-  dispatch({ type: SET_ENV });
-
+  
   useEffect(() => {
-    LanguageService.loadStaticLanguage(dispatch);
+    dispatch({ type: SET_ENV });
     loadTables(dispatch);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 

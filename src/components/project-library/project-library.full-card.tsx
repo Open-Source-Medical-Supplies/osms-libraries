@@ -13,10 +13,12 @@ import {
 } from "../../shared/utility/general.utility";
 import { genLocalParam } from '../../shared/utility/param-handling';
 import ActiveLib from "../../shared/types/lib.enum";
+import { TABLE_MAPPING } from "../../shared/constants/google-bucket.constants";
+import { BasicObject } from "../../shared/types/shared.type";
 
 const ProjectFullCard = () => {
-  const { lang, selected } = useTypedSelector(({ lang, selected }) => ({
-    lang,
+  const { lang, selected } = useTypedSelector(({ tables, selected }) => ({
+    lang: tables.loaded[TABLE_MAPPING.Translations] as BasicObject<string>,
     selected,
   }));
   if (!selected || !(selected.data instanceof Project)) return <div></div>;
