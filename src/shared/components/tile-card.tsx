@@ -1,9 +1,7 @@
 import { Button } from 'primereact/button';
 import { Card } from 'primereact/card';
 import React from 'react';
-import { useTypedSelector } from '../../redux/root.reducer';
-import { TABLE_MAPPING } from '../constants/google-bucket.constants';
-import { BasicObject } from '../types/shared.type';
+import { getLang } from '../utility/language.utility';
 
 export interface TileCardAction {
   fn: Function;
@@ -31,7 +29,7 @@ const TileCard = ({
   children?: React.ReactNode;
   actionOnCard?: boolean;
 }) => {
-  const Lang = useTypedSelector(({tables}) => tables.loaded[TABLE_MAPPING.Translations] as BasicObject<string>,);
+  const Lang = getLang();
   className = 'grayscale ' + className; 
 
   const headerImage = (
