@@ -1,8 +1,9 @@
 import { Button } from "primereact/button";
 import React from "react";
 import ReactMarkdown from "react-markdown";
-import { Material } from "../../classes/material.class";
-import { Project } from "../../classes/project.class";
+import { Material } from "../../shared/classes/material.class";
+import { Project } from "../../shared/classes/project.class";
+import { useTypedSelector } from "../../redux/root.reducer";
 import ImageCarousel from "../../shared/components/detail-window/image-carousel";
 import MarkdownSection from "../../shared/components/markdown/markdown-section";
 import TileCard from "../../shared/components/tile-card";
@@ -11,21 +12,17 @@ import {
   openExternal
 } from "../../shared/utility/general.utility";
 import { genLocalParam } from '../../shared/utility/param-handling';
-import ActiveLib from "../../types/lib.enum";
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux/root.reducer";
-import { LangType } from "../../redux/lang.reducer";
+import ActiveLib from "../../shared/types/lib.enum";
+import { TABLE_MAPPING } from "../../shared/constants/google-bucket.constants";
+import { BasicObject } from "../../shared/types/shared.type";
 
-const ProjectFullCard = ({
-	selected,
-	materials,
-}: {
-	selected: Project;
-	materials: Material[];
-}) => {
-  const Lang = useSelector<RootState, LangType>(({lang}) => lang);
-  if (!selected) return <div></div>;
-
+const ProjectFullCard = () => {
+  const { lang, selected } = useTypedSelector(({ tables, selected }) => ({
+    lang: tables.loaded[TABLE_MAPPING.Translations] as BasicObject<string>,
+    selected,
+  }));
+  if (!selected || !(selected.data instanceof Project)) return <div></div>;
+  const links = selected.supportingData as Material[];
 	const {
 		name,
 		displayName,
@@ -38,7 +35,7 @@ const ProjectFullCard = ({
 		creator,
 		osmsNotes,
 		externalLink,
-  } = selected;
+  } = selected.data;
 
   const linkAcross = name instanceof Array ? 
     genLocalParam( ActiveLib.CATEGORY, name[0] ) :
@@ -73,7 +70,7 @@ const ProjectFullCard = ({
 				<Button
 					onClick={openExternal(externalLinks[0])}
 					tooltip="Link will open in a new tab"
-					label={Lang['makeIt']}
+					label={lang['makeIt']}
 					icon="pi pi-external-link"
 					iconPos="right"
 					className="p-button-raised p-button-rounded margin-z-auto"
@@ -107,7 +104,7 @@ const ProjectFullCard = ({
 				{MarkdownSection(medicalStatus, reviewedBy, "", true)}
 				{MarkdownSection("Sources", hyperLinkText)}
         {ImageCarousel<Material>({
-          links: materials,
+          links,
           cardTemplate: ICCardTemplate
         })}
 			</div>

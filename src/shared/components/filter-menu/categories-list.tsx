@@ -2,7 +2,7 @@ import classNames from "classnames";
 import { DataView } from 'primereact/dataview';
 import { Panel } from 'primereact/panel';
 import React, { useEffect, useState } from "react";
-import { CategorySupply } from "../../../classes/category-supply.class";
+import { CategorySupply } from "../../classes/category-supply.class";
 import { empty, notEmpty } from "../../utility/general.utility";
 import TileCard from "../tile-card";
 

@@ -1,6 +1,6 @@
 import React from 'react';
-import { CategoryInfo } from '../../classes/category-info.class';
-import { Project } from '../../classes/project.class';
+import { CategoryInfo } from '../../shared/classes/category-info.class';
+import { Project } from '../../shared/classes/project.class';
 import SearchBar, { SearchBarStateChange } from '../../shared/components/search-bar';
 
 const CategorySearchBar = ({

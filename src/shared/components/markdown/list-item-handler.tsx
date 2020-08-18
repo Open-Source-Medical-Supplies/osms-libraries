@@ -23,7 +23,7 @@ class ListItemHandler extends PureComponent {
     language: ''
   };
   static propTypes = {
-    value: PropTypes.string.isRequired,
+    value: PropTypes.string,
     language: PropTypes.string
   };
 

@@ -1,16 +1,25 @@
 import TreeNode from "primereact/components/treenode/TreeNode";
 import { Panel } from "primereact/panel";
-import { Tree, TreeProps } from "primereact/tree";
+import { Tree } from "primereact/tree";
 import React from "react";
-import { FilterNodes, FilterNodeData } from "../../../types/filter-node.type";
+import { FilterNodeData, FilterNodes } from "../../types/filter-node.type";
 
 const AttributesList = ({
-  nodes, nodeFilters, setSelection
+  nodes, nodeFilters, setFilterState
 }: {
   nodes: FilterNodes;
   nodeFilters: FilterNodeData;
-  setSelection: TreeProps['onSelectionChange'];
+  setFilterState: Function;
 }) => {
+  const setSelection = (event: {originalEvent: Event, value: any}) => {
+    setFilterState({
+      nodeFilters: event.value,
+      previousFilters: {
+        nodeFilters
+      }
+    });
+  };
+  
   return (
     <Panel header='Attributes' toggleable={true} className='attribute-list-panel filter-panel'>
       <Tree

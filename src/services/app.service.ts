@@ -1,10 +1,10 @@
 import get from "lodash.get";
-import { CategoryInfo } from "../classes/category-info.class";
-import { Material } from "../classes/material.class";
-import { Project } from "../classes/project.class";
+import { CategoryInfo } from "../shared/classes/category-info.class";
+import { Material } from "../shared/classes/material.class";
+import { Project } from "../shared/classes/project.class";
 import { toDict } from "../shared/utility/general.utility";
 import { getParam, PARAMS } from "../shared/utility/param-handling";
-import { BasicObject } from "../types/shared.type";
+import { BasicObject } from "../shared/types/shared.type";
 import { AirtableHelpers, AirtableSupplyCalls } from "./airtable";
 
 const getCategories = async (): Promise<{
@@ -64,7 +64,7 @@ export const fetchData = async <T, S extends Function>(
 		callKeys.map((k: AppServiceKeys) => AppServices[k]()) as Promise<any>[]
 	).then(
 		(res) => {
-			const param = getParam(PARAMS.SELECTED, true);
+			const param = getParam(PARAMS.SELECTED);
 			const flatRes = flattenPromiseAll(res);
 			if (!param) {
 				setState(flatRes);

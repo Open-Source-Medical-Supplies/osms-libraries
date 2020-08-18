@@ -1,5 +1,5 @@
 import { Action } from 'redux';
-import ActiveLib from '../types/lib.enum';
+import ActiveLib from '../shared/types/lib.enum';
 
 export const libReducer = (
   state = ActiveLib.CATEGORY,

@@ -1,23 +1,27 @@
 import classNames from "classnames";
-import React, { useRef } from 'react';
-import { useSelector } from "react-redux";
-import { CategoryInfo } from "../../../classes/category-info.class";
-import { Project } from '../../../classes/project.class';
-import { RootState } from "../../../redux/root.reducer";
-import ActiveLib from "../../../types/lib.enum";
-import { PARAMS, updateQueryParam } from "../../utility/param-handling";
+import React, { Dispatch, useRef } from 'react';
+import { useDispatch } from "react-redux";
+import { useTypedSelector } from "../../../redux/root.reducer";
+import { CategoryInfo } from "../../classes/category-info.class";
+import { Project } from '../../classes/project.class';
+import { SELECTED_ACTIONS } from "../../constants/selected.constants";
+import ActiveLib from "../../types/lib.enum";
+import { SelectAction } from "../../types/selected.type";
+import { getParam, PARAMS } from "../../utility/param-handling";
 import NewUpdatedBanner from "../new-updated-banner";
 import TileCard from "../tile-card";
 
 const ProjectCard: React.FC<{
   data: Project | CategoryInfo;
-  setCard: Function;
   selected: Project | CategoryInfo;
   isMobile: boolean;
 }> = ({
-  data, setCard, selected, isMobile
+  data, selected, isMobile
 }) => {
-  const lib = useSelector<RootState, ActiveLib>(({lib}) => lib)
+  const dispatch = useDispatch<Dispatch<SelectAction>>();
+  const tables = useTypedSelector(({ tables }) => tables);
+  const activeLib = getParam<ActiveLib>(PARAMS.LIBRARY);
+
   const thisRef = useRef<HTMLDivElement>(null);
   
   const { displayName, imageURL } = data;
@@ -25,8 +29,11 @@ const ProjectCard: React.FC<{
   const cardIsSelected = !!selectedName && selectedName === displayName;
 
   const selectCard = () => {
-    updateQueryParam({key: PARAMS.SELECTED, val: displayName});
-    setCard({selected: data, visible: true});
+    dispatch({
+      type: SELECTED_ACTIONS.SET,
+      data,
+      supportingDataSet: tables.loaded
+    });
   };
   
   const highlight = classNames({ "card-selected": cardIsSelected });
@@ -42,7 +49,7 @@ const ProjectCard: React.FC<{
   let sizing = isMobile ? 'p-col-6' : 'p-col-2'; // show all
   if (!isMobile && !!selectedName) {
     // not mobile, card selected -> condense to share w/ fullcard
-    sizing = lib === ActiveLib.PROJECT ? 'p-col-6': 'p-col-12';
+    sizing = activeLib === ActiveLib.PROJECT ? 'p-col-6': 'p-col-12';
   }
 
   return (

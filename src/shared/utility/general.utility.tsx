@@ -1,5 +1,5 @@
 import React from 'react';
-import { BasicObject } from '../../types/shared.type';
+import { BasicObject } from '../types/shared.type';
 import get from 'lodash.get';
 import { HIDE_SELECTED } from '../constants/general.constants';
 import { removeParam, PARAMS } from './param-handling';
@@ -13,9 +13,9 @@ export const AopenExternal = (href: string, children: React.ReactNode) => <a hre
 export const notEmptyStr = (s: string): boolean => /\w|\d/.test(s);
 export const emptyStr = (s: string) => !notEmptyStr(s);
 
-export const empty = (o: object): boolean => !!o && !Object.keys(o).length;
+export const empty = (o: {} | undefined): boolean => !!o && !Object.keys(o).length;
 
-export const notEmpty = (o: {}): boolean => !empty(o);
+export const notEmpty = (o: {} | undefined): boolean => !empty(o);
 
 export const allEmpty = (o: any): boolean => {
   for (const k in o) {
@@ -118,6 +118,7 @@ export const fixMdUrls = (md: string): string => {
 }
 
 export const toDict = <T extends any> (data: T[], index: string) => {
+  // do NOT change the key name otherwise it won't match elsewhere
   return data.reduce((acc: BasicObject<T[]>, datum: T) => {
     const key = get(datum, index);
     if (acc[key]) {
