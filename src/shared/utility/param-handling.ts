@@ -1,46 +1,50 @@
-import ActiveLib from "../types/lib.enum";
 import { BasicObject } from "../types/shared.type";
 
 export enum PARAMS {
-  FILTERSTATE = 'filterState',
-  SELECTED = 'selected',
-  LIBRARY = 'library'
+  FILTERSTATE = "filterState",
+  SELECTED = "selected",
+  LIBRARY = "library",
 }
 export enum PARAM_TYPES {
-  STRING = 'STRING',
-  ARRAY = 'ARRAY',
-  DICT = 'DICT'
+  STRING = "STRING",
+  ARRAY = "ARRAY",
+  DICT = "DICT",
 }
 
-type GetParamReturn<T> = null
-  | string
-  | T
-  | Array<T | string | null>
-  | BasicObject<T | string | null>
+export interface QueryParams {
+  key: PARAMS;
+  val: string;
+}
 
 const getUrl = () => new URL(window.location.href);
 const getParamFromUrl = (k: PARAMS) => getUrl().searchParams.get(k);
-const parseParam = (key: PARAMS) => {
-  let val = getParamFromUrl(key);
-  try { if (val) {
-    val = JSON.parse(val);
-  } } catch {}
+const parseParam = <T = any>(key: PARAMS): T => {
+  let val: any = getParamFromUrl(key);
+  try {
+    if (val) {
+      val = JSON.parse(val);
+    }
+  } catch {
+    val = "";
+  }
   return val;
-}
+};
 
 /**
  * Retrieves 1+ params and can return either a string [default], string array, or dict
- * 
+ *
  * Does not perform any null-checking
  */
-export const getParam = <T> (
+export const getParam = <T = any>(
   keys: PARAMS | PARAMS[],
   returnType: PARAM_TYPES = PARAM_TYPES.STRING
-): GetParamReturn<T> => {
+): T | T[] | BasicObject<T> | null => {
   switch (returnType) {
     case PARAM_TYPES.STRING:
       if (keys instanceof Array) {
-        console.warn('An array input cannot be a string output; defaulting to ARRAY');
+        console.warn(
+          "An array input cannot be a string output; defaulting to ARRAY"
+        );
         return getParam(keys, PARAM_TYPES.ARRAY);
       }
       return parseParam(keys);
@@ -48,61 +52,26 @@ export const getParam = <T> (
       if (!(keys instanceof Array)) {
         keys = [keys];
       }
-      return keys.reduce((acc: Array<string | null> , key) => {
-        let val = getParamFromUrl(key);
-        try {
-          if (val) {
-            val = JSON.parse(val);
-          }
-        } catch {}
-      
-        acc.push(val)
+      return keys.reduce((acc: T[], key: PARAMS) => {
+        acc.push(parseParam(key));
         return acc;
       }, []);
     case PARAM_TYPES.DICT:
       if (!(keys instanceof Array)) {
         keys = [keys];
       }
-      return keys.reduce((acc: BasicObject<string | null> , key) => {
-        let val = getParamFromUrl(key);
-        try {
-          if (val) {
-            val = JSON.parse(val);
-          }
-        } catch {}
-      
-        acc[key] = val
+      return keys.reduce((acc: BasicObject<T>, key: PARAMS) => {
+        acc[key] = parseParam(key);
         return acc;
       }, {});
   }
-
-  
 };
 
 export const removeParam = (key: PARAMS): void => {
   const url = getUrl();
   url.searchParams.delete(key);
   softUpdateURL(url);
-}
-
-// used for creating links between libs
-export const genLocalParam = (
-  lib: ActiveLib,
-  param: string,
-): string =>
-  [
-    "/libraries/",
-    lib,
-    "-library?",
-    PARAMS.SELECTED,
-    "=",
-    encodeURI(param),
-  ].join("");
-
-export interface QueryParams {
-  key?: string;
-  val: string;
-}
+};
 
 export const setQueryParam = ({ key, val }: QueryParams): void => {
   if (!key || !val) return;
@@ -115,7 +84,7 @@ export const setQueryParam = ({ key, val }: QueryParams): void => {
   }
 };
 
-const softUpdateURL = (url: URL): void=> {
+const softUpdateURL = (url: URL): void => {
   // update url w/o page reload
   window.history.pushState(null, "", url.href);
-}
+};
