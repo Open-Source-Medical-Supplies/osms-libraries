@@ -6,7 +6,7 @@ import { CategoryInfo } from '../../shared/classes/category-info.class';
 import CardContainer from '../../shared/components/card-container/card-container';
 import DetailWindow from '../../shared/components/detail-window/detail-window';
 import Loading from '../../shared/components/loading';
-import { TABLE_MAPPING } from '../../shared/constants/google-bucket.constants';
+import { TABLE_MAPPING } from '../../shared/constants/general.constants';
 import { SELECTED_ACTIONS } from '../../shared/constants/selected.constants';
 import ActiveLib from '../../shared/types/lib.enum';
 import { SelectAction } from '../../shared/types/selected.type';

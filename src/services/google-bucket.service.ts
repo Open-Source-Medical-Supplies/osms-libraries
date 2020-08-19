@@ -1,7 +1,8 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { Dispatch } from "react";
 import { TableAction, TABLE_ACTIONS } from "../redux/tables.reducer";
-import { TableMap, TABLE_MAPPING } from "../shared/constants/google-bucket.constants";
+import { TABLE_MAPPING } from "../shared/constants/general.constants";
+import { TableMap } from "../shared/constants/google-bucket.constants";
 import { AirtableRecords } from "../shared/types/airtable.type";
 import { valueof } from "../shared/types/shared.type";
 

@@ -25,7 +25,9 @@ const parseParam = <T = any>(key: PARAMS): T => {
       val = JSON.parse(val);
     }
   } catch {
-    val = "";
+    if (!val) {
+      val = "";
+    }
   }
   return val;
 };
@@ -38,14 +40,14 @@ const parseParam = <T = any>(key: PARAMS): T => {
 export const getParam = <T = any>(
   keys: PARAMS | PARAMS[],
   returnType: PARAM_TYPES = PARAM_TYPES.STRING
-): T | T[] | BasicObject<T> | null => {
+): T => {
   switch (returnType) {
     case PARAM_TYPES.STRING:
       if (keys instanceof Array) {
         console.warn(
           "An array input cannot be a string output; defaulting to ARRAY"
         );
-        return getParam(keys, PARAM_TYPES.ARRAY);
+        return getParam(keys, PARAM_TYPES.ARRAY) as T;
       }
       return parseParam(keys);
     case PARAM_TYPES.ARRAY:
@@ -55,7 +57,7 @@ export const getParam = <T = any>(
       return keys.reduce((acc: T[], key: PARAMS) => {
         acc.push(parseParam(key));
         return acc;
-      }, []);
+      }, []) as unknown as T;
     case PARAM_TYPES.DICT:
       if (!(keys instanceof Array)) {
         keys = [keys];
@@ -63,7 +65,7 @@ export const getParam = <T = any>(
       return keys.reduce((acc: BasicObject<T>, key: PARAMS) => {
         acc[key] = parseParam(key);
         return acc;
-      }, {});
+      }, {}) as unknown as T;
   }
 };
 

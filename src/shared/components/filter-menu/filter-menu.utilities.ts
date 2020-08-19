@@ -226,7 +226,7 @@ export const filterBy = (
 export const filtersToParams = (filterState: FilterState): QueryParams => {
   const { nodeFilters, categoriesFilters, searchBar } = filterState;
   return {
-    key: "filterState",
+    key: PARAMS.FILTERSTATE,
     val: JSON.stringify({
       nodeFilters,
       categoriesFilters,

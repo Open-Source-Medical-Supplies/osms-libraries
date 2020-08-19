@@ -223,9 +223,10 @@ export default class DetailWindow extends React.Component<SidebarProps,any> {
 
   render() {
     const className = classNames(
-      "p-sidebar p-component p-sidebar-right-custom",
+      "p-sidebar p-component p-sidebar-custom",
       this.props.className,
       "p-sidebar-" + this.props.position,
+      "p-sidebar-" + this.props.position + '-custom',
       {
         "p-sidebar-active": this.props.visible,
         "p-sidebar-full": this.props.fullScreen,
@@ -241,7 +242,7 @@ export default class DetailWindow extends React.Component<SidebarProps,any> {
         style={{height: '100%', ...this.props.style}}
         role="complementary"
       >
-        {closeIcon}
+        {this.props.showCloseIcon ? closeIcon : null}
         {this.props.children}
       </div>
     );

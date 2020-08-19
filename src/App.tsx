@@ -7,44 +7,30 @@ import { useDispatch } from "react-redux";
 import { Redirect, Route, Switch } from "react-router";
 import { BrowserRouter } from "react-router-dom";
 import "./App.scss";
-import CategoryLibrary from "./components/category-library/category-library";
-import ProjectLibrary from "./components/project-library/project-library";
+import LibraryMain from "./components/library-main/library-main";
 import { SET_ENV } from "./redux/env.reducer";
+import { LIB_ACTIONS } from "./redux/lib.reducer";
 import loadTables from "./services/google-bucket.service";
-import ScrollToTop from "./shared/utility/scroll-to-top";
 import ErrorBoundary from "./shared/components/error-boundary";
-
-/* '20-06-28 * Can't get working due to bad path names after build + hosting */
-// const LazyCategoryLib = React.lazy(() =>
-// 	import("./components/category-library/category-library.component")
-// );
-// const LazyProjectLib = React.lazy(() =>
-// 	import("./components/project-library/project-library.component")
-// );
-// <Suspense fallback={<div>Loading...</div>}>
-// </Suspense>
 
 function App() {
   const dispatch = useDispatch();
   
   useEffect(() => {
     dispatch({ type: SET_ENV });
+    dispatch({ type: LIB_ACTIONS.LIB_START });
     loadTables(dispatch);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <React.Fragment>
-      <BrowserRouter basename="/libraries">
-        <ErrorBoundary>
-          <Switch>
-            <Route path="/category" component={CategoryLibrary} />
-            <Route path="/project" component={ProjectLibrary} />
-            <Redirect from="*" to="/category" />
-          </Switch>
-        </ErrorBoundary>
-      </BrowserRouter>
-      <ScrollToTop />
-    </React.Fragment>
+    <BrowserRouter basename="/libraries">
+      <ErrorBoundary>
+        <Switch>
+          <Route path="/" component={LibraryMain} />
+          <Redirect from="*" to="/" />
+        </Switch>
+      </ErrorBoundary>
+    </BrowserRouter>
   );
 }
 

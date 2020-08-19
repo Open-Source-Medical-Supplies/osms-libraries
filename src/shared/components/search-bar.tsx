@@ -29,7 +29,7 @@ const SearchBar = (props: {
   }, [props.providedStr]);
   
 	return (
-		<div id={props.id || "search-bar"} className={(props.className || '') + " search-bar sticky-top-0"} style={{ zIndex: 20 }}>
+		<div id={props.id || "search-bar"} className={(props.className || '') + " search-bar"} style={{ zIndex: 20 }}>
 			<span className="p-float-label">
 				<label htmlFor="searchBar">{searchState.length ? "" : Lang['search']}</label>
 				<InputText

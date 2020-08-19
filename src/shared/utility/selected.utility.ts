@@ -1,9 +1,16 @@
 import { TableState } from "../../redux/tables.reducer";
-import { SupportingDataMap } from "../constants/selected.constants";
 import ActiveLib from "../types/lib.enum";
 import { SelectedState, SupportingData, SupportingDatum, SupportingDataSet } from "../types/selected.type";
 import { toDict } from "./general.utility";
 import { getParam, PARAMS } from "./param-handling";
+import { TABLE_MAPPING } from "../constants/general.constants";
+import { valueof } from "../types/shared.type";
+
+export const SupportingDataMap: {[key in ActiveLib]: valueof<typeof TABLE_MAPPING>} = {
+  [ActiveLib.CATEGORY]: TABLE_MAPPING.Project,
+  [ActiveLib.PROJECT]: TABLE_MAPPING.Material
+}
+
 
 export const getSupportingData = (selected: string, supportingDataSet: SelectedState['supportingDataSet']) => {
   if ( !selected || !supportingDataSet ) {

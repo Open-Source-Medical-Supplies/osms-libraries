@@ -3,6 +3,7 @@ import React from 'react';
 import { CategoryInfo } from '../../classes/category-info.class';
 import { Project } from '../../classes/project.class';
 import ProjectCard from './card';
+import './_card-container.scss';
 
 interface CardContainerType {
   records: Array<Project | CategoryInfo>;
@@ -21,7 +22,11 @@ const CardContainer: React.FC<CardContainerType> = ({records, selected, isMobile
   };
 
   return records.length ?
-    <DataView value={records} layout='grid' itemTemplate={MappedCard} /> :
+    <DataView
+      className='card-container_data-view'
+      value={records}
+      layout='grid'
+      itemTemplate={MappedCard} /> :
     <div style={{alignSelf: 'center', margin: '0 auto'}}>
       <h3>No records match that criteria</h3>
     </div>

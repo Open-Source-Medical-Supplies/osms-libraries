@@ -1,7 +1,7 @@
 import { BasicObject } from "../types/shared.type";
 import { AirtableRecord } from "../types/airtable.type";
 import { useTypedSelector } from "../../redux/root.reducer";
-import { TABLE_MAPPING } from "../constants/google-bucket.constants";
+import { TABLE_MAPPING } from "../constants/general.constants";
 
 // Only callable w/in a valid React component
 // eslint-disable-next-line react-hooks/rules-of-hooks

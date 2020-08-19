@@ -52,11 +52,17 @@ div.p-grid, .p-dataview.p-component.p-dataview-grid {
   margin: 0 !important;
 }
 
-.p-sidebar-right-custom {
+.p-sidebar-custom {
   position: relative !important;
   height: 100vh;
   width: calc(100% - 0.5rem) !important;
+}
+
+.p-sidebar-right-custom {
   margin-left: 0.5rem !important;
+}
+.p-sidebar-left-custom {
+  margin-right: 0.5rem !important;
 }
 
 .p-card img, .p-card div.center-flex  {

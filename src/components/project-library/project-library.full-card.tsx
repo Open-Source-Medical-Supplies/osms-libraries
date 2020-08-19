@@ -11,9 +11,8 @@ import {
   AopenExternal,
   openExternal
 } from "../../shared/utility/general.utility";
-import { genLocalParam } from '../../shared/utility/param-handling';
 import ActiveLib from "../../shared/types/lib.enum";
-import { TABLE_MAPPING } from "../../shared/constants/google-bucket.constants";
+import { TABLE_MAPPING } from "../../shared/constants/general.constants";
 import { BasicObject } from "../../shared/types/shared.type";
 
 const ProjectFullCard = () => {
@@ -37,9 +36,13 @@ const ProjectFullCard = () => {
 		externalLink,
   } = selected.data;
 
-  const linkAcross = name instanceof Array ? 
-    genLocalParam( ActiveLib.CATEGORY, name[0] ) :
-    genLocalParam( ActiveLib.CATEGORY, name );
+  // const linkAcross = name instanceof Array ? 
+  //   genLocalParam( ActiveLib.CATEGORY, name[0] ) :
+  //   genLocalParam( ActiveLib.CATEGORY, name );
+  const linkAcross = () => {
+    console.log('fix')
+    return 'foo';
+  };
 
 	const headerImage =
 		typeof imageURL !== "string" ? (
@@ -93,7 +96,7 @@ const ProjectFullCard = () => {
 			<div className="full-card__content">
 				{headerImage}
 				<h1>{displayName}</h1>
-				{AopenExternal(linkAcross, <h2>{name}</h2>)}
+				{AopenExternal(linkAcross(), <h2>{name}</h2>)}
 				{desc}
 				{attributionOrg || creator ? (
 					<div className="p-grid">

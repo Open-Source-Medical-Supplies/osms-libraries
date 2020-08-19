@@ -19,7 +19,7 @@ export interface FilterState {
   searchBar: string;
   previousFilters: PreviousFilterState;
   isFiltering: boolean;
-  showMobileFilters: boolean;
+  show: boolean;
 };
 
 export interface FilterDatum {

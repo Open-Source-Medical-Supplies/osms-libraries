@@ -5,11 +5,9 @@ import { Project } from "../../shared/classes/project.class";
 import ImageCarousel from "../../shared/components/detail-window/image-carousel";
 import MarkdownSection from "../../shared/components/markdown/markdown-section";
 import TileCard from "../../shared/components/tile-card";
-import ActiveLib from "../../shared/types/lib.enum";
-import { Indexable, BasicObject } from "../../shared/types/shared.type";
+import { TABLE_MAPPING } from "../../shared/constants/general.constants";
+import { BasicObject, Indexable } from "../../shared/types/shared.type";
 import { openExternal } from "../../shared/utility/general.utility";
-import { genLocalParam } from "../../shared/utility/param-handling";
-import { TABLE_MAPPING } from "../../shared/constants/google-bucket.constants";
 
 const CategoryLibFullCard = () => {
   const { lang, selected } = useTypedSelector(({ tables, selected }) => ({
@@ -44,7 +42,10 @@ const CategoryLibFullCard = () => {
 
   const ICCardTemplate = (data: Project) => {
     const { displayName, imageURL, externalLink } = data;
-    const linkAcross = genLocalParam(ActiveLib.PROJECT, displayName);
+    const linkAcross = () => {
+      console.log('fix')
+      return 'foo';
+    };
     const actions = [
       {
         label: lang["viewSource"],
@@ -54,7 +55,7 @@ const CategoryLibFullCard = () => {
       {
         label: lang["viewDetails"],
         icon: "eye",
-        fn: openExternal(linkAcross),
+        fn: openExternal(linkAcross()),
       },
     ];
 

@@ -7,15 +7,14 @@ import { Material } from '../../shared/classes/material.class';
 import { Project } from '../../shared/classes/project.class';
 import CardContainer from "../../shared/components/card-container/card-container";
 import DetailWindow from "../../shared/components/detail-window/detail-window";
-import FilterMenu from "../../shared/components/filter-menu/filter-menu";
 import Loading from '../../shared/components/loading';
-import { TABLE_MAPPING } from '../../shared/constants/google-bucket.constants';
+import { TABLE_MAPPING } from '../../shared/constants/general.constants';
+import { SELECTED_ACTIONS } from '../../shared/constants/selected.constants';
 import ActiveLib from '../../shared/types/lib.enum';
+import { SelectAction } from '../../shared/types/selected.type';
 import { BasicObject } from '../../shared/types/shared.type';
 import { PARAMS, setQueryParam } from '../../shared/utility/param-handling';
 import ProjectFullCard from './project-library.full-card';
-import { SELECTED_ACTIONS } from '../../shared/constants/selected.constants';
-import { SelectAction } from '../../shared/types/selected.type';
 
 const StateDefault: {
   _records: Project[]; // immutable
@@ -82,7 +81,7 @@ const ProjectLibrary: React.FC = () => {
   const DesktopFormat = (
     <React.Fragment>
       <div id='app__filter-menu' style={{flex: 1, marginRight: '0.5rem'}}>
-        <FilterMenu state={state} setState={setState}/>
+        {/* <FilterMenu state={state} setState={setState}/> */}
       </div>
       <div id='app__card-container' style={{display: 'flex', flex: !!selected.data ? 2 : 4}}>
           <Loading loading={!tables.completed} >
@@ -103,7 +102,7 @@ const ProjectLibrary: React.FC = () => {
   const MobileFormat = (
     <React.Fragment>
       <div className='flex-column' style={{width: '100%'}}>
-        <FilterMenu state={state} setState={setState}/>
+        {/* <FilterMenu state={state} setState={setState}/> */}
         <Loading loading={!tables.completed} >
           <CardContainer
             isMobile={isMobile}
