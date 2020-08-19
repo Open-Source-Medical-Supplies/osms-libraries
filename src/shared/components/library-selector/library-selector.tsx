@@ -5,6 +5,7 @@ import { useTypedSelector } from '../../../redux/root.reducer';
 import ActiveLib from '../../types/lib.enum';
 import { LIB_ACTIONS } from '../../../redux/lib.reducer';
 import './_library-selector.scss'
+import { PARAMS, removeParam } from '../../utility/param-handling';
 
 interface SelectBtnOption {
   label: string;
@@ -27,10 +28,15 @@ const LibrarySelector = ({className = ''}: {className: string}) => {
     }
   ];
 
-  const onChange = (val: SelectBtnOption['value']) => dispatch({
-    type: LIB_ACTIONS.LIB_SET,
-    lib: val
-  });
+  const onChange = (val: SelectBtnOption['value']) => {
+    if (!val || val === lib) return;
+    
+    removeParam(PARAMS.FILTERSTATE);
+    dispatch({
+      type: LIB_ACTIONS.LIB_SET,
+      lib: val
+    })
+  };
 
   return (
     <div className={'library-selector ' + className}>

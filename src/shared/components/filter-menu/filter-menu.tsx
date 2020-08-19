@@ -16,6 +16,8 @@ import { FilterSearchBar } from "./filter-search-bar";
 import "./_filter-menu.scss";
 import LibrarySelector from "../library-selector/library-selector";
 import { Sidebar } from "primereact/sidebar";
+import { Project } from "../../classes/project.class";
+import classNames from 'classnames';
 
 /* eslint-disable react-hooks/exhaustive-deps */
 
@@ -42,11 +44,19 @@ const FilterStateDefault: FilterState = {
 };
 
 const FilterMenu = ({
-  state,
-  setState,
+  _data,
+  data,
+  disabled = false,
+  doReset,
+  onMenuVizChange,
+  onFilter,
 }: {
-  state: any;
-  setState: Function;
+  _data: Project[];
+  data: Project[];
+  disabled: boolean;
+  doReset?: () => void;
+  onMenuVizChange?: (viz: boolean) => void;
+  onFilter?: (filteredRecords: Project[]) => void;
 }) => {
   const { isMobile, tables } = useTypedSelector(
     ({ env, tables }) => ({
@@ -56,7 +66,6 @@ const FilterMenu = ({
     shallowEqual
   );
 
-  const { _records, records } = state;
   const [filterState, baseSetFilterState] = useState(FilterStateDefault);
   const setFilterState: SetFilterFn = (props: Partial<FilterState>) => {
     const update = {
@@ -68,18 +77,32 @@ const FilterMenu = ({
     };
     baseSetFilterState({ ...filterState, ...update });
   };
+  const toggleSidebar = () => {
+    const setTo = !filterState.show;
+    setFilterState({ show: setTo });
+    if (onMenuVizChange) {
+      onMenuVizChange(setTo);
+    }
+  };
+
+  const clearFilters = () => setFilterState({
+    nodeFilters: {},
+    categoriesFilters: {},
+    searchBar: "",
+  });
 
   const doFilter = useCallback(() => {
-    const filteredRecords = filterBy(filterState, _records, records);
-    setFilterState({ isFiltering: _records.length > filteredRecords.length });
-    setState({ records: filteredRecords }, true); // when loading from a param, had a race condition. Kinda hacky
-  }, [filterState, records]);
+    const filteredRecords = filterBy(filterState, _data, data);
+    setFilterState({ isFiltering: _data.length > filteredRecords.length });
+    if (onFilter) {
+      onFilter(filteredRecords);
+    }
+  }, [filterState, data]);
 
   // load menu
   useEffect(() => {
     if (tables.completed) {
-      const params =
-        (getParam(PARAMS.FILTERSTATE) as Partial<FilterState>) || {};
+      const params = getParam<Partial<FilterState>>(PARAMS.FILTERSTATE) || {};
       setFilterState({
         loaded: true,
         categories: tables.loaded[
@@ -100,7 +123,7 @@ const FilterMenu = ({
     ? createUUID()
     : false;
 
-  useEffect(() => doFilter(), [_records]);
+  useEffect(() => doFilter(), [_data]);
 
   // filter-changes
   useEffect(() => {
@@ -131,8 +154,6 @@ const FilterMenu = ({
     </React.Fragment>
   );
 
-  const toggleSidebar = () => setFilterState({ show: !filterState.show });
-
   const SideMenu = isMobile ? (
     <Sidebar
       onHide={toggleSidebar}
@@ -148,37 +169,59 @@ const FilterMenu = ({
     <DetailWindow
       position="left"
       visible={filterState.show}
-      showCloseIcon={true}
+      showCloseIcon={false}
       className="p-sidebar-md"
     >
       {Filters}
     </DetailWindow>
   );
 
-  const FilterMenuContainer = (
-    <div className={"grid-area" + (isMobile ? "-mobile" : "")}>
-      {SideMenu}
+  const MenuButton = () => {
+    const icon = "pi pi-" + (disabled || filterState.show ? "times" : "bars");
+    const className = classNames(
+      "mobile-button__square filter-menu__grid-button disabled-button",
+      {
+        'disabled-button__true': disabled
+      }
+    );
+    return (
       <Button
-        style={{ marginRight: "0.5rem" }}
-        className="mobile-button__square filter-menu__grid-button"
-        onClick={toggleSidebar}
-        icon={"pi pi-" + (filterState.show ? "times" : "bars")}
+        style={{marginRight: "0.5rem"}}
+        className={className}
+        onClick={disabled ? () => null : toggleSidebar}
+        icon={icon}
       />
+    );
+  };
+
+  const ClearFilters = () => (
+    <Button
+      className="mobile-button__square filter-menu__grid-button"
+      icon='pi pi-undo'
+      disabled={!filterState.isFiltering}
+      onClick={clearFilters} />
+  );
+
+  const className = "filter-menu-container grid-area" + (isMobile ? "-mobile" : "");
+  const Header = (
+    <div className={className}>
+      <MenuButton />
       <LibrarySelector className="filter-menu__grid-select" />
       <FilterSearchBar
         className="mobile-search-bar filter-menu__grid-search"
         searchBarText={filterState.searchBar}
         setFilterState={setFilterState}
       />
-      <ClearFilters
-        className="mobile-button__square filter-menu__grid-button"
-        setFilterState={setFilterState}
-        isFiltering={filterState.isFiltering}
-      />
+      <ClearFilters />
     </div>
   );
 
-  return FilterMenuContainer;
+  return (
+    <React.Fragment>
+      {Header}
+      {disabled ? null : SideMenu}
+    </React.Fragment>
+  );
 };
 
 export default FilterMenu;

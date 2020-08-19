@@ -135,3 +135,12 @@ $new-updated-max: 100px;
     list-style: inside disc !important;
   }
 }
+
+.disabled-button {
+  opacity: 1;
+
+  &__true {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}

@@ -24,7 +24,7 @@ const CardContainer: React.FC<CardContainerType> = ({records, selected, isMobile
 
   return records.length ?
     <DataView
-      className='card-container_data-view'
+      className='card-container__data-view'
       value={records}
       layout='grid'
       itemTemplate={MappedCard} /> :

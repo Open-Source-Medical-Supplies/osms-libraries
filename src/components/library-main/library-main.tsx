@@ -1,6 +1,8 @@
+import { Sidebar } from "primereact/sidebar";
 import React, { useEffect, useState } from "react";
 import { shallowEqual, useDispatch } from "react-redux";
 import { useTypedSelector } from "../../redux/root.reducer";
+import { CategoryInfo } from "../../shared/classes/category-info.class";
 import { CategorySupply } from "../../shared/classes/category-supply.class";
 import { Material } from "../../shared/classes/material.class";
 import { Project } from "../../shared/classes/project.class";
@@ -8,34 +10,33 @@ import CardContainer from "../../shared/components/card-container/card-container
 import FilterMenu from "../../shared/components/filter-menu/filter-menu";
 import Loading from "../../shared/components/loading";
 import { TABLE_MAPPING } from "../../shared/constants/general.constants";
-import { SELECTED_ACTIONS, SupportingDataMap } from "../../shared/constants/selected.constants";
-import { SelectAction } from "../../shared/types/selected.type";
-import { BasicObject, valueof } from "../../shared/types/shared.type";
-import { Sidebar } from "primereact/sidebar";
-import ProjectFullCard from "../project-library/project-library.full-card";
-import DetailWindow from "../../shared/components/detail-window/detail-window";
-import { getParam, PARAMS } from "../../shared/utility/param-handling";
+import { SELECTED_ACTIONS } from "../../shared/constants/selected.constants";
 import ActiveLib, { ActiveLibToClassName } from "../../shared/types/lib.enum";
-import CategoryLibFullCard from "../category-library/category-library.full-card";
+import { SelectAction } from "../../shared/types/selected.type";
+import { BasicObject } from "../../shared/types/shared.type";
 import FullCard from "./full-card";
-import { isSymbol } from "util";
-import { CategoryInfo } from "../../shared/classes/category-info.class";
+import './_library-main.scss'
+import classNames from 'classnames';
 
-const StateDefault: {
-  _records: Project[] | CategoryInfo[]; // immutable
+type PartialState = Partial<typeof stateDefault>;
+
+interface StateDefault {
+  _records: Project[] | CategoryInfo[];
   records: Project[] | CategoryInfo[];
   categories: BasicObject<CategorySupply>;
   materials: BasicObject<Material[]>;
   selectedMaterials: Material[];
-} = {
-  _records: [], // 'immutable'
+  filterMenuViz: Boolean;
+}
+
+const stateDefault: StateDefault = {
+  _records: [],
   records: [],
   categories: {},
   materials: {},
   selectedMaterials: [],
+  filterMenuViz: false
 };
-
-type PartialState = Partial<typeof StateDefault>;
 
 const LibraryMain = () => {
   const dispatch = useDispatch();
@@ -48,7 +49,7 @@ const LibraryMain = () => {
     shallowEqual
   );
 
-  let [state, baseSetState] = useState(StateDefault);
+  let [state, baseSetState] = useState(stateDefault);
   const setState = (props: PartialState, async = false) => {
     const updateState = () => baseSetState(() => ({ ...state, ...props }));
     async ? setTimeout(updateState) : updateState();
@@ -71,14 +72,28 @@ const LibraryMain = () => {
     }
   }, [tables.completed, lib]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const libContainerClasses = classNames(
+    "library-main-container",
+    {
+      "library-main-container__grid__menu-closed": !state.filterMenuViz,
+      "library-main-container__grid__menu-open": state.filterMenuViz
+    }
+  );
+
   return (
-    <div className="library-main-container">
-      <FilterMenu state={state} setState={setState} />
+    <div className={libContainerClasses}>
+      <FilterMenu
+        disabled={lib === ActiveLib.CATEGORY}
+        _data={state._records as Project[]}
+        data={state.records as Project[]}
+        reset={}
+        onFilter={(filteredRecords) => setState({ records: filteredRecords }, true)}
+        onMenuVizChange={(menuViz) => setState({filterMenuViz: menuViz})}/>
       <Loading loading={!tables.completed}>
         <CardContainer
           isMobile={isMobile}
           records={state.records}
-          selected={selected.data as Project}
+          selected={selected.data }
         />
       </Loading>
       <Sidebar
@@ -86,7 +101,7 @@ const LibraryMain = () => {
         fullScreen={isMobile}
         visible={!!selected.data}
         onHide={hide}
-        className={isMobile ? '' : 'p-sidebar-md'}
+        className={isMobile ? '' : 'p-sidebar-lg'}
       >
       <FullCard lib={lib} />
     </Sidebar>
