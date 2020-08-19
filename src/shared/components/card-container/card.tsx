@@ -46,11 +46,7 @@ const ProjectCard: React.FC<{
     });
   }
 
-  let sizing = isMobile ? 'p-col-6' : 'p-col-2'; // show all
-  if (!isMobile && !!selectedName) {
-    // not mobile, card selected -> condense to share w/ fullcard
-    sizing = activeLib === ActiveLib.PROJECT ? 'p-col-6': 'p-col-12';
-  }
+  const sizing = isMobile ? 'p-col-6' : 'p-col-2'; // show all
 
   return (
     <div key={displayName} ref={thisRef} style={{position: 'relative'}} className={sizing}>

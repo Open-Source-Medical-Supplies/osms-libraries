@@ -8,20 +8,22 @@ import CardContainer from "../../shared/components/card-container/card-container
 import FilterMenu from "../../shared/components/filter-menu/filter-menu";
 import Loading from "../../shared/components/loading";
 import { TABLE_MAPPING } from "../../shared/constants/general.constants";
-import { SELECTED_ACTIONS } from "../../shared/constants/selected.constants";
+import { SELECTED_ACTIONS, SupportingDataMap } from "../../shared/constants/selected.constants";
 import { SelectAction } from "../../shared/types/selected.type";
-import { BasicObject } from "../../shared/types/shared.type";
+import { BasicObject, valueof } from "../../shared/types/shared.type";
 import { Sidebar } from "primereact/sidebar";
 import ProjectFullCard from "../project-library/project-library.full-card";
 import DetailWindow from "../../shared/components/detail-window/detail-window";
 import { getParam, PARAMS } from "../../shared/utility/param-handling";
-import ActiveLib from "../../shared/types/lib.enum";
+import ActiveLib, { ActiveLibToClassName } from "../../shared/types/lib.enum";
 import CategoryLibFullCard from "../category-library/category-library.full-card";
 import FullCard from "./full-card";
+import { isSymbol } from "util";
+import { CategoryInfo } from "../../shared/classes/category-info.class";
 
 const StateDefault: {
-  _records: Project[]; // immutable
-  records: Project[];
+  _records: Project[] | CategoryInfo[]; // immutable
+  records: Project[] | CategoryInfo[];
   categories: BasicObject<CategorySupply>;
   materials: BasicObject<Material[]>;
   selectedMaterials: Material[];
@@ -37,12 +39,10 @@ type PartialState = Partial<typeof StateDefault>;
 
 const LibraryMain = () => {
   const dispatch = useDispatch();
-  const lib = getParam<ActiveLib>(PARAMS.LIBRARY);
-
-  const { isMobile, tables, selected } = useTypedSelector(
-    ({ env, tables, selected }) => ({
+  const { isMobile, tables, lib, selected } = useTypedSelector(
+    ({ env, tables, lib, selected }) => ({
       isMobile: env.isMobile,
-      tables,
+      tables, lib,
       selected,
     }),
     shallowEqual
@@ -61,36 +61,15 @@ const LibraryMain = () => {
 
   useEffect(() => {
     if (tables.completed) {
-      setState({
-        records: tables.loaded[TABLE_MAPPING.Project] as Project[],
-        _records: tables.loaded[TABLE_MAPPING.Project] as Project[],
-      });
+      const focus = tables.loaded[TABLE_MAPPING[ActiveLibToClassName[lib]]] as Project[] | CategoryInfo[];
+      setState({ records: focus, _records: focus });
       dispatch<SelectAction>({
         type: SELECTED_ACTIONS.CHECK,
-        dataSet: tables.loaded[TABLE_MAPPING.Project] as Project[],
+        dataSet: focus,
         supportingDataSet: tables.loaded,
       });
     }
-  }, [tables.completed]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const Selected = isMobile ? (
-    <Sidebar
-      position="right"
-      fullScreen={true}
-      visible={!!selected.data}
-      onHide={hide}
-    >
-      <FullCard lib={lib} />
-    </Sidebar>
-  ) : (
-    <DetailWindow
-      visible={!!selected.data}
-      onHide={hide}
-      className="p-sidebar-md"
-    >
-      <FullCard lib={lib} />
-    </DetailWindow>
-  );
+  }, [tables.completed, lib]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="library-main-container">
@@ -102,7 +81,15 @@ const LibraryMain = () => {
           selected={selected.data as Project}
         />
       </Loading>
-      {Selected}
+      <Sidebar
+        position="right"
+        fullScreen={isMobile}
+        visible={!!selected.data}
+        onHide={hide}
+        className={isMobile ? '' : 'p-sidebar-md'}
+      >
+      <FullCard lib={lib} />
+    </Sidebar>
     </div>
   );
 };

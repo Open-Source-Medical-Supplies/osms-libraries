@@ -14,7 +14,7 @@ export interface LibAction extends Action<LIB_ACTIONS> {
 export const libReducer = (
   state = ActiveLib.CATEGORY,
   action: LibAction
-) => {
+): ActiveLib => {
   switch (action.type) {
     case LIB_ACTIONS.LIB_SET:
       setQueryParam({ key: PARAMS.LIBRARY, val: action.lib })
