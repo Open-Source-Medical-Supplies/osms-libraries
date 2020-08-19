@@ -18,7 +18,6 @@ export interface FilterState {
   filters: {};
   searchBar: string;
   previousFilters: PreviousFilterState;
-  isFiltering: boolean;
   show: boolean;
 };
 

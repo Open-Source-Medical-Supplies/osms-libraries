@@ -6,6 +6,7 @@ import ActiveLib from '../../types/lib.enum';
 import { LIB_ACTIONS } from '../../../redux/lib.reducer';
 import './_library-selector.scss'
 import { PARAMS, removeParam } from '../../utility/param-handling';
+import { FILTER_ACTIONS } from '../../constants/filter.constants';
 
 interface SelectBtnOption {
   label: string;
@@ -30,8 +31,9 @@ const LibrarySelector = ({className = ''}: {className: string}) => {
 
   const onChange = (val: SelectBtnOption['value']) => {
     if (!val || val === lib) return;
-    
-    removeParam(PARAMS.FILTERSTATE);
+    dispatch({
+      type: FILTER_ACTIONS.CLEAR_FILTER
+    })
     dispatch({
       type: LIB_ACTIONS.LIB_SET,
       lib: val

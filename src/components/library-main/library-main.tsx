@@ -17,6 +17,7 @@ import { BasicObject } from "../../shared/types/shared.type";
 import FullCard from "./full-card";
 import './_library-main.scss'
 import classNames from 'classnames';
+import { FILTER_ACTIONS } from "../../shared/constants/filter.constants";
 
 type PartialState = Partial<typeof stateDefault>;
 
@@ -86,8 +87,6 @@ const LibraryMain = () => {
         disabled={lib === ActiveLib.CATEGORY}
         _data={state._records as Project[]}
         data={state.records as Project[]}
-        reset={}
-        onFilter={(filteredRecords) => setState({ records: filteredRecords }, true)}
         onMenuVizChange={(menuViz) => setState({filterMenuViz: menuViz})}/>
       <Loading loading={!tables.completed}>
         <CardContainer

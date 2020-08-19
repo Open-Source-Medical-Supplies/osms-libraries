@@ -15,7 +15,6 @@ export const libReducer = (
   state = ActiveLib.CATEGORY,
   action: LibAction
 ): ActiveLib => {
-  console.log('lib switch')
   switch (action.type) {
     case LIB_ACTIONS.LIB_SET:
       setQueryParam({ key: PARAMS.LIBRARY, val: action.lib })
