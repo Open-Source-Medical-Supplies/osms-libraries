@@ -60,7 +60,7 @@ const ProjectLibrary: React.FC = () => {
   };
 
   const hide = () => dispatch<SelectAction>({
-    type: SELECTED_ACTIONS.CLEAR
+    type: SELECTED_ACTIONS.CLEAR_SELECTED
   });
   // ['getProjects', 'getBoM'],
 
@@ -71,7 +71,7 @@ const ProjectLibrary: React.FC = () => {
         _records: tables.loaded[TABLE_MAPPING.Project] as Project[],
       })
       dispatch<SelectAction>({
-        type: SELECTED_ACTIONS.CHECK,
+        type: SELECTED_ACTIONS.CHECK_SELECTED,
         dataSet: tables.loaded[TABLE_MAPPING.Project] as Project[],
         supportingDataSet: tables.loaded
       });

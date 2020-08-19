@@ -17,7 +17,7 @@ export const selectedReducer = (
   let supportingData: SupportingData;
   
   switch (action.type) {
-    case SELECTED_ACTIONS.CHECK:
+    case SELECTED_ACTIONS.CHECK_SELECTED:
       const selector = action.selector || "displayName";
       const param = getParam(PARAMS.SELECTED);
       
@@ -35,7 +35,7 @@ export const selectedReducer = (
         }
       }
       return defaultState;
-    case SELECTED_ACTIONS.SET:
+    case SELECTED_ACTIONS.SET_SELECTED:
       if (!action.data || !action.supportingDataSet) {
         console.warn('Attempted to set selected view without enough data');
         return defaultState;
@@ -48,7 +48,7 @@ export const selectedReducer = (
         data: action.data,
         supportingData,
       };
-    case SELECTED_ACTIONS.CLEAR:
+    case SELECTED_ACTIONS.CLEAR_SELECTED:
       removeParam(PARAMS.SELECTED);
       return defaultState;
     default:

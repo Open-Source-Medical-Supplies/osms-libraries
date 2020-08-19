@@ -28,7 +28,7 @@ const ProjectCard: React.FC<{
 
   const selectCard = () => {
     dispatch({
-      type: SELECTED_ACTIONS.SET,
+      type: SELECTED_ACTIONS.SET_SELECTED,
       data,
       supportingDataSet: tables.loaded
     });

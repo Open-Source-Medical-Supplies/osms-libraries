@@ -57,7 +57,7 @@ const LibraryMain = () => {
 
   const hide = () =>
     dispatch<SelectAction>({
-      type: SELECTED_ACTIONS.CLEAR,
+      type: SELECTED_ACTIONS.CLEAR_SELECTED,
     });
 
   useEffect(() => {
@@ -65,7 +65,7 @@ const LibraryMain = () => {
       const focus = tables.loaded[TABLE_MAPPING[ActiveLibToClassName[lib]]] as Project[] | CategoryInfo[];
       setState({ records: focus, _records: focus });
       dispatch<SelectAction>({
-        type: SELECTED_ACTIONS.CHECK,
+        type: SELECTED_ACTIONS.CHECK_SELECTED,
         dataSet: focus,
         supportingDataSet: tables.loaded,
       });

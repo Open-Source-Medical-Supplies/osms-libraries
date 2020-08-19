@@ -48,7 +48,7 @@ const CategoryLibrary: React.FC = () => {
   // local state
   let [state, setState] = useState(DefaultState);
   const hide = () => dispatch<SelectAction>({
-    type: SELECTED_ACTIONS.CLEAR
+    type: SELECTED_ACTIONS.CLEAR_SELECTED
   });
 
   useEffect(() => {
@@ -59,7 +59,7 @@ const CategoryLibrary: React.FC = () => {
       })
 
       dispatch<SelectAction>({
-        type: SELECTED_ACTIONS.CHECK,
+        type: SELECTED_ACTIONS.CHECK_SELECTED,
         dataSet: tables.loaded[TABLE_MAPPING.CategoryInfo] as CategoryInfo[],
         supportingDataSet: tables.loaded
       });
