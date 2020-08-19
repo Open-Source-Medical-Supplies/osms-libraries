@@ -2,27 +2,25 @@ import classNames from "classnames";
 import React, { Dispatch, useRef } from 'react';
 import { useDispatch } from "react-redux";
 import { useTypedSelector } from "../../../redux/root.reducer";
-import { CategoryInfo } from "../../classes/category-info.class";
-import { Project } from '../../classes/project.class';
 import { SELECTED_ACTIONS } from "../../constants/selected.constants";
 import ActiveLib from "../../types/lib.enum";
-import { SelectAction } from "../../types/selected.type";
+import { SelectAction, Selected } from "../../types/selected.type";
 import { getParam, PARAMS } from "../../utility/param-handling";
 import NewUpdatedBanner from "../new-updated-banner";
 import TileCard from "../tile-card";
 
 const ProjectCard: React.FC<{
-  data: Project | CategoryInfo;
-  selected: Project | CategoryInfo;
+  data: Selected;
+  selected: Selected;
   isMobile: boolean;
 }> = ({
   data, selected, isMobile
 }) => {
   const dispatch = useDispatch<Dispatch<SelectAction>>();
   const tables = useTypedSelector(({ tables }) => tables);
-  const activeLib = getParam<ActiveLib>(PARAMS.LIBRARY);
-
   const thisRef = useRef<HTMLDivElement>(null);
+
+  if (!data) return null;
   
   const { displayName, imageURL } = data;
   const selectedName = selected && selected.displayName ? selected.displayName : '';

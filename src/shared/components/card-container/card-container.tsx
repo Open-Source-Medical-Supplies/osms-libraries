@@ -4,10 +4,11 @@ import { CategoryInfo } from '../../classes/category-info.class';
 import { Project } from '../../classes/project.class';
 import ProjectCard from './card';
 import './_card-container.scss';
+import { Selected } from '../../types/selected.type';
 
 interface CardContainerType {
   records: Array<Project | CategoryInfo>;
-  selected: Project | CategoryInfo;
+  selected: Selected;
   isMobile: boolean;
 }
 
