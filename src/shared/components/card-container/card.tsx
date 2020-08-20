@@ -3,9 +3,7 @@ import React, { Dispatch, useRef } from 'react';
 import { useDispatch } from "react-redux";
 import { useTypedSelector } from "../../../redux/root.reducer";
 import { SELECTED_ACTIONS } from "../../constants/selected.constants";
-import ActiveLib from "../../types/lib.enum";
 import { SelectAction, Selected } from "../../types/selected.type";
-import { getParam, PARAMS } from "../../utility/param-handling";
 import NewUpdatedBanner from "../new-updated-banner";
 import TileCard from "../tile-card";
 

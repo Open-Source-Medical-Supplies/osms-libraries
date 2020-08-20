@@ -1,12 +1,15 @@
 import { SelectButton } from 'primereact/selectbutton';
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import { LIB_ACTIONS, DispatchLibAction, LibAction } from '../../../redux/lib.reducer';
 import { useTypedSelector } from '../../../redux/root.reducer';
-import ActiveLib from '../../types/lib.enum';
-import { LIB_ACTIONS } from '../../../redux/lib.reducer';
-import './_library-selector.scss'
-import { PARAMS, removeParam } from '../../utility/param-handling';
+import { CategoryInfo } from '../../classes/category-info.class';
+import { Project } from '../../classes/project.class';
 import { FILTER_ACTIONS } from '../../constants/filter.constants';
+import { TABLE_MAPPING } from '../../constants/general.constants';
+import ActiveLib, { ActiveLibToClassName } from '../../types/lib.enum';
+import './_library-selector.scss';
+import { DispatchFilterAction, FilterAction } from '../../../redux/filter.reducer';
 
 interface SelectBtnOption {
   label: string;
@@ -16,7 +19,7 @@ type SelectBtnOptions = SelectBtnOption[]
 
 const LibrarySelector = ({className = ''}: {className: string}) => {
   const dispatch = useDispatch();
-  const lib = useTypedSelector(({lib}) => lib)
+  const {lib, tables} = useTypedSelector(({lib, tables}) => ({lib, tables}))
   
   const options: SelectBtnOptions = [
     {
@@ -30,14 +33,21 @@ const LibrarySelector = ({className = ''}: {className: string}) => {
   ];
 
   const onChange = (val: SelectBtnOption['value']) => {
-    if (!val || val === lib) return;
-    dispatch({
+    if (!val || val === lib.active) return;
+    
+    const filterAction: FilterAction = {
       type: FILTER_ACTIONS.CLEAR_FILTER
-    })
-    dispatch({
-      type: LIB_ACTIONS.LIB_SET,
-      lib: val
-    })
+    };
+    dispatch(filterAction);
+    
+    const focus = tables.loaded[TABLE_MAPPING[ActiveLibToClassName[val]]] as Project[] | CategoryInfo[];
+    const libAction: LibAction = {
+      type: LIB_ACTIONS.SET_LIB,
+      active: val,
+      _data: focus,
+      data: focus
+    };
+    dispatch(libAction);
   };
 
   return (

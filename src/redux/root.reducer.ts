@@ -1,11 +1,10 @@
-import { TypedUseSelectorHook, useSelector } from "react-redux";
+import { TypedUseSelectorHook, useSelector, useDispatch } from "react-redux";
 import { combineReducers, Action } from "redux";
 import { envReducer } from './env.reducer';
 import { libReducer } from './lib.reducer';
 import { selectedReducer } from "./selected.reducer";
 import { tablesReducer } from "./tables.reducer";
-import { filterReducer } from "./filter.reduer";
-import { activeReducer } from "./active.reducer";
+import { filterReducer } from "./filter.reducer";
 import { ThunkDispatch, ThunkAction } from "redux-thunk";
 
 export const rootReducer = combineReducers({
@@ -14,7 +13,6 @@ export const rootReducer = combineReducers({
   tables: tablesReducer,
   selected: selectedReducer,
   filter: filterReducer,
-  active: activeReducer
 })
 
 

@@ -1,12 +1,11 @@
 import classNames from 'classnames';
 import { Button } from "primereact/button";
 import { Sidebar } from "primereact/sidebar";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { shallowEqual, useDispatch } from "react-redux";
+import { clearFilter, filterAndUpdate, DispatchFilterAction } from '../../../redux/filter.reducer';
 import { useTypedSelector } from "../../../redux/root.reducer";
 import { CategoryInfo } from "../../classes/category-info.class";
-import { Project } from "../../classes/project.class";
-import { FILTER_ACTIONS } from '../../constants/filter.constants';
 import { TABLE_MAPPING } from "../../constants/general.constants";
 import { FilterState } from "../../types/filter.type";
 import { CategoryComparator, createUUID } from "../../utility/general.utility";
@@ -18,7 +17,6 @@ import CategoriesList from "./categories-list";
 import { setFilterParams } from "./filter-menu.utilities";
 import { FilterSearchBar } from "./filter-search-bar";
 import "./_filter-menu.scss";
-import { clearFilter, filterAndUpdate } from '../../../redux/filter.reduer';
 
 /* eslint-disable react-hooks/exhaustive-deps */
 
@@ -41,16 +39,13 @@ const FilterStateDefault: FilterState = {
     searchBar: "",
   },
   show: false,
+  isFiltering: false
 };
 
 const FilterMenu = ({
-  _data,
-  data,
   disabled = false,
   onMenuVizChange,
 }: {
-  _data: Project[];
-  data: Project[];
   disabled: boolean;
   onMenuVizChange?: (viz: boolean) => void;
 }) => {
@@ -61,7 +56,7 @@ const FilterMenu = ({
     }),
     shallowEqual
   );
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<DispatchFilterAction>();
 
   const [filterState, baseSetFilterState] = useState(FilterStateDefault);
   const setFilterState: SetFilterFn = (props: Partial<FilterState>) => {
@@ -115,6 +110,7 @@ const FilterMenu = ({
   useEffect(() => {
     if (!filterState.loaded) return;
     setFilterParams(filterState);
+    setFilterState({isFiltering: true});
     doFilter();
   }, [
     catFilterBool,
@@ -126,11 +122,7 @@ const FilterMenu = ({
 
   const Filters = (
     <React.Fragment>
-      <CategoriesList
-        categories={filterState.categories}
-        categoriesFilters={filterState.categoriesFilters}
-        setFilterState={setFilterState}
-      />
+      <CategoriesList />
       <div className="mb-1"></div>
       <AttributesList
         nodes={filterState.nodes}
@@ -184,6 +176,7 @@ const FilterMenu = ({
     <Button
       className="mobile-button__square filter-menu__grid-button"
       icon='pi pi-undo'
+      disabled={filterState.isFiltering}
       onClick={clearFilters} />
   );
 
@@ -192,11 +185,7 @@ const FilterMenu = ({
     <div className={className}>
       <MenuButton />
       <LibrarySelector className="filter-menu__grid-select" />
-      <FilterSearchBar
-        className="mobile-search-bar filter-menu__grid-search"
-        searchBarText={filterState.searchBar}
-        setFilterState={setFilterState}
-      />
+      <FilterSearchBar className="mobile-search-bar filter-menu__grid-search"/>
       <ClearFilters />
     </div>
   );

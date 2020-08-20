@@ -18,7 +18,7 @@ function App() {
   
   useEffect(() => {
     dispatch({ type: SET_ENV });
-    dispatch({ type: LIB_ACTIONS.LIB_START });
+    dispatch({ type: LIB_ACTIONS.LOAD_LIB });
     loadTables(dispatch);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 

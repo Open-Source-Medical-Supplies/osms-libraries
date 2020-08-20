@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import { Sidebar } from "primereact/sidebar";
 import React, { useEffect, useState } from "react";
 import { shallowEqual, useDispatch } from "react-redux";
@@ -15,9 +16,7 @@ import ActiveLib, { ActiveLibToClassName } from "../../shared/types/lib.enum";
 import { SelectAction } from "../../shared/types/selected.type";
 import { BasicObject } from "../../shared/types/shared.type";
 import FullCard from "./full-card";
-import './_library-main.scss'
-import classNames from 'classnames';
-import { FILTER_ACTIONS } from "../../shared/constants/filter.constants";
+import "./_library-main.scss";
 
 type PartialState = Partial<typeof stateDefault>;
 
@@ -36,16 +35,15 @@ const stateDefault: StateDefault = {
   categories: {},
   materials: {},
   selectedMaterials: [],
-  filterMenuViz: false
+  filterMenuViz: false,
 };
 
 const LibraryMain = () => {
   const dispatch = useDispatch();
   const { isMobile, tables, lib, selected } = useTypedSelector(
-    ({ env, tables, lib, selected }) => ({
+    ({ env, ...libs }) => ({
       isMobile: env.isMobile,
-      tables, lib,
-      selected,
+      ...libs,
     }),
     shallowEqual
   );
@@ -61,38 +59,45 @@ const LibraryMain = () => {
       type: SELECTED_ACTIONS.CLEAR_SELECTED,
     });
 
+  // load initial tables / change on lib-change
   useEffect(() => {
     if (tables.completed) {
-      const focus = tables.loaded[TABLE_MAPPING[ActiveLibToClassName[lib]]] as Project[] | CategoryInfo[];
-      setState({ records: focus, _records: focus });
+      const {_data, data} = lib;
+      let focus;
+      if (!_data) {
+        focus = tables.loaded[TABLE_MAPPING[ActiveLibToClassName[lib.active]]] as
+          | Project[]
+          | CategoryInfo[];
+      }
+
+      setState({
+        records: data || focus,
+        _records: _data || focus
+      });
       dispatch<SelectAction>({
         type: SELECTED_ACTIONS.CHECK_SELECTED,
         dataSet: focus,
         supportingDataSet: tables.loaded,
       });
     }
-  }, [tables.completed, lib]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [tables.completed, lib.active]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const libContainerClasses = classNames(
-    "library-main-container",
-    {
-      "library-main-container__grid__menu-closed": !state.filterMenuViz,
-      "library-main-container__grid__menu-open": state.filterMenuViz
-    }
-  );
+  const libContainerClasses = classNames("library-main-container", {
+    "library-main-container__grid__menu-closed": !state.filterMenuViz,
+    "library-main-container__grid__menu-open": state.filterMenuViz,
+  });
 
   return (
     <div className={libContainerClasses}>
       <FilterMenu
-        disabled={lib === ActiveLib.CATEGORY}
-        _data={state._records as Project[]}
-        data={state.records as Project[]}
-        onMenuVizChange={(menuViz) => setState({filterMenuViz: menuViz})}/>
+        disabled={lib.active === ActiveLib.CATEGORY}
+        onMenuVizChange={(menuViz) => setState({ filterMenuViz: menuViz })}
+      />
       <Loading loading={!tables.completed}>
         <CardContainer
           isMobile={isMobile}
           records={state.records}
-          selected={selected.data }
+          selected={selected.data}
         />
       </Loading>
       <Sidebar
@@ -100,10 +105,10 @@ const LibraryMain = () => {
         fullScreen={isMobile}
         visible={!!selected.data}
         onHide={hide}
-        className={isMobile ? '' : 'p-sidebar-lg'}
+        className={isMobile ? "" : "p-sidebar-lg"}
       >
-      <FullCard lib={lib} />
-    </Sidebar>
+        <FullCard lib={lib.active} />
+      </Sidebar>
     </div>
   );
 };

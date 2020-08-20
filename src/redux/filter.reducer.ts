@@ -6,10 +6,13 @@ import { FilterState } from '../shared/types/filter.type';
 import { PARAMS, removeParam } from '../shared/utility/param-handling';
 import { ACTIVE_ACTIONS } from './active.reducer';
 import { RootState } from './root.reducer';
+import { Dispatch } from 'react';
 
 export interface FilterAction extends Action<FILTER_ACTIONS> {
-  payload: FilterState;
+  payload?: Partial<FilterState>;
 };
+
+export type DispatchFilterAction = Dispatch<FilterAction | Function>;
 
 // const catCompare = new CategoryComparator();
 
@@ -30,6 +33,7 @@ const FilterStateDefault: FilterState = {
     searchBar: "",
   },
   show: false,
+  isFiltering: false
 };
 
 /** usage: dispatch(filterAndUpdate()) */
@@ -40,9 +44,8 @@ export const filterAndUpdate = (
   dispatch: (o: any) => Promise<any>,
   getState: () => RootState
 ) => {
-  debugger
   const state = getState();
-  const {_data, data} = state.active
+  const {_data, data} = state.lib
 
   const filteredRecords = filterBy(
     filterState,
@@ -50,10 +53,10 @@ export const filterAndUpdate = (
     data as Project[]
   );
 
-  return dispatch({
+  return new Promise(resolve => dispatch({
     type: FILTER_ACTIONS.SET_FILTER,
     payload: filterState
-  }).then(
+  })).then(
     () => dispatch({
       type: ACTIVE_ACTIONS.FILTER_ACTIVE,
       data: filteredRecords,
@@ -65,9 +68,9 @@ export const clearFilter = () => (
   // ): TypedThunkAction<FilterAction | ActiveActions> => (
   dispatch: (o: any) => Promise<any>,
 ) => {
-  return dispatch({
+  return new Promise(resolve => dispatch({
     type: FILTER_ACTIONS.CLEAR_FILTER,
-  }).then(
+  })).then(
     () => dispatch({
       type: ACTIVE_ACTIONS.RESET_ACTIVE,
     })
@@ -78,6 +81,8 @@ export const filterReducer = (
   state = FilterStateDefault,
   action: FilterAction
 ): FilterState => {
+  console.log(action)
+
   switch (action.type) {
     case FILTER_ACTIONS.CLEAR_FILTER:
       removeParam(PARAMS.FILTERSTATE);
@@ -98,7 +103,7 @@ export const filterReducer = (
         ...action.payload,
         previousFilters: {
           ...state.previousFilters,
-          ...action.payload.previousFilters,
+          ...(action.payload as FilterState).previousFilters,
         }
       }
     default:
