@@ -31,14 +31,15 @@ const CardSections = [
     key: 'engReqs',
     value: 'Engineering Requirements'},
 	{
-    key: 'fabReqs',
-    value: 'Assembly/Fabrication Requirements'},
+    key: 'addReqs',
+    value: 'Additional Requirements'},
 	{
     key: 'resources',
     value: 'Resources'},
 	{
     key: 'designDisclaimers',
-    value: 'Disclaimer Designs'}
+    value: 'Disclaimer Designs'
+  }
 ];
 
 export class CategoryInfo {
@@ -46,7 +47,7 @@ export class CategoryInfo {
 
   static CardSections = CardSections;
 
-  fabReqs!: string;
+  addReqs!: string;
   displayName!: string;
   imageURL!: string;
   currentGlobalResources!: string;
