@@ -17,12 +17,13 @@ import { SelectAction } from "../../shared/types/selected.type";
 import { BasicObject } from "../../shared/types/shared.type";
 import FullCard from "./full-card";
 import "./_library-main.scss";
+import { ActiveType } from "../../redux/lib.reducer";
 
 type PartialState = Partial<typeof stateDefault>;
 
 interface StateDefault {
-  _records: Project[] | CategoryInfo[];
-  records: Project[] | CategoryInfo[];
+  _records: ActiveType;
+  records: ActiveType;
   categories: BasicObject<CategorySupply>;
   materials: BasicObject<Material[]>;
   selectedMaterials: Material[];
@@ -63,7 +64,7 @@ const LibraryMain = () => {
   useEffect(() => {
     if (tables.completed) {
       const { _data, data } = lib;
-      let focus;
+      let focus: ActiveType = [];
 
       if (_data.length) {
         setState({ records: data, _records: _data });
