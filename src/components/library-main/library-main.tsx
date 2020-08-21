@@ -62,21 +62,21 @@ const LibraryMain = () => {
   // load initial tables / change on lib-change
   useEffect(() => {
     if (tables.completed) {
-      const {_data, data} = lib;
+      const { _data, data } = lib;
       let focus;
-      if (!_data) {
-        focus = tables.loaded[TABLE_MAPPING[ActiveLibToClassName[lib.active]]] as
-          | Project[]
-          | CategoryInfo[];
+
+      if (_data.length) {
+        setState({ records: data, _records: _data });
+      } else {
+        focus = tables.loaded[
+          TABLE_MAPPING[ActiveLibToClassName[lib.active]]
+        ] as Project[] | CategoryInfo[];
+        setState({ records: focus, _records: focus });
       }
 
-      setState({
-        records: data || focus,
-        _records: _data || focus
-      });
       dispatch<SelectAction>({
         type: SELECTED_ACTIONS.CHECK_SELECTED,
-        dataSet: focus,
+        dataSet: _data.length ? _data : focus,
         supportingDataSet: tables.loaded,
       });
     }

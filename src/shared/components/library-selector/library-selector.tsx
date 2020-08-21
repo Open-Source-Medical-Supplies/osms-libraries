@@ -1,7 +1,8 @@
 import { SelectButton } from 'primereact/selectbutton';
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { LIB_ACTIONS, DispatchLibAction, LibAction } from '../../../redux/lib.reducer';
+import { FilterAction } from '../../../redux/filter.reducer';
+import { LibAction, LIB_ACTIONS } from '../../../redux/lib.reducer';
 import { useTypedSelector } from '../../../redux/root.reducer';
 import { CategoryInfo } from '../../classes/category-info.class';
 import { Project } from '../../classes/project.class';
@@ -9,7 +10,6 @@ import { FILTER_ACTIONS } from '../../constants/filter.constants';
 import { TABLE_MAPPING } from '../../constants/general.constants';
 import ActiveLib, { ActiveLibToClassName } from '../../types/lib.enum';
 import './_library-selector.scss';
-import { DispatchFilterAction, FilterAction } from '../../../redux/filter.reducer';
 
 interface SelectBtnOption {
   label: string;
@@ -34,7 +34,7 @@ const LibrarySelector = ({className = ''}: {className: string}) => {
 
   const onChange = (val: SelectBtnOption['value']) => {
     if (!val || val === lib.active) return;
-    
+
     const filterAction: FilterAction = {
       type: FILTER_ACTIONS.CLEAR_FILTER
     };
@@ -53,7 +53,7 @@ const LibrarySelector = ({className = ''}: {className: string}) => {
   return (
     <div className={'library-selector ' + className}>
       <SelectButton
-        value={lib}
+        value={lib.active}
         options={options}
         onChange={(e) => onChange(e.value)}/>
     </div>
