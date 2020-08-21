@@ -1,4 +1,8 @@
-.library-main-container {
+.mobile.library-main-container {
+  display: flex;
+  flex-direction: column;
+}
+.desktop.library-main-container {
   display: grid;
   grid-template-columns: 35% auto;
   grid-template-rows: 48px auto;

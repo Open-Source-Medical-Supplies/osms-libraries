@@ -29,3 +29,8 @@ a {
 section {
   margin-bottom: 1rem;
 }
+
+.p-sidebar-left.p-sidebar-lg,
+.p-sidebar-right.p-sidebar-lg {
+  width: 60em !important;
+}

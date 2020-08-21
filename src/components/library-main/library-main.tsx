@@ -86,6 +86,8 @@ const LibraryMain = () => {
   const libContainerClasses = classNames("library-main-container", {
     "library-main-container__grid__menu-closed": !state.filterMenuViz,
     "library-main-container__grid__menu-open": state.filterMenuViz,
+    "mobile": isMobile,
+    "desktop": !isMobile
   });
 
   return (

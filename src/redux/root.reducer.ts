@@ -1,11 +1,11 @@
-import { TypedUseSelectorHook, useSelector, useDispatch } from "react-redux";
-import { combineReducers, Action } from "redux";
+import { TypedUseSelectorHook, useSelector } from "react-redux";
+import { Action, combineReducers } from "redux";
+import { ThunkAction, ThunkDispatch } from "redux-thunk";
 import { envReducer } from './env.reducer';
+import { filterReducer } from "./filter.reducer";
 import { libReducer } from './lib.reducer';
 import { selectedReducer } from "./selected.reducer";
 import { tablesReducer } from "./tables.reducer";
-import { filterReducer } from "./filter.reducer";
-import { ThunkDispatch, ThunkAction } from "redux-thunk";
 
 export const rootReducer = combineReducers({
   lib: libReducer,
@@ -14,7 +14,6 @@ export const rootReducer = combineReducers({
   selected: selectedReducer,
   filter: filterReducer,
 })
-
 
 export type RootState = ReturnType<typeof rootReducer>;
 export type TypedThunkDispatch<A = any, T = any> = ThunkDispatch<RootState, T, Action<A>>;
