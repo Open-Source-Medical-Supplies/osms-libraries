@@ -11,18 +11,26 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
+h1, h2, h3, h4, h5, h6, p, span {
+  color: $text;
+}
 h1, h2, h3, h4, h5, h6, p {
   margin-top: 0 !important;
   margin-bottom: 0.5rem !important;
 }
-h3, a {
-  color: $blue !important;
+a > * {
+  color: inherit;
 }
+button > * {
+  color: $white;
+}
+
 a {
   color: $primary !important;
-  
+  text-decoration: underline !important;
   &:hover {
-  color: $blue !important;
+    color: $accent !important;
+    text-decoration: none !important;
   }
 }
 
@@ -33,4 +41,8 @@ section {
 .p-sidebar-left.p-sidebar-lg,
 .p-sidebar-right.p-sidebar-lg {
   width: 60em !important;
+}
+
+.markdown-section {
+  padding: 0;
 }
