@@ -36,11 +36,11 @@ export const libReducer = (
 ): Required<LibState> => {
   switch (action.type) {
     case LIB_ACTIONS.SET_LIB:
-      if (!action.active) return state;
+      if (!action._data) return state;
 
-      setQueryParam({ key: PARAMS.LIBRARY, val: action.active })
+      setQueryParam({ key: PARAMS.LIBRARY, val: action.active || state.active })
       return {
-        active: action.active,
+        active: action.active || state.active,
         _data: action._data || [],
         data: action.data || []
       };

@@ -51,19 +51,26 @@ const FilterMenu = ({ disabled = false }: { disabled: boolean }) => {
 
   const clearFilters = () => dispatchFilter(clearFilter());
   const doFilter = () => {
+    setFilterParams(filter);
+    
     const filtered = filterBy(
       filter,
       lib._data as Project[],
       lib.data as Project[]
     );
-    console.log('from filter menu', filtered)
+
+    dispatchFilter({
+      type: filtered.length < lib._data.length ? 
+        FILTER_ACTIONS.START_FILTERING :
+        FILTER_ACTIONS.STOP_FILTERING
+    });
     dispatchLib({
       type: LIB_ACTIONS.FILTER_LIB,
       data: filtered,
     });
   };
 
-  // load menu
+  // run on tables loaded
   useEffect(() => {
     if (tables.completed) {
       const params = getParam<Partial<FilterState>>(PARAMS.FILTERSTATE) || {};
@@ -81,10 +88,10 @@ const FilterMenu = ({ disabled = false }: { disabled: boolean }) => {
     }
   }, [tables.completed]);
 
+  // run on filters loaded
   useEffect(() => {
-    if (filter.loaded) {
-      doFilter();
-    }
+    if (!filter.loaded) return;
+    doFilter();
   }, [filter.loaded]);
 
   const nodeFiltersBool = Object.keys(filter.nodeFilters).length;
@@ -93,16 +100,9 @@ const FilterMenu = ({ disabled = false }: { disabled: boolean }) => {
     filter.previousFilters.categoriesFilters || {}
   ) ? createUUID() : false;
 
-  // filter-changes
+  // run on filter state changes
   useEffect(() => {
     if (!filter.loaded) return;
-    setFilterParams(filter);
-    dispatchFilter({
-      type: FILTER_ACTIONS.SET_FILTER,
-      payload: {
-        isFiltering: true,
-      },
-    });
     doFilter();
   }, [
     catFilterBool,
@@ -159,12 +159,12 @@ const FilterMenu = ({ disabled = false }: { disabled: boolean }) => {
       />
     );
   };
-
+  
   const ClearFilters = () => (
     <Button
       className="mobile-button__square filter-menu__grid-button"
       icon="pi pi-undo"
-      disabled={filter.isFiltering}
+      disabled={!filter.isFiltering}
       onClick={clearFilters}
     />
   );

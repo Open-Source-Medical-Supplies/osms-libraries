@@ -1,7 +1,6 @@
 import { SelectButton } from 'primereact/selectbutton';
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { FilterAction } from '../../../redux/filter.reducer';
 import { LibAction, LIB_ACTIONS } from '../../../redux/lib.reducer';
 import { useTypedSelector } from '../../../redux/root.reducer';
 import { CategoryInfo } from '../../classes/category-info.class';
@@ -35,19 +34,15 @@ const LibrarySelector = ({className = ''}: {className: string}) => {
   const onChange = (val: SelectBtnOption['value']) => {
     if (!val || val === lib.active) return;
 
-    const filterAction: FilterAction = {
-      type: FILTER_ACTIONS.CLEAR_FILTER
-    };
-    dispatch(filterAction);
+    dispatch({ type: FILTER_ACTIONS.CLEAR_FILTER });
     
     const focus = tables.loaded[TABLE_MAPPING[ActiveLibToClassName[val]]] as Project[] | CategoryInfo[];
-    const libAction: LibAction = {
+    dispatch<LibAction>({
       type: LIB_ACTIONS.SET_LIB,
       active: val,
       _data: focus,
       data: focus
-    };
-    dispatch(libAction);
+    });
   };
 
   return (

@@ -1,12 +1,9 @@
 import { Dispatch } from 'react';
 import { Action } from 'redux';
-import { Project } from '../shared/classes/project.class';
-import { filterBy } from '../shared/components/filter-menu/filter-menu.utilities';
 import { FILTER_ACTIONS } from '../shared/constants/filter.constants';
 import { FilterState } from '../shared/types/filter.type';
 import { PARAMS, removeParam } from '../shared/utility/param-handling';
 import { LIB_ACTIONS } from './lib.reducer';
-import { RootState } from './root.reducer';
 
 export interface FilterAction extends Action<FILTER_ACTIONS> {
   payload?: Partial<FilterState>;
@@ -36,45 +33,11 @@ const FilterStateDefault: FilterState = {
   isFiltering: false
 };
 
-/** usage: dispatch(filterAndUpdate()) */
-export const filterAndUpdate = (
-  filterState: FilterState
-) => (
-  // ): TypedThunkAction<FilterAction | ActiveActions> => (
-  dispatch: (o: any) => Promise<any>,
-  getState: () => RootState
-) => {
-  const state = getState();
-  const {_data, data} = state.lib
-
-  const filteredRecords = filterBy(
-    filterState,
-    _data as Project[],
-    data as Project[]
-  );
-
-  return new Promise(resolve => dispatch({
-    type: FILTER_ACTIONS.SET_FILTER,
-    payload: filterState
-  })).then(
-    () => dispatch({
-      type: LIB_ACTIONS.FILTER_LIB,
-      data: filteredRecords,
-    })
-  );
-}
-
 export const clearFilter = () => (
-  // ): TypedThunkAction<FilterAction | ActiveActions> => (
   dispatch: (o: any) => Promise<any>,
 ) => {
-  return new Promise(resolve => dispatch({
-    type: FILTER_ACTIONS.CLEAR_FILTER,
-  })).then(
-    () => dispatch({
-      type: LIB_ACTIONS.RESET_LIB,
-    })
-  );
+  dispatch({ type: FILTER_ACTIONS.CLEAR_FILTER });
+  dispatch({ type: LIB_ACTIONS.RESET_LIB });
 };
 
 export const filterReducer = (
@@ -82,6 +45,16 @@ export const filterReducer = (
   action: FilterAction
 ): FilterState => {
   switch (action.type) {
+    case FILTER_ACTIONS.START_FILTERING:
+      return {
+        ...state,
+        isFiltering: true
+      }
+    case FILTER_ACTIONS.STOP_FILTERING:
+      return {
+        ...state,
+        isFiltering: false
+      }
     case FILTER_ACTIONS.CLEAR_FILTER:
       removeParam(PARAMS.FILTERSTATE);
       return {
@@ -93,7 +66,8 @@ export const filterReducer = (
           searchBar: state.searchBar,
           nodeFilters: state.nodeFilters,
           categoriesFilters: state.categoriesFilters,
-        }
+        },
+        isFiltering: false
       };
     case FILTER_ACTIONS.SET_FILTER:
       if (!action?.payload) return state;
@@ -104,8 +78,7 @@ export const filterReducer = (
         previousFilters: {
           ...state.previousFilters,
           ...action.payload.previousFilters,
-        },
-        isFiltering: false
+        }
       }
     case FILTER_ACTIONS.TOGGLE_FILTER_MENU:
       if (!action?.payload?.show) return state;
