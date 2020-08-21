@@ -73,7 +73,6 @@ export const removeParam = (key: PARAMS): void => {
   const url = getUrl();
   url.searchParams.delete(key);
   softUpdateURL(url);
-  console.log('param updated')
 };
 
 export const setQueryParam = ({ key, val }: QueryParams): void => {

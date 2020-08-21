@@ -15,7 +15,7 @@ export enum LIB_ACTIONS {
 export type ActiveType = Project[] | CategoryInfo[] | [];
 
 export interface LibState {
-  active: ActiveLib;
+  active?: ActiveLib;
   _data?: ActiveType;
   data?: ActiveType;
 }
@@ -36,6 +36,8 @@ export const libReducer = (
 ): Required<LibState> => {
   switch (action.type) {
     case LIB_ACTIONS.SET_LIB:
+      if (!action.active) return state;
+
       setQueryParam({ key: PARAMS.LIBRARY, val: action.active })
       return {
         active: action.active,
@@ -52,6 +54,16 @@ export const libReducer = (
       }
       setQueryParam({key: PARAMS.LIBRARY, val: state.active })
       return state;
+    case LIB_ACTIONS.FILTER_LIB:
+      return {
+        ...state,
+        data: action.data || []
+      };
+    case LIB_ACTIONS.RESET_LIB:
+      return {
+        ...state,
+        data: state._data
+      }
     default:
       return state;
   }

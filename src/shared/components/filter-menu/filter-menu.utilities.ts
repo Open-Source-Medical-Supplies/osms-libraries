@@ -196,6 +196,7 @@ export const filterBy = (
   _records: Project[],
   records: Project[]
 ) => {
+  debugger
   const filters = combineFilters(filterState);
 
   if (allNotEmpty(filters)) {

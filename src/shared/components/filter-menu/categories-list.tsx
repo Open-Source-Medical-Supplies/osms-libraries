@@ -69,7 +69,6 @@ const CategoriesList = () => {
       categoriesFilters[k] = true;
       newState = { [k]: true };
     }
-    console.log(newState)
     setToggleState(newState)
     dispatch({
       type: FILTER_ACTIONS.SET_FILTER,

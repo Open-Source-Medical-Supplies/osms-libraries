@@ -36,7 +36,6 @@ const AttributesList = () => {
     });
   };
   
-
   return (
     <Panel header='Attributes' toggleable={true} className='attribute-list-panel filter-panel'>
       <Tree
