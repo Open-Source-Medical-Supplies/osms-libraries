@@ -124,11 +124,7 @@ const FilterMenu = ({
     <React.Fragment>
       <CategoriesList />
       <div className="mb-1"></div>
-      <AttributesList
-        nodes={filterState.nodes}
-        nodeFilters={filterState.nodeFilters}
-        setFilterState={setFilterState}
-      />
+      <AttributesList />
     </React.Fragment>
   );
 
