@@ -1,6 +1,7 @@
 import React from "react";
 import ReactMarkdown from "react-markdown";
-import { fixMdUrls, notEmptyStr } from "../../utility/general.utility";
+import { notEmptyStr, OpenExternalSafely } from "../../utility/general.utility";
+import { fixMdUrls } from "../../utility/airtable-markdown.utility";
 import ListItemHandler from "./list-item-handler";
 
 const MarkdownSection = (
@@ -13,6 +14,7 @@ const MarkdownSection = (
     <div key={sectionName} className={className + " markdown-section"}>
       <h3>{sectionName}</h3>
       <ReactMarkdown
+        linkTarget={OpenExternalSafely}
         source={md ? fixMdUrls(md) : ""}
         renderers={{ listItem: ListItemHandler }}
       />
