@@ -2,6 +2,7 @@ import "primeflex/primeflex.css";
 import "primeicons/primeicons.css";
 import "primereact/resources/primereact.min.css";
 import "primereact/resources/themes/nova-light/theme.css";
+import "flag-icon-css/css/flag-icon.min.css";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Redirect, Route, Switch } from "react-router";

@@ -45,7 +45,7 @@ const TileCard = ({
         return <Button
           key={mainText + i}
           onClick={() => a.fn()}
-          label={a.label || Lang['view']}
+          label={a.label || Lang.get('view')}
           icon={icon}
           iconPos='right'
           style={{marginRight: i < actions.length ? '0.5rem' : ''}}

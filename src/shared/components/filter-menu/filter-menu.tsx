@@ -20,6 +20,7 @@ import CategoriesList from "./categories-list";
 import { filterBy, setFilterParams } from "./filter-menu.utilities";
 import { FilterSearchBar } from "./filter-search-bar";
 import "./_filter-menu.scss";
+import LanguageSelect from "../language-select";
 
 /* eslint-disable react-hooks/exhaustive-deps */
 
@@ -159,7 +160,7 @@ const FilterMenu = ({ disabled = false }: { disabled: boolean }) => {
       />
     );
   };
-  
+
   const ClearFilters = () => (
     <Button
       className="mobile-button__square filter-menu__grid-button"
@@ -177,6 +178,7 @@ const FilterMenu = ({ disabled = false }: { disabled: boolean }) => {
       <LibrarySelector className="filter-menu__grid-select" />
       <FilterSearchBar className="mobile-search-bar filter-menu__grid-search" />
       <ClearFilters />
+      <LanguageSelect />
     </div>
   );
 

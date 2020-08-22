@@ -5,15 +5,16 @@ import { Project } from "../../shared/classes/project.class";
 import ImageCarousel from "../../shared/components/detail-window/image-carousel";
 import MarkdownSection from "../../shared/components/markdown/markdown-section";
 import TileCard from "../../shared/components/tile-card";
-import { TABLE_MAPPING } from "../../shared/constants/general.constants";
-import { BasicObject, Indexable } from "../../shared/types/shared.type";
+import { Indexable } from "../../shared/types/shared.type";
 import { openExternal } from "../../shared/utility/general.utility";
+import { getLang } from "../../shared/utility/language.utility";
 
 const CategoryLibFullCard = () => {
-  const { lang, selected } = useTypedSelector(({ tables, selected }) => ({
-    lang: tables.loaded[TABLE_MAPPING.Translations] as BasicObject<string>,
+  const { selected } = useTypedSelector(({ selected }) => ({
     selected,
   }));
+  const Lang = getLang();
+  
   const countSections = useMemo(() => {
     if (selected.data) {
       return !!CategoryInfo.CardSections.reduce(
@@ -48,12 +49,12 @@ const CategoryLibFullCard = () => {
     };
     const actions = [
       {
-        label: lang["viewSource"],
+        label: Lang.get("viewSource"),
         icon: "external-link",
         fn: openExternal(externalLink),
       },
       {
-        label: lang["viewDetails"],
+        label: Lang.get("viewDetails"),
         icon: "eye",
         fn: openExternal(linkAcross()),
       },

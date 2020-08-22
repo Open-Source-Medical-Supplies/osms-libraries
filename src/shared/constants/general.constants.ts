@@ -6,7 +6,16 @@ export const HIDE_SELECTED = {
 };
 
 // had to separate this from g-b.const.ts out because of a runtime compiling race condition ??
-export const TABLE_MAPPING: BasicObject<string> = {
+interface TableMapping extends BasicObject<string>{
+  Project: "Project",
+  CategoryInfo: "CategoryInfo",
+  CategorySupply: "CategorySupply",
+  FilterMenu: "FilterMenu",
+  Material: "Material",
+  Translations: "Translations"
+}
+
+export const TABLE_MAPPING: TableMapping = {
   Project: "Project",
   CategoryInfo: "CategoryInfo",
   CategorySupply: "CategorySupply",

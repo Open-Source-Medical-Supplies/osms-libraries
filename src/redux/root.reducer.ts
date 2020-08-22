@@ -6,6 +6,7 @@ import { filterReducer } from "./filter.reducer";
 import { libReducer } from './lib.reducer';
 import { selectedReducer } from "./selected.reducer";
 import { tablesReducer } from "./tables.reducer";
+import { languageReducer } from "./language.reducer";
 
 export const rootReducer = combineReducers({
   lib: libReducer,
@@ -13,6 +14,7 @@ export const rootReducer = combineReducers({
   tables: tablesReducer,
   selected: selectedReducer,
   filter: filterReducer,
+  lang: languageReducer
 })
 
 export type RootState = ReturnType<typeof rootReducer>;

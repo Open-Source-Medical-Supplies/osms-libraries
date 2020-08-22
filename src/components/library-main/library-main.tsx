@@ -15,6 +15,7 @@ import ActiveLib, { ActiveLibToClassName } from "../../shared/types/lib.enum";
 import { SelectAction } from "../../shared/types/selected.type";
 import FullCard from "./full-card";
 import "./_library-main.scss";
+import { LANG_ACTIONS } from "../../redux/language.reducer";
 
 const LibraryMain = () => {
   const dispatch = useDispatch();
@@ -36,6 +37,11 @@ const LibraryMain = () => {
       const focus = tables.loaded[
         TABLE_MAPPING[ActiveLibToClassName[lib.active]]
       ] as Project[] | CategoryInfo[];
+
+      dispatch({
+        type: LANG_ACTIONS.INIT_LANGS,
+        base: tables.loaded[TABLE_MAPPING.Translations]
+      })
 
       dispatch<LibAction>({
         type: LIB_ACTIONS.SET_LIB,
