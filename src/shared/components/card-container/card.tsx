@@ -1,18 +1,17 @@
 import classNames from "classnames";
-import React, { Dispatch, useRef, useCallback } from "react";
+import React, { Dispatch, useCallback, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { useTypedSelector } from "../../../redux/root.reducer";
 import { SELECTED_ACTIONS } from "../../constants/selected.constants";
+import ActiveLib from "../../types/lib.enum";
 import { SelectAction, Selected } from "../../types/selected.type";
 import NewUpdatedBanner from "../new-updated-banner";
 import TileCard, { TileCardActions } from "../tile-card";
-import ActiveLib, { ActiveLibToClassName } from "../../types/lib.enum";
 
 const ProjectCard: React.FC<{data: Selected;}> = ({ data }) => {
   const dispatch = useDispatch<Dispatch<SelectAction>>();
-  const { isMobile, selected, tables, lib } = useTypedSelector(
-    ({ tables, selected, env, lib }) => ({
-      isMobile: env.isMobile,
+  const { selected, tables, lib } = useTypedSelector(
+    ({ tables, selected, lib }) => ({
       selected: selected.data,
       tables,
       lib
@@ -64,8 +63,7 @@ const ProjectCard: React.FC<{data: Selected;}> = ({ data }) => {
     });
   }
 
-  const sizing = isMobile ? "p-col-6" : "p-col-2"; // show all
-
+  const sizing = 'p-sm-4 p-md-3 p-lg-3 p-xl-2';
   return (
     <div
       key={displayName}
