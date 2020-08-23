@@ -4,22 +4,17 @@ import { CategoryInfo } from '../../classes/category-info.class';
 import { Project } from '../../classes/project.class';
 import ProjectCard from './card';
 import './_card-container.scss';
-import { Selected } from '../../types/selected.type';
+import { getLang } from '../../utility/language.utility';
 
 interface CardContainerType {
   records: Array<Project | CategoryInfo>;
-  selected: Selected;
-  isMobile: boolean;
 }
 
-const CardContainer: React.FC<CardContainerType> = ({records, selected, isMobile}) => {
+const CardContainer: React.FC<CardContainerType> = ({records}) => {
+  const Lang = getLang();
   const MappedCard = (data: Project | CategoryInfo) => {
     const key = data instanceof Project ? data.baseID :  data.categoryKey;
-    return <ProjectCard
-      key={key}
-      data={data}
-      isMobile={isMobile}
-      selected={selected}/>
+    return <ProjectCard key={key} data={data}/>
   };
 
   return records.length ?
@@ -29,7 +24,7 @@ const CardContainer: React.FC<CardContainerType> = ({records, selected, isMobile
       layout='grid'
       itemTemplate={MappedCard} /> :
     <div style={{alignSelf: 'center', margin: '0 auto'}}>
-      <h3>No records match that criteria</h3>
+      <h3>{Lang.get('noRecordsMatch')}</h3>
     </div>
 }
 

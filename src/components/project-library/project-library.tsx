@@ -85,10 +85,7 @@ const ProjectLibrary: React.FC = () => {
       </div>
       <div id='app__card-container' style={{display: 'flex', flex: !!selected.data ? 2 : 4}}>
           <Loading loading={!tables.completed} >
-            <CardContainer
-              isMobile={isMobile}
-              records={state.records}
-              selected={selected.data as Project} />
+            <CardContainer records={state.records} />
           </Loading>
       </div>
       <div id='app__detail-window-container' style={{display: 'flex', flex: !!selected.data ? 2 : 0}}>
@@ -104,10 +101,7 @@ const ProjectLibrary: React.FC = () => {
       <div className='flex-column' style={{width: '100%'}}>
         {/* <FilterMenu state={state} setState={setState}/> */}
         <Loading loading={!tables.completed} >
-          <CardContainer
-            isMobile={isMobile}
-            records={state.records}
-            selected={selected.data as Project} />
+          <CardContainer records={state.records} />
         </Loading>
       </div>
     <Sidebar

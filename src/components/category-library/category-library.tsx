@@ -93,10 +93,7 @@ const CategoryLibrary: React.FC = () => {
         <CategorySearchBar _records={state._records} setState={setState} />
         <div className='divider-1'></div>
         <Loading loading={!tables.completed}>
-          <CardContainer
-            isMobile={isMobile}
-            records={state.records}
-            selected={selected.data as CategoryInfo} />
+          <CardContainer records={state.records} />
         </Loading>
       </div>
       <div id='app__detail-window' style={{ flex: rightFlex, maxWidth: '79vw' }}>

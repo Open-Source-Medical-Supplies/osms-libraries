@@ -5,7 +5,7 @@ import { getLang } from '../utility/language.utility';
 
 export interface TileCardAction {
   fn: Function;
-  label?: string;
+  label?: string | null;
   icon?: string;
 }
 export type TileCardActions = TileCardAction[];
@@ -42,14 +42,24 @@ const TileCard = ({
     <span style={{display: 'flex', justifyContent: 'flex-end'}}>
       {actions && !actionOnCard ? actions.reverse().map((a, i) => {
         const icon = 'pi pi-' + (a.icon || buttonIcon);
-        return <Button
-          key={mainText + i}
-          onClick={() => a.fn()}
-          label={a.label || Lang.get('view')}
-          icon={icon}
-          iconPos='right'
-          style={{marginRight: i < actions.length ? '0.5rem' : ''}}
-          className="p-button-raised p-button-rounded" />
+        if (a.label !== null) {
+          return <Button
+            key={mainText + i}
+            onClick={() => a.fn()}
+            label={a.label || Lang.get('view')}
+            icon={icon}
+            iconPos='right'
+            style={{marginRight: i < actions.length ? '0.5rem' : ''}}
+            className="p-button-raised p-button-rounded" />
+        } else {
+          return <Button
+            type='button'
+            key={mainText + i}
+            onClick={() => a.fn()}
+            icon={icon}
+            style={{marginRight: i < actions.length ? '0.5rem' : ''}}
+            className='p-button-raised p-button-rounded' />
+        }
       }) : null}
     </span>
   );

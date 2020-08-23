@@ -79,11 +79,7 @@ const LibraryMain = () => {
     <div className={libContainerClasses}>
       <FilterMenu disabled={lib.active === ActiveLib.CATEGORY} />
       <Loading loading={!tables.completed}>
-        <CardContainer
-          isMobile={isMobile}
-          records={lib.data}
-          selected={selected.data}
-        />
+        <CardContainer records={lib.data} />
       </Loading>
       <Sidebar
         position="right"
