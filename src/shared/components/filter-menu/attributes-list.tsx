@@ -9,6 +9,7 @@ import { FILTER_ACTIONS } from "../../constants/filter.constants";
 import { TABLE_MAPPING } from "../../constants/general.constants";
 import { FilterNodes } from "../../types/filter-node.type";
 import { mapFilterData } from '../filter-menu/filter-menu.utilities';
+import { getLang } from "../../utility/language.utility";
 
 const AttributesList = () => {
   const dispatch = useDispatch<DispatchFilterAction>();
@@ -17,6 +18,7 @@ const AttributesList = () => {
     nodeFilters,
   }));
   const nodes = useRef<FilterNodes>([]);
+  const Lang = getLang();
 
   useEffect(() => {
     if (tables.completed) {
@@ -37,7 +39,7 @@ const AttributesList = () => {
   };
   
   return (
-    <Panel header='Attributes' toggleable={true} className='attribute-list-panel filter-panel'>
+    <Panel header={Lang.get('attributes')} toggleable={true} className='attribute-list-panel filter-panel'>
       <Tree
         value={nodes.current as TreeNode[]}
         selectionMode="checkbox"

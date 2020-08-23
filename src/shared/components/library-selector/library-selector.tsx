@@ -9,6 +9,7 @@ import { FILTER_ACTIONS } from '../../constants/filter.constants';
 import { TABLE_MAPPING } from '../../constants/general.constants';
 import ActiveLib, { ActiveLibToClassName } from '../../types/lib.enum';
 import './_library-selector.scss';
+import { getLang } from '../../utility/language.utility';
 
 interface SelectBtnOption {
   label: string;
@@ -19,14 +20,15 @@ type SelectBtnOptions = SelectBtnOption[]
 const LibrarySelector = ({className = ''}: {className: string}) => {
   const dispatch = useDispatch();
   const {lib, tables} = useTypedSelector(({lib, tables}) => ({lib, tables}))
+  const Lang = getLang();
   
   const options: SelectBtnOptions = [
     {
-      label: 'Categories',
+      label: Lang.get('categories'),
       value: ActiveLib.CATEGORY
     },
     {
-      label: 'Projects',
+      label: Lang.get('projects'),
       value: ActiveLib.PROJECT
     }
   ];

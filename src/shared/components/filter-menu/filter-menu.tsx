@@ -41,24 +41,17 @@ const FilterMenu = ({ disabled = false }: { disabled: boolean }) => {
     shallowEqual
   );
 
-  const toggleSidebar = () => {
-    dispatchFilter({
-      type: FILTER_ACTIONS.TOGGLE_FILTER_MENU,
-      payload: {
-        show: !filter.show,
-      },
-    });
-  };
+  const toggleSidebar = () => dispatchFilter({
+    type: FILTER_ACTIONS.TOGGLE_FILTER_MENU,
+    payload: { show: !filter.show }
+  });
 
   const clearFilters = () => dispatchFilter(clearFilter());
   const doFilter = () => {
     setFilterParams(filter);
     
-    const filtered = filterBy(
-      filter,
-      lib._data as Project[],
-      lib.data as Project[]
-    );
+    const {_data, data} = lib;
+    const filtered = filterBy( filter, _data as Project[], data as Project[] );
 
     dispatchFilter({
       type: filtered.length < lib._data.length ? 

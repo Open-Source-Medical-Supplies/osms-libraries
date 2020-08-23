@@ -11,6 +11,7 @@ import { TABLE_MAPPING } from "../../constants/general.constants";
 import { empty, notEmpty } from "../../utility/general.utility";
 import TileCard from "../tile-card";
 import './_category-list.scss';
+import { getLang } from "../../utility/language.utility";
 
 /* eslint-disable react-hooks/exhaustive-deps */
 type MouseEvent = React.MouseEvent<HTMLElement>;
@@ -25,6 +26,7 @@ const CategoriesList = () => {
     filter,
   }));
   let { categoriesFilters } = filter;
+  const Lang = getLang();
 
   useEffect(() => {
     if (tables.completed) {
@@ -98,7 +100,7 @@ const CategoriesList = () => {
   };
 
   return (
-    <Panel header={"Categories"} className="filter-panel" toggleable={true}>
+    <Panel header={Lang.get('categories')} className="filter-panel" toggleable={true}>
       <DataView
         value={categories.current}
         layout="grid"

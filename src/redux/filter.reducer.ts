@@ -81,7 +81,10 @@ export const filterReducer = (
         }
       }
     case FILTER_ACTIONS.TOGGLE_FILTER_MENU:
-      if (!action?.payload?.show) return state;
+      if (!action?.payload ?? !action.payload?.show) {
+        // ? s ? o ? m ? a ? n ? y ?
+        return state;
+      }
 
       return {
         ...state,
