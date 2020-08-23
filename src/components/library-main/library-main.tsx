@@ -88,7 +88,7 @@ const LibraryMain = () => {
         onHide={hide}
         className={isMobile ? "" : "p-sidebar-lg"}
       >
-        <FullCard lib={lib.active} />
+        <FullCard />
       </Sidebar>
     </div>
   );

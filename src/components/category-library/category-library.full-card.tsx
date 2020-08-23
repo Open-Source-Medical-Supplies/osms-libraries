@@ -1,15 +1,20 @@
 import React, { useMemo } from "react";
+import { useDispatch } from "react-redux";
+import { setLib } from "../../redux/actions/lib.action";
+import { setSelected } from "../../redux/actions/selected.action";
 import { useTypedSelector } from "../../redux/root.reducer";
 import { CategoryInfo } from "../../shared/classes/category-info.class";
 import { Project } from "../../shared/classes/project.class";
 import ImageCarousel from "../../shared/components/detail-window/image-carousel";
 import MarkdownSection from "../../shared/components/markdown/markdown-section";
 import TileCard from "../../shared/components/tile-card";
+import ActiveLib from "../../shared/types/lib.enum";
 import { Indexable } from "../../shared/types/shared.type";
 import { openExternal } from "../../shared/utility/general.utility";
 import { getLang } from "../../shared/utility/language.utility";
 
 const CategoryLibFullCard = () => {
+  const dispatch = useDispatch();
   const { selected } = useTypedSelector(({ selected }) => ({
     selected,
   }));
@@ -41,12 +46,15 @@ const CategoryLibFullCard = () => {
       />
     );
 
+  const linkAcross = (data: Project) => () => {
+    // set project as selected
+    // dispatch(setLib(ActiveLib.PROJECT));
+    // can't leave it like this because it breaks the existing loading for a selected card
+    // OR I need to update how a selected gets loaded. err...
+    dispatch(setSelected(data, ActiveLib.PROJECT));
+  };
   const ICCardTemplate = (data: Project) => {
     const { displayName, imageURL, externalLink } = data;
-    const linkAcross = () => {
-      console.log('fix')
-      return 'foo';
-    };
     const actions = [
       {
         label: Lang.get("viewSource"),
@@ -56,7 +64,7 @@ const CategoryLibFullCard = () => {
       {
         label: Lang.get("viewDetails"),
         icon: "eye",
-        fn: openExternal(linkAcross()),
+        fn: linkAcross(data),
       },
     ];
 

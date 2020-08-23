@@ -3,14 +3,7 @@ import ActiveLib from "../types/lib.enum";
 import { SelectedState, SupportingData, SupportingDatum, SupportingDataSet } from "../types/selected.type";
 import { toDict } from "./general.utility";
 import { getParam, PARAMS } from "./param-handling";
-import { TABLE_MAPPING } from "../constants/general.constants";
-import { valueof } from "../types/shared.type";
-
-export const SupportingDataMap: {[key in ActiveLib]: valueof<typeof TABLE_MAPPING>} = {
-  [ActiveLib.CATEGORY]: TABLE_MAPPING.Project,
-  [ActiveLib.PROJECT]: TABLE_MAPPING.Material
-}
-
+import { SupportingDataMap } from "../constants/selected.constants";
 
 export const getSupportingData = (selected: string, supportingDataSet: SelectedState['supportingDataSet']) => {
   if ( !selected || !supportingDataSet ) {
@@ -22,8 +15,9 @@ export const getSupportingData = (selected: string, supportingDataSet: SelectedS
 
 export const parseTablesToSupportingDataSet = (
   tables: TableState['loaded'],
+  lib?: ActiveLib
 ): SupportingDataSet => {
-  const activeLib = getParam(PARAMS.LIBRARY) as ActiveLib;
+  const activeLib = lib || getParam(PARAMS.LIBRARY) as ActiveLib;
   let table;
 
   try {
@@ -32,12 +26,16 @@ export const parseTablesToSupportingDataSet = (
     return {}
   }
 
-  return toDict<SupportingDatum>(table , 'name')
+  return toDict<SupportingDatum>(table, 'name')
 }
 
 export const parseTablesToSupportingData = (
   tables: TableState['loaded'],
-  supportTarget: string
+  supportTarget: string,
+  lib?: ActiveLib
 ): SupportingData => {
-  return parseTablesToSupportingDataSet(tables)[supportTarget]
+  return parseTablesToSupportingDataSet(
+    tables,
+    lib
+  )[supportTarget] || [];
 }

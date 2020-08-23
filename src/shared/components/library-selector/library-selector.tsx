@@ -1,13 +1,9 @@
 import { SelectButton } from "primereact/selectbutton";
 import React, { useCallback } from "react";
 import { useDispatch } from "react-redux";
-import { LibAction, LIB_ACTIONS } from "../../../redux/lib.reducer";
+import { setLib } from '../../../redux/actions/lib.action';
 import { useTypedSelector } from "../../../redux/root.reducer";
-import { CategoryInfo } from "../../classes/category-info.class";
-import { Project } from "../../classes/project.class";
-import { FILTER_ACTIONS } from "../../constants/filter.constants";
-import { TABLE_MAPPING } from "../../constants/general.constants";
-import ActiveLib, { ActiveLibToClassName } from "../../types/lib.enum";
+import ActiveLib from "../../types/lib.enum";
 import { getLang } from "../../utility/language.utility";
 import "./_library-selector.scss";
 
@@ -19,10 +15,7 @@ type SelectBtnOptions = SelectBtnOption[];
 
 const LibrarySelector = ({ className = "" }: { className: string }) => {
   const dispatch = useDispatch();
-  const { lib, tables } = useTypedSelector(({ lib, tables }) => ({
-    lib,
-    tables,
-  }));
+  const lib = useTypedSelector(({ lib }) => lib);
   const Lang = getLang();
   const options = useCallback<() => SelectBtnOptions>(() => Lang.loading ? [] : [
     {
@@ -35,20 +28,9 @@ const LibrarySelector = ({ className = "" }: { className: string }) => {
     },
   ], [Lang.selected, Lang.loading]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const onChange = (val: SelectBtnOption["value"]) => {
-    if (!val || val === lib.active) return;
-
-    dispatch({ type: FILTER_ACTIONS.CLEAR_FILTER });
-
-    const focus = tables.loaded[TABLE_MAPPING[ActiveLibToClassName[val]]] as
-      | Project[]
-      | CategoryInfo[];
-    dispatch<LibAction>({
-      type: LIB_ACTIONS.SET_LIB,
-      active: val,
-      _data: focus,
-      data: focus,
-    });
+  const onChange = (toLib: SelectBtnOption["value"]) => {
+    if (!toLib || toLib === lib.active) return;
+    dispatch(setLib(toLib));
   };
   
   return (

@@ -1,29 +1,21 @@
 import classNames from "classnames";
-import React, { Dispatch, useCallback, useRef } from "react";
+import React, { useCallback, useRef } from "react";
 import { useDispatch } from "react-redux";
+import { setSelected } from "../../../redux/actions/selected.action";
 import { useTypedSelector } from "../../../redux/root.reducer";
-import { SELECTED_ACTIONS } from "../../constants/selected.constants";
 import ActiveLib from "../../types/lib.enum";
-import { SelectAction, Selected } from "../../types/selected.type";
+import { Selected } from "../../types/selected.type";
 import NewUpdatedBanner from "../new-updated-banner";
 import TileCard, { TileCardActions } from "../tile-card";
 
 const ProjectCard: React.FC<{data: Selected;}> = ({ data }) => {
-  const dispatch = useDispatch<Dispatch<SelectAction>>();
-  const { selected, tables, lib } = useTypedSelector(
-    ({ tables, selected, lib }) => ({
-      selected: selected.data,
-      tables,
-      lib
-    })
+  const dispatch = useDispatch();
+  const { selected, lib } = useTypedSelector(
+    ({ selected, lib }) => ({ selected: selected.data, lib })
   );
   const thisRef = useRef<HTMLDivElement>(null);
   const selectCard = useCallback(() => {
-    dispatch({
-      type: SELECTED_ACTIONS.SET_SELECTED,
-      data,
-      supportingDataSet: tables.loaded,
-    });
+    dispatch(setSelected(data));
   }, [data]); // eslint-disable-line react-hooks/exhaustive-deps
   // const fitlerByCategory = useCallback(() => {
   //   dispatch({
@@ -46,6 +38,7 @@ const ProjectCard: React.FC<{data: Selected;}> = ({ data }) => {
   ]
 
   if (lib.active === ActiveLib.CATEGORY) {
+    // add filtering icon for category cards
     actions.push({
       fn: () => console.log('category filter-linking todo'),
       label: null,
@@ -63,6 +56,7 @@ const ProjectCard: React.FC<{data: Selected;}> = ({ data }) => {
     });
   }
 
+  // must be divisors of 12
   const sizing = 'p-sm-4 p-md-3 p-lg-3 p-xl-2';
   return (
     <div

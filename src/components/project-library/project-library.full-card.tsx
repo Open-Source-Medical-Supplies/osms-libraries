@@ -1,7 +1,9 @@
 import { Button } from "primereact/button";
 import React from "react";
 import ReactMarkdown from "react-markdown";
+import { useDispatch } from "react-redux";
 import { useTypedSelector } from "../../redux/root.reducer";
+import { CategoryInfo } from "../../shared/classes/category-info.class";
 import { Material } from "../../shared/classes/material.class";
 import { Project } from "../../shared/classes/project.class";
 import ImageCarousel from "../../shared/components/detail-window/image-carousel";
@@ -9,11 +11,15 @@ import MarkdownSection from "../../shared/components/markdown/markdown-section";
 import TileCard from "../../shared/components/tile-card";
 import {
   AopenExternal,
-  openExternal
+  openExternal,
+  toDict
 } from "../../shared/utility/general.utility";
 import { getLang } from "../../shared/utility/language.utility";
+import ActiveLib from "../../shared/types/lib.enum";
+import { setSelectedByName } from "../../redux/actions/selected.action";
 
 const ProjectFullCard = () => {
+  const dispatch = useDispatch();
   const { selected } = useTypedSelector(({ selected }) => ({
     selected,
   }));
@@ -35,12 +41,9 @@ const ProjectFullCard = () => {
     externalLink,
   } = selected.data;
 
-  // const linkAcross = name instanceof Array ?
-  //   genLocalParam( ActiveLib.CATEGORY, name[0] ) :
-  //   genLocalParam( ActiveLib.CATEGORY, name );
   const linkAcross = () => {
-    console.log("fix");
-    return "foo";
+    const nom = name instanceof Array ? name[0] : name;
+    dispatch(setSelectedByName(nom, 'displayName', 'CategoryInfo', ActiveLib.CATEGORY));
   };
 
   const headerImage =
@@ -99,7 +102,7 @@ const ProjectFullCard = () => {
       <div className="full-card__content">
         {headerImage}
         <h1>{displayName}</h1>
-        {AopenExternal(linkAcross(), <h2>{name}</h2>)}
+        {<button onClick={linkAcross}> <h2>{name}</h2></button>}
         {desc}
         {attributionOrg || creator ? (
           <div className="p-grid">

@@ -1,9 +1,12 @@
 import React from "react";
-import ActiveLib from "../../shared/types/lib.enum";
+import { useTypedSelector } from "../../redux/root.reducer";
+import { CategoryInfo } from "../../shared/classes/category-info.class";
 import CategoryLibFullCard from "../category-library/category-library.full-card";
 import ProjectFullCard from "../project-library/project-library.full-card";
 
-const FullCard = ({ lib }: { lib: ActiveLib }) =>
-  lib === ActiveLib.CATEGORY ? <CategoryLibFullCard /> : <ProjectFullCard />;
+const FullCard = () => {
+  const selected = useTypedSelector(({selected}) => selected);
+  return selected.data instanceof CategoryInfo ? <CategoryLibFullCard /> : <ProjectFullCard />;
+}
 
 export default FullCard;
