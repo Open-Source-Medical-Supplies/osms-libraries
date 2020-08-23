@@ -1,5 +1,5 @@
 import { SelectButton } from "primereact/selectbutton";
-import React, { useRef, useEffect } from "react";
+import React, { useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { LibAction, LIB_ACTIONS } from "../../../redux/lib.reducer";
 import { useTypedSelector } from "../../../redux/root.reducer";
@@ -8,8 +8,8 @@ import { Project } from "../../classes/project.class";
 import { FILTER_ACTIONS } from "../../constants/filter.constants";
 import { TABLE_MAPPING } from "../../constants/general.constants";
 import ActiveLib, { ActiveLibToClassName } from "../../types/lib.enum";
-import "./_library-selector.scss";
 import { getLang } from "../../utility/language.utility";
+import "./_library-selector.scss";
 
 interface SelectBtnOption {
   label: string;
@@ -24,21 +24,16 @@ const LibrarySelector = ({ className = "" }: { className: string }) => {
     tables,
   }));
   const Lang = getLang();
-  const options = useRef<SelectBtnOptions>([]);
-
-  useEffect(() => {
-    if (Lang.loading) return;
-    options.current = [
-      {
-        label: Lang.get("categories"),
-        value: ActiveLib.CATEGORY,
-      },
-      {
-        label: Lang.get("projects"),
-        value: ActiveLib.PROJECT,
-      },
-    ];
-  }, [Lang.loading]); // eslint-disable-line react-hooks/exhaustive-deps
+  const options = useCallback<() => SelectBtnOptions>(() => Lang.loading ? [] : [
+    {
+      label: Lang.get("categories"),
+      value: ActiveLib.CATEGORY,
+    },
+    {
+      label: Lang.get("projects"),
+      value: ActiveLib.PROJECT,
+    },
+  ], [Lang.selected, Lang.loading]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const onChange = (val: SelectBtnOption["value"]) => {
     if (!val || val === lib.active) return;
@@ -60,7 +55,7 @@ const LibrarySelector = ({ className = "" }: { className: string }) => {
     <div className={"library-selector " + className}>
       <SelectButton
         value={lib.active}
-        options={options.current}
+        options={options()}
         onChange={(e) => onChange(e.value)}
       />
     </div>
