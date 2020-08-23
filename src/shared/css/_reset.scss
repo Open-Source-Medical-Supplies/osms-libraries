@@ -41,7 +41,13 @@ section {
 
 .p-sidebar-left.p-sidebar-lg,
 .p-sidebar-right.p-sidebar-lg {
-  width: 60em !important;
+  // from https://www.primefaces.org/primereact/showcase/#/flexgrid
+  @media screen and (min-width: 768px) {
+    width: 40em !important;
+  }
+  @media screen and (min-width: 1200px) {
+    width: 60em !important;
+  }
 }
 
 .markdown-section {
