@@ -1,13 +1,12 @@
-import React, { useRef } from 'react';
-import { SlideMenu } from 'primereact/slidemenu';
 import { Button } from 'primereact/button';
-import { getLang } from '../utility/language.utility';
-import { IETF } from '../constants/ietf.constants';
-import { useTypedSelector } from '../../redux/root.reducer';
 import { MenuItem } from 'primereact/components/menuitem/MenuItem';
-import { empty } from '../utility/general.utility';
-import { LanguageBase, DispatchLanguageAction, LANG_ACTIONS } from '../../redux/language.reducer';
+import { SlideMenu } from 'primereact/slidemenu';
+import React, { useRef } from 'react';
 import { useDispatch } from 'react-redux';
+import { DispatchLanguageAction, LanguageBase, LANG_ACTIONS } from '../../redux/language.reducer';
+import { useTypedSelector } from '../../redux/root.reducer';
+import { IETF } from '../constants/ietf.constants';
+import { empty } from '../utility/general.utility';
 
 const LanguageSelect = () => {
   const {base, selected} = useTypedSelector(({ lang: { base, selected } }) => ({base, selected}));

@@ -21,30 +21,43 @@ export const getLang = () =>
       return {
         get: () => "Loading",
         loading: true,
-        selected
+        selected,
       };
     }
     return {
       get: (key: string) => getLangVal(base, key, selected),
       loading: false,
-      selected
+      selected,
     };
   });
 
-// basically a function just to handle fall-backs
+/** Handles fall-back scenarios during language retrieval */
 export const getLangVal = (
   langObj: LanguageBase,
   key: string,
   useLang: undefined | IETF
 ) => {
-  const lang = useLang || (navigator.language as IETF);
+  let langKey = useLang || (navigator.language as IETF);
+
+  /**
+   * If the langKey, eg. en-GB, doesn't exist in the translated keys,
+   * attempt to find a partial match back to one that does, or fallback to en-US
+   * e.g. en-GB -> en -> en-US
+   * e.g. fr-CA -> fr -> fr-FR
+   */
+  if (!langObj[langKey]) {
+    const major = langKey.slice(0, 2);
+    const tempKey = Object.keys(langObj).find((k) => k.includes(major)) as IETF;
+    langKey = tempKey || IETF["en-US"];
+  }
+
   let val: string;
   try {
-    val = langObj[lang][key];
+    val = langObj[langKey][key];
   } catch (e) {
     console.warn(
       `
-      Couldn't retrieve value for ${lang}, ${key}.
+      Couldn't retrieve value for ${langKey}, ${key}.
       Attempting to default to en-US.
     `,
       e
