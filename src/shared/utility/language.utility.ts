@@ -20,10 +20,12 @@ export const getLang = () =>
     if (!base || empty(base)) {
       return {
         get: () => "Loading",
+        loading: true
       };
     }
     return {
       get: (key: string) => getLangVal(base, key, selected),
+      loading: false
     };
   });
 

@@ -144,3 +144,7 @@ $new-updated-max: 100px;
     cursor: not-allowed;
   }
 }
+
+.p-selectbutton .p-button.p-highlight span {
+  color: $white;
+}
