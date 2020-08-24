@@ -1,8 +1,7 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { Dispatch } from "react";
 import { TableAction, TABLE_ACTIONS } from "../redux/tables.reducer";
-import { TABLE_MAPPING } from "../shared/constants/general.constants";
-import { TableMap } from "../shared/constants/google-bucket.constants";
+import { ClassMap, FunctionMap, TABLE_MAPPING } from "../shared/constants/google-bucket.constants";
 import { AirtableRecords } from "../shared/types/airtable.type";
 import { valueof } from "../shared/types/shared.type";
 
@@ -41,7 +40,7 @@ const notInStaging = (v: AirtableStaging): boolean => {
 
 const dataToClass = (
   data: AirtableRecords<AirtableStaging>,
-  mapper: valueof<typeof TableMap>
+  mapper: valueof<typeof ClassMap>
 ) => data.reduce((acc: any[], {fields}) => {
   if (notInStaging(fields)) {
     acc.push(new mapper.prototype.constructor(fields));
@@ -60,12 +59,11 @@ const loadTables = (dispatch: Dispatch<TableAction>): void => {
       tableList.forEach(({ underscored, type, camelCased }) => {
         axiosGet<AirtableRecords<AirtableStaging>>(underscored).then(
           ({ data }) => {
-            const mapper = TableMap[type];
 
-            if (mapper) {
-              data = mapper.prototype ?
-                dataToClass(data, mapper) :
-                mapper(data.filter(v => notInStaging(v.fields)));
+            if (ClassMap[type]) {
+              data = dataToClass(data, ClassMap[type]);
+            } else if (FunctionMap[type]) {
+              data = FunctionMap[type](data.filter(v => notInStaging(v.fields)));
             }
 
             dispatch({
