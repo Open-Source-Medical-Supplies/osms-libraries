@@ -1,5 +1,6 @@
 import React, { useMemo } from "react";
 import { useDispatch } from "react-redux";
+import { setLib } from "../../redux/actions/lib.action";
 import { setSelected } from "../../redux/actions/selected.action";
 import { useTypedSelector } from "../../redux/root.reducer";
 import { CategoryInfo } from "../../shared/classes/category-info.class";
@@ -47,10 +48,8 @@ const CategoryLibFullCard = () => {
 
   const linkAcross = (data: Project) => () => {
     // set project as selected
-    // dispatch(setLib(ActiveLib.PROJECT));
-    // can't leave it like this because it breaks the existing loading for a selected card
-    // OR I need to update how a selected gets loaded. err...
-    dispatch(setSelected(data, ActiveLib.PROJECT));
+    dispatch(setSelected(data, ActiveLib.PROJECT))
+    dispatch(setLib(ActiveLib.PROJECT));
   };
   const ICCardTemplate = (data: Project) => {
     const { displayName, imageURL, externalLink } = data;

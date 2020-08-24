@@ -3,14 +3,14 @@ import { FilterState } from "../../shared/types/filter.type";
 import ActiveLib from "../../shared/types/lib.enum";
 import { LIB_ACTIONS } from "../lib.reducer";
 import { TypedThunkAction } from "../root.reducer";
-import { setLib } from "./lib.action";
+import { changeLib } from "./lib.action";
 
 export const filterInOtherLib = (
   targetLib: ActiveLib,
   targetLabel: string,
   targetType: Pick<FilterState, "categories" | "searchBar">
 ): TypedThunkAction => (dispatch, getState) => {
-  dispatch(setLib(targetLib));
+  dispatch(changeLib(targetLib));
 };
 
 export const clearFilter = () => (dispatch: (o: any) => Promise<any>) => {

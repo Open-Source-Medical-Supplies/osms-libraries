@@ -1,7 +1,7 @@
 import { SelectButton } from "primereact/selectbutton";
 import React, { useCallback } from "react";
 import { useDispatch } from "react-redux";
-import { setLib } from '../../../redux/actions/lib.action';
+import { changeLib } from '../../../redux/actions/lib.action';
 import { useTypedSelector } from "../../../redux/root.reducer";
 import ActiveLib from "../../types/lib.enum";
 import { getLang } from "../../utility/language.utility";
@@ -30,7 +30,7 @@ const LibrarySelector = ({ className = "" }: { className: string }) => {
 
   const onChange = (toLib: SelectBtnOption["value"]) => {
     if (!toLib || toLib === lib.active) return;
-    dispatch(setLib(toLib));
+    dispatch(changeLib(toLib));
   };
   
   return (

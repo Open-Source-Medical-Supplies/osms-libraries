@@ -9,13 +9,23 @@ import { clearFilter } from "./filter.action";
 export interface SetLibOptions {
   keepFilter?: boolean;
   keepSelected?: boolean;
+  followUp?: Function;
+}
+
+export const setLib = (val: ActiveLib) => (dispatch: Dispatch<any>, getState: () => RootState) => {
+  const {tables} = getState();
+  const focus = tables.loaded[TABLE_MAPPING[ActiveLibToClassName[val]]] as ActiveType;
+  dispatch({
+    type: LIB_ACTIONS.SET_LIB,
+    active: val,
+    _data: focus,
+    data: focus,
+  });
 }
 
 // Used as dispatch(setLib(...));
 // All dispatch calls run by default
-export const setLib = (val: ActiveLib, options?: SetLibOptions) => (dispatch: Dispatch<any>, getState: () => RootState) => {
-  const {tables} = getState();
-
+export const changeLib = (val: ActiveLib, options?: SetLibOptions) => (dispatch: Dispatch<any>, _: () => RootState) => {
   if (!options?.keepFilter) {
     dispatch(clearFilter());
   }
@@ -24,11 +34,5 @@ export const setLib = (val: ActiveLib, options?: SetLibOptions) => (dispatch: Di
     dispatch({ type: SELECTED_ACTIONS.CLEAR_SELECTED })
   }
 
-  const focus = tables.loaded[TABLE_MAPPING[ActiveLibToClassName[val]]] as ActiveType;
-  dispatch({
-    type: LIB_ACTIONS.SET_LIB,
-    active: val,
-    _data: focus,
-    data: focus,
-  });
+  dispatch(setLib(val));
 }
