@@ -24,11 +24,11 @@ function App() {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <BrowserRouter basename="/libraries">
+    <BrowserRouter>
       <ErrorBoundary>
         <Switch>
-          <Route path="/" component={LibraryMain} />
-          <Redirect from="*" to="/" />
+          <Route path="/library" exact component={LibraryMain} />
+          <Redirect from="*" to="/library" />
         </Switch>
       </ErrorBoundary>
     </BrowserRouter>
