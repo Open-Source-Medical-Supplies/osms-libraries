@@ -171,7 +171,7 @@ const FilterMenu = ({ disabled = false }: { disabled: boolean }) => {
       <LibrarySelector className="filter-menu__grid-select" />
       <FilterSearchBar className="mobile-search-bar filter-menu__grid-search" />
       <ClearFilters />
-      <LanguageSelect />
+      {/* <LanguageSelect /> */}
     </div>
   );
 
