@@ -86,7 +86,7 @@ const ProjectFullCard = () => {
         imageURL={imageURL}
         className={"fullcard-carousel-cards"}
       >
-        <div className="tile-card__header clamp-1"> {idealCaption} </div>
+        <div className="tile-card__header clamp-2"> {idealCaption} </div>
         {detail ? <ReactMarkdown source={detail} /> : null}
       </TileCard>
     );

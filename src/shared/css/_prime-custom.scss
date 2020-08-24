@@ -68,3 +68,14 @@ div.p-grid, .p-dataview.p-component.p-dataview-grid {
 .p-card img, .p-card div.center-flex  {
   margin-top: 2px;
 }
+
+.p-dataview-content .p-grid .p-card-content {
+  height: 38.4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  h4 {
+    margin-bottom: 0 !important;
+  }
+}

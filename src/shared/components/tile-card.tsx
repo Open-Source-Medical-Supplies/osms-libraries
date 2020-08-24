@@ -66,7 +66,7 @@ const TileCard = ({
 
   const BaseCard = (
     <Card header={headerImage} footer={footer} className={className}>
-      { children || <h4 className='clamp-1' style={{textAlign: 'center'}}> {mainText} </h4> }
+      { children || <h4 className='clamp-2' style={{textAlign: 'center'}}> {mainText} </h4> }
     </Card>
   );
 
@@ -75,7 +75,7 @@ const TileCard = ({
       className={className + ' tile-card button-no-style'}
       onClick={(e) => (actions as TileCardActions)[0].fn(e)}>
       <Card header={headerImage}>
-        <div className='tile-card__header clamp-1'> {mainText} </div>
+        <div className='tile-card__header clamp-2'> {mainText} </div>
         { subText ? <div className='tile-card__sub-header clamp-1'> {subText} </div> : null }
       </Card>
     </button>

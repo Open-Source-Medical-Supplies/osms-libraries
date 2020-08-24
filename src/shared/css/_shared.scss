@@ -8,6 +8,9 @@
 .clamp-1 {
   @include clamp-n(1);
 }
+.clamp-2{
+  @include clamp-n(2);
+}
 
 .divider-1 {
   margin-bottom: 1rem;

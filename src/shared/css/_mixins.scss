@@ -3,7 +3,7 @@
   -webkit-line-clamp: $n;
   -webkit-box-orient: vertical; 
   overflow: hidden;
-  word-break: break-all;
+  word-break: break-word;
 }
 
 @mixin tileCardFonts($header: 21px, $subHeader: 16.38px, $headerWeight: 700, $subHeaderWeight: 700) {
