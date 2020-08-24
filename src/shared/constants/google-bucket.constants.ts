@@ -21,11 +21,14 @@ export const TABLE_MAPPING = {
   Material: "Material",
   Translations: "Translations"
 }
-export const TableMap: {[key in valueof<typeof TABLE_MAPPING>]: Function} = {
+export const ClassMap: {[key in valueof<typeof TABLE_MAPPING>]: Function} = {
   Project,
   CategoryInfo,
   CategorySupply,
-  FilterMenu: mapFilterData,
   Material,
+}
+
+export const FunctionMap: {[key in valueof<typeof TABLE_MAPPING>]: Function} = {
+  FilterMenu: mapFilterData,
   Translations: mapLangData
 };
