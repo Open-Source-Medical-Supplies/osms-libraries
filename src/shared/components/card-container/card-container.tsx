@@ -23,7 +23,11 @@ const CardContainer: React.FC<CardContainerType> = ({records}) => {
       value={records}
       layout='grid'
       itemTemplate={MappedCard} /> :
-    <div style={{alignSelf: 'center', margin: '0 auto'}}>
+    <div className='card-container__data-view' style={{
+      display: 'flex',
+      justifyContent: 'center',
+      marginTop: '1rem'
+      }}>
       <h3>{Lang.get('noRecordsMatch')}</h3>
     </div>
 }
