@@ -16,9 +16,7 @@ export const setSelectedByName = (
   getState: () => RootState
 ) => {
   const {tables} = getState();
-  debugger
-  const data = (tables.loaded[ fromType] as any[]).find((o: any) => o && o[matcher] === name)
-  debugger
+  const data = (tables.loaded[fromType] as any[]).find((o: any) => o && o[matcher] === name)
   dispatch(setSelected(data, toLib));
 }
 

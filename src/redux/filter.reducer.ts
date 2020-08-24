@@ -3,7 +3,6 @@ import { Action } from 'redux';
 import { FILTER_ACTIONS } from '../shared/constants/filter.constants';
 import { FilterState } from '../shared/types/filter.type';
 import { PARAMS, removeParam } from '../shared/utility/param-handling';
-import { LIB_ACTIONS } from './lib.reducer';
 
 export interface FilterAction extends Action<FILTER_ACTIONS> {
   payload?: Partial<FilterState>;
@@ -11,7 +10,6 @@ export interface FilterAction extends Action<FILTER_ACTIONS> {
 
 export type DispatchFilterAction = Dispatch<FilterAction | Function>;
 
-// const catCompare = new CategoryComparator();
 
 export type SetFilterFn = (props: Partial<FilterState>) => void;
 
@@ -31,13 +29,6 @@ const FilterStateDefault: FilterState = {
   },
   show: false,
   isFiltering: false
-};
-
-export const clearFilter = () => (
-  dispatch: (o: any) => Promise<any>,
-) => {
-  dispatch({ type: FILTER_ACTIONS.CLEAR_FILTER });
-  dispatch({ type: LIB_ACTIONS.RESET_LIB });
 };
 
 export const filterReducer = (
@@ -71,8 +62,7 @@ export const filterReducer = (
       };
     case FILTER_ACTIONS.SET_FILTER:
       if (!action?.payload) return state;
-
-      return {
+      const temp = {
         ...state,
         ...action.payload,
         previousFilters: {
@@ -80,15 +70,11 @@ export const filterReducer = (
           ...action.payload.previousFilters,
         }
       }
+      return temp;
     case FILTER_ACTIONS.TOGGLE_FILTER_MENU:
-      if (!action?.payload ?? !action.payload?.show) {
-        // ? s ? o ? m ? a ? n ? y ?
-        return state;
-      }
-
       return {
         ...state,
-        show: action.payload.show
+        show: !state.show
       }
     default:
       return state;

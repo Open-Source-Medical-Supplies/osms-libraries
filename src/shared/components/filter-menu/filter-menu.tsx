@@ -3,7 +3,8 @@ import { Button } from "primereact/button";
 import { Sidebar } from "primereact/sidebar";
 import React, { useEffect } from "react";
 import { shallowEqual, useDispatch } from "react-redux";
-import { clearFilter, DispatchFilterAction } from "../../../redux/filter.reducer";
+import { clearFilter } from "../../../redux/actions/filter.action";
+import { DispatchFilterAction } from "../../../redux/filter.reducer";
 import { DispatchLibAction, LIB_ACTIONS } from "../../../redux/lib.reducer";
 import { useTypedSelector } from "../../../redux/root.reducer";
 import { CategoryInfo } from "../../classes/category-info.class";
@@ -14,13 +15,13 @@ import { FilterState } from "../../types/filter.type";
 import { CategoryComparator, createUUID } from "../../utility/general.utility";
 import { getParam, PARAMS } from "../../utility/param-handling";
 import DetailWindow from "../detail-window/detail-window";
+import LanguageSelect from "../language-select";
 import LibrarySelector from "../library-selector/library-selector";
 import AttributesList from "./attributes-list";
 import CategoriesList from "./categories-list";
 import { filterBy, setFilterParams } from "./filter-menu.utilities";
 import { FilterSearchBar } from "./filter-search-bar";
 import "./_filter-menu.scss";
-import LanguageSelect from "../language-select";
 
 /* eslint-disable react-hooks/exhaustive-deps */
 
@@ -42,8 +43,7 @@ const FilterMenu = ({ disabled = false }: { disabled: boolean }) => {
   );
 
   const toggleSidebar = () => dispatchFilter({
-    type: FILTER_ACTIONS.TOGGLE_FILTER_MENU,
-    payload: { show: !filter.show }
+    type: FILTER_ACTIONS.TOGGLE_FILTER_MENU
   });
 
   const clearFilters = () => dispatchFilter(clearFilter());
@@ -91,7 +91,7 @@ const FilterMenu = ({ disabled = false }: { disabled: boolean }) => {
   const nodeFiltersBool = Object.keys(filter.nodeFilters).length;
   const catFilterBool = catCompare.compareKeys(
     filter.categoriesFilters,
-    filter.previousFilters.categoriesFilters || {}
+    filter.previousFilters.categoriesFilters
   ) ? createUUID() : false;
 
   // run on filter state changes

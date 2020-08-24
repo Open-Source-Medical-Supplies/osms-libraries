@@ -1,6 +1,5 @@
 import React, { useMemo } from "react";
 import { useDispatch } from "react-redux";
-import { setLib } from "../../redux/actions/lib.action";
 import { setSelected } from "../../redux/actions/selected.action";
 import { useTypedSelector } from "../../redux/root.reducer";
 import { CategoryInfo } from "../../shared/classes/category-info.class";

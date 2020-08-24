@@ -1,10 +1,10 @@
 import { Dispatch } from "react";
-import { FILTER_ACTIONS } from "../../shared/constants/filter.constants";
 import { TABLE_MAPPING } from "../../shared/constants/general.constants";
+import { SELECTED_ACTIONS } from "../../shared/constants/selected.constants";
 import ActiveLib, { ActiveLibToClassName } from "../../shared/types/lib.enum";
 import { ActiveType, LIB_ACTIONS } from "../lib.reducer";
 import { RootState } from "../root.reducer";
-import { SELECTED_ACTIONS } from "../../shared/constants/selected.constants";
+import { clearFilter } from "./filter.action";
 
 export interface SetLibOptions {
   keepFilter?: boolean;
@@ -17,7 +17,7 @@ export const setLib = (val: ActiveLib, options?: SetLibOptions) => (dispatch: Di
   const {tables} = getState();
 
   if (!options?.keepFilter) {
-    dispatch({ type: FILTER_ACTIONS.CLEAR_FILTER });
+    dispatch(clearFilter());
   }
   
   if (!(options?.keepSelected)) {

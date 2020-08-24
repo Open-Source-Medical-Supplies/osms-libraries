@@ -2,21 +2,16 @@ import { Button } from "primereact/button";
 import React from "react";
 import ReactMarkdown from "react-markdown";
 import { useDispatch } from "react-redux";
+import { setSelectedByName } from "../../redux/actions/selected.action";
 import { useTypedSelector } from "../../redux/root.reducer";
-import { CategoryInfo } from "../../shared/classes/category-info.class";
 import { Material } from "../../shared/classes/material.class";
 import { Project } from "../../shared/classes/project.class";
 import ImageCarousel from "../../shared/components/detail-window/image-carousel";
 import MarkdownSection from "../../shared/components/markdown/markdown-section";
 import TileCard from "../../shared/components/tile-card";
-import {
-  AopenExternal,
-  openExternal,
-  toDict
-} from "../../shared/utility/general.utility";
-import { getLang } from "../../shared/utility/language.utility";
 import ActiveLib from "../../shared/types/lib.enum";
-import { setSelectedByName } from "../../redux/actions/selected.action";
+import { openExternal } from "../../shared/utility/general.utility";
+import { getLang } from "../../shared/utility/language.utility";
 
 const ProjectFullCard = () => {
   const dispatch = useDispatch();

@@ -3,13 +3,13 @@ import { Panel } from "primereact/panel";
 import { Tree } from "primereact/tree";
 import React, { useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
+import { setAttributes } from "../../../redux/actions/filter.action";
 import { DispatchFilterAction } from "../../../redux/filter.reducer";
 import { useTypedSelector } from "../../../redux/root.reducer";
-import { FILTER_ACTIONS } from "../../constants/filter.constants";
 import { TABLE_MAPPING } from "../../constants/general.constants";
 import { FilterNodes } from "../../types/filter-node.type";
-import { mapFilterData } from '../filter-menu/filter-menu.utilities';
 import { getLang } from "../../utility/language.utility";
+import { mapFilterData } from '../filter-menu/filter-menu.utilities';
 
 const AttributesList = () => {
   const dispatch = useDispatch<DispatchFilterAction>();
@@ -27,15 +27,7 @@ const AttributesList = () => {
   }, [tables.completed]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const setSelection = (event: {originalEvent: Event, value: any}) => {
-    dispatch({
-      type: FILTER_ACTIONS.SET_FILTER,
-      payload: {
-        nodeFilters: event.value,
-        previousFilters: {
-          nodeFilters
-        }
-      },
-    });
+    dispatch(setAttributes(event.value));
   };
   
   return (

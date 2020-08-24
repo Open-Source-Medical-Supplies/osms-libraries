@@ -1,24 +1,14 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { useTypedSelector } from "../../../redux/root.reducer";
-import { FILTER_ACTIONS } from "../../constants/filter.constants";
 import SearchBar, { SearchBarStateChange } from "../search-bar";
+import { setSearchBar } from '../../../redux/actions/filter.action';
 
 export const FilterSearchBar = ({ className }: { className?: string }) => {
   const searchBarText = useTypedSelector(({ filter }) => filter.searchBar);
 
   const dispatch = useDispatch();
-  const update: SearchBarStateChange = (searchState) => {
-    dispatch({
-      type: FILTER_ACTIONS.SET_FILTER,
-      payload: {
-        searchBar: searchState || "",
-        previousFilters: {
-          searchBar: searchBarText || "",
-        },
-      },
-    });
-  };
+  const update: SearchBarStateChange = searchState => dispatch(setSearchBar(searchState));
 
   return (
     <SearchBar

@@ -3,15 +3,15 @@ import { DataView } from "primereact/dataview";
 import { Panel } from "primereact/panel";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
+import { setCategories } from "../../../redux/actions/filter.action";
 import { DispatchFilterAction } from "../../../redux/filter.reducer";
 import { useTypedSelector } from "../../../redux/root.reducer";
 import { CategorySupply } from "../../classes/category-supply.class";
-import { FILTER_ACTIONS } from "../../constants/filter.constants";
 import { TABLE_MAPPING } from "../../constants/general.constants";
 import { empty, notEmpty } from "../../utility/general.utility";
+import { getLang } from "../../utility/language.utility";
 import TileCard from "../tile-card";
 import './_category-list.scss';
-import { getLang } from "../../utility/language.utility";
 
 /* eslint-disable react-hooks/exhaustive-deps */
 type MouseEvent = React.MouseEvent<HTMLElement>;
@@ -71,20 +71,15 @@ const CategoriesList = () => {
       categoriesFilters[k] = true;
       newState = { [k]: true };
     }
+
     setToggleState(newState)
-    dispatch({
-      type: FILTER_ACTIONS.SET_FILTER,
-      payload: {
-        categoriesFilters: categoriesFilters,
-        previousFilters: {
-          categoriesFilters: previousState,
-        },
-      },
-    });
+    dispatch(setCategories(categoriesFilters, previousState));
   };
 
   const CategoryBlock = (o: CategorySupply): JSX.Element => {
-    const classes = classNames("category-list-card p-col-6", {
+    const classes = classNames(
+      "category-list-card",
+      "p-sm-6 p-md-4 p-lg-6 p-xl-4", {
       "highlight-child": toggleState[o.name],
     });
 

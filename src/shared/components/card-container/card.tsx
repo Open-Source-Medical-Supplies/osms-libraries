@@ -7,6 +7,7 @@ import ActiveLib from "../../types/lib.enum";
 import { Selected } from "../../types/selected.type";
 import NewUpdatedBanner from "../new-updated-banner";
 import TileCard, { TileCardActions } from "../tile-card";
+import { filterFromCategoryToProjects } from "../../../redux/actions/shared.action";
 
 const ProjectCard: React.FC<{data: Selected;}> = ({ data }) => {
   const dispatch = useDispatch();
@@ -40,7 +41,7 @@ const ProjectCard: React.FC<{data: Selected;}> = ({ data }) => {
   if (lib.active === ActiveLib.CATEGORY) {
     // add filtering icon for category cards
     actions.push({
-      fn: () => console.log('category filter-linking todo'),
+      fn: () => dispatch(filterFromCategoryToProjects(displayName)),
       label: null,
       icon: 'filter',
     })

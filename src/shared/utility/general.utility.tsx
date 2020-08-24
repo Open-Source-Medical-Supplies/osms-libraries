@@ -36,8 +36,8 @@ export class CategoryComparator {
   state: any;
   previous: any;
 
-  compareKeys (state: {}, previous: {}): boolean {
-    if (state === this.state && previous === this.previous) {
+  compareKeys (state: {}, previous: {} | undefined): boolean {
+    if (!previous || (state === this.state && previous === this.previous)) {
       return false;
     }
     this.state = state;
