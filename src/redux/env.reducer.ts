@@ -16,7 +16,6 @@ export const envReducer = (
   state: EnvType = InitialState,
   action: Action<typeof SET_ENV>
 ) => {
-  console.log(action.type)
   switch(action.type) {
     case SET_ENV:
       return {

@@ -2,6 +2,7 @@ import { Button } from "primereact/button";
 import React from "react";
 import ReactMarkdown from "react-markdown";
 import { useDispatch } from "react-redux";
+import { setLib } from "../../redux/actions/lib.action";
 import { setSelectedByName } from "../../redux/actions/selected.action";
 import { useTypedSelector } from "../../redux/root.reducer";
 import { Material } from "../../shared/classes/material.class";
@@ -38,7 +39,8 @@ const ProjectFullCard = () => {
 
   const linkAcross = () => {
     const nom = name instanceof Array ? name[0] : name;
-    dispatch(setSelectedByName(nom, 'displayName', 'CategoryInfo', ActiveLib.CATEGORY));
+    dispatch(setLib(ActiveLib.CATEGORY));
+    dispatch(setSelectedByName(nom, 'displayName', 'CategoryInfo', ActiveLib.CATEGORY))
   };
 
   const headerImage =

@@ -12,6 +12,7 @@ import ActiveLib from "../../shared/types/lib.enum";
 import { Indexable } from "../../shared/types/shared.type";
 import { openExternal } from "../../shared/utility/general.utility";
 import { getLang } from "../../shared/utility/language.utility";
+import { SELECTED_ACTIONS } from "../../shared/constants/selected.constants";
 
 const CategoryLibFullCard = () => {
   const dispatch = useDispatch();
@@ -48,8 +49,8 @@ const CategoryLibFullCard = () => {
 
   const linkAcross = (data: Project) => () => {
     // set project as selected
-    dispatch(setSelected(data, ActiveLib.PROJECT))
     dispatch(setLib(ActiveLib.PROJECT));
+    dispatch(setSelected(data, ActiveLib.PROJECT))
   };
   const ICCardTemplate = (data: Project) => {
     const { displayName, imageURL, externalLink } = data;
