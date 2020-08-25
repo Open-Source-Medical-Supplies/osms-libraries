@@ -68,11 +68,11 @@ div.p-grid, .p-dataview.p-component.p-dataview-grid {
 .p-sidebar-left.p-sidebar-lg,
 .p-sidebar-right.p-sidebar-lg {
   // from https://www.primefaces.org/primereact/showcase/#/flexgrid
-  @media screen and (max-width: 900px) {
+  @media screen and (max-width: 999px) {
     width: 100% !important;
   }
-  @media screen and (min-width: 901px) {
-    width: 60em !important;
+  @media screen and (min-width: 1000px) {
+    width: 60rem !important;
   }
 }
 

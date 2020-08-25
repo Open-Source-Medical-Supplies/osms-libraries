@@ -29,12 +29,7 @@
 }
 .clamp-2{
   @include clamp-n(2);
-}
-h4.clamp-2 {
-  height: 38.4px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  height: 3.3em;
   margin-bottom: 0 !important;
 }
 
