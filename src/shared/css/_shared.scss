@@ -30,6 +30,13 @@
 .clamp-2{
   @include clamp-n(2);
 }
+h4.clamp-2 {
+  height: 38.4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 0 !important;
+}
 
 .divider-1 {
   margin-bottom: 1rem;
