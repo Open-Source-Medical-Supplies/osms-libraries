@@ -19,7 +19,6 @@
     "@types/react-router-dom": "^5.1.5",
     "@types/redux": "^3.6.0",
     "@types/redux-thunk": "^2.1.0",
-    "airtable": "^0.8.1",
     "axios": "^0.19.2",
     "classnames": "^2.2.6",
     "flag-icon-css": "^3.5.0",
