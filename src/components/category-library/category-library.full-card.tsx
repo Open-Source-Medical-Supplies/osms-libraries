@@ -12,7 +12,6 @@ import ActiveLib from "../../shared/types/lib.enum";
 import { Indexable } from "../../shared/types/shared.type";
 import { openExternal } from "../../shared/utility/general.utility";
 import { getLang } from "../../shared/utility/language.utility";
-import { SELECTED_ACTIONS } from "../../shared/constants/selected.constants";
 
 const CategoryLibFullCard = () => {
   const dispatch = useDispatch();

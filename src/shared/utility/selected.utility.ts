@@ -34,8 +34,11 @@ export const parseTablesToSupportingData = (
   supportTarget: string,
   lib?: ActiveLib
 ): SupportingData => {
-  return parseTablesToSupportingDataSet(
-    tables,
-    lib
-  )[supportTarget] || [];
+  const dict = parseTablesToSupportingDataSet(tables, lib);
+  return Object.keys(dict).reduce((acc: SupportingData, key) => {
+    if (key.includes(supportTarget)) {
+      acc.push(...dict[key])
+    }
+    return acc;
+  }, []);
 }

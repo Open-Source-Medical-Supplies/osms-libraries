@@ -15,7 +15,6 @@ import { FilterState } from "../../types/filter.type";
 import { CategoryComparator, createUUID } from "../../utility/general.utility";
 import { getParam, PARAMS } from "../../utility/param-handling";
 import DetailWindow from "../detail-window/detail-window";
-import LanguageSelect from "../language-select";
 import LibrarySelector from "../library-selector/library-selector";
 import AttributesList from "./attributes-list";
 import CategoriesList from "./categories-list";

@@ -20,6 +20,7 @@ export const setSelectedByName = (
   dispatch(setSelected(data, toLib));
 }
 
+// pass 'lib' if it's not the current lib
 export const setSelected = (
   data: Selected,
   lib?: ActiveLib
@@ -35,6 +36,7 @@ export const setSelected = (
     displayName,
     lib
   );
+  console.log(supportingData.length)
   setQueryParam({ key: PARAMS.SELECTED, val: displayName });
 
   dispatch({
