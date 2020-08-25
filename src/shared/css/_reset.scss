@@ -19,7 +19,7 @@ h1, h2, h3, h4, h5, h6, p {
   margin-bottom: 0.5rem !important;
 }
 
-button > * {
+button.p-button-raised > * {
   color: $white;
 }
 
@@ -37,17 +37,6 @@ a {
 
 section {
   margin-bottom: 1rem;
-}
-
-.p-sidebar-left.p-sidebar-lg,
-.p-sidebar-right.p-sidebar-lg {
-  // from https://www.primefaces.org/primereact/showcase/#/flexgrid
-  @media screen and (min-width: 768px) {
-    width: 40em !important;
-  }
-  @media screen and (min-width: 1200px) {
-    width: 60em !important;
-  }
 }
 
 .markdown-section {

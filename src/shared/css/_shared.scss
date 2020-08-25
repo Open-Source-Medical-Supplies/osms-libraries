@@ -5,6 +5,25 @@
   border: none;
 }
 
+.button-link-style {
+  margin: 0;
+  padding: 0;
+  border: none;
+  text-decoration: underline;
+  background: none;
+  cursor: pointer;
+  
+  color: $primary;
+  > * {
+    color: $primary;
+  }
+
+  &:hover {
+    color: $accent !important;
+    text-decoration: none !important;
+  }
+}
+
 .clamp-1 {
   @include clamp-n(1);
 }

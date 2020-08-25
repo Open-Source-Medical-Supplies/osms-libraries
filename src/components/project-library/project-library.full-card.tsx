@@ -99,7 +99,7 @@ const ProjectFullCard = () => {
       <div className="full-card__content">
         {headerImage}
         <h1>{displayName}</h1>
-        {<button onClick={linkAcross}> <h2>{name}</h2></button>}
+        {<button onClick={linkAcross} className='button-link-style'> <h2>{name}</h2></button>}
         {desc}
         {attributionOrg || creator ? (
           <div className="p-grid">
