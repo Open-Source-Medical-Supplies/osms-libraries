@@ -79,3 +79,33 @@ div.p-grid, .p-dataview.p-component.p-dataview-grid {
 .p-card img, .p-card div.center-flex  {
   margin-top: 2px;
 }
+
+// bc they don't include p-tag ?? no idea
+.p-tag {
+  background: $blue;
+  padding: 0.25rem 0.4rem;
+  border-radius: 3px;
+
+  span, i {
+    color: $white;
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+
+  &-success {
+    background-color: $success;
+    color: $white;
+  }
+  &-info {
+    background-color: $blue;
+    color: $white;
+  }
+  &-warning {
+    background-color: $accent;
+    color: $text;
+  }
+  &-danger {
+    background-color: $danger;
+    color: $white;
+  }
+}

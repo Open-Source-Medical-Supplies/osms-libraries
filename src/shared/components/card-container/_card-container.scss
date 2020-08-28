@@ -1,7 +1,9 @@
 #osms-lib {
   .card-container__data-view {
     overflow-y: auto;
-    
+  }
+  
+  .category .card-container__data-view {
     @media screen and (max-width: 768px) {
       max-height: calc(100vh - 104px);
     }
@@ -10,4 +12,15 @@
       max-height: calc(100vh - 48px);
     }
   }
+  
+  .project .card-container__data-view {
+    @media screen and (max-width: 768px) {
+      max-height: calc(100vh - 146px - 1.5rem);
+    }
+    
+    @media screen and (min-width: 769px) {
+      max-height: calc(100vh - 90px - 1.5rem);
+    }
+  }
 }
+

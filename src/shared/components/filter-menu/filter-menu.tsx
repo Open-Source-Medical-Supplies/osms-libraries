@@ -12,13 +12,15 @@ import { Project } from "../../classes/project.class";
 import { FILTER_ACTIONS } from "../../constants/filter.constants";
 import { TABLE_MAPPING } from "../../constants/general.constants";
 import { FilterState } from "../../types/filter.type";
-import { CategoryComparator, createUUID } from "../../utility/general.utility";
+import ActiveLib from "../../types/lib.enum";
+import { CategoryComparator } from "../../utility/general.utility";
 import { getParam, PARAMS } from "../../utility/param-handling";
 import DetailWindow from "../detail-window/detail-window";
 import LibrarySelector from "../library-selector/library-selector";
 import AttributesList from "./attributes-list";
 import CategoriesList from "./categories-list";
-import { filterBy, setFilterParams } from "./filter-menu.utilities";
+import { filterBy, getFilterHash, setFilterParams } from "./filter-menu.utilities";
+import FilterPills from "./filter-pills";
 import { FilterSearchBar } from "./filter-search-bar";
 import "./_filter-menu.scss";
 
@@ -87,23 +89,12 @@ const FilterMenu = ({ disabled = false }: { disabled: boolean }) => {
     doFilter();
   }, [filter.loaded]);
 
-  const nodeFiltersBool = Object.keys(filter.nodeFilters).length;
-  const catFilterBool = catCompare.compareKeys(
-    filter.categoriesFilters,
-    filter.previousFilters.categoriesFilters
-  ) ? createUUID() : false;
-
   // run on filter state changes
   useEffect(() => {
     if (!filter.loaded) return;
+    console.log('main')
     doFilter();
-  }, [
-    catFilterBool,
-    nodeFiltersBool,
-    filter.searchBar,
-    filter.nodeFilters,
-    filter.categoriesFilters,
-  ]);
+  }, [getFilterHash(filter, catCompare)]);
 
   const Filters = (
     <React.Fragment>
@@ -138,7 +129,7 @@ const FilterMenu = ({ disabled = false }: { disabled: boolean }) => {
   const MenuButton = () => {
     const icon = "pi pi-" + (disabled || filter.show ? "times" : "bars");
     const className = classNames(
-      "mobile-button__square filter-menu__grid-button disabled-button",
+      "mobile-button__square filter-menu__button disabled-button",
       {
         "disabled-button__true": disabled,
       }
@@ -155,22 +146,37 @@ const FilterMenu = ({ disabled = false }: { disabled: boolean }) => {
 
   const ClearFilters = () => (
     <Button
-      className="mobile-button__square filter-menu__grid-button"
+      className="mobile-button__square filter-menu__button"
       icon="pi pi-undo"
       disabled={!filter.isFiltering}
       onClick={clearFilters}
     />
   );
 
-  const className =
-    "filter-menu-container grid-area" + (isMobile ? "-mobile" : "");
+  const containerClass = classNames(
+    "filter-menu-container grid-area",
+    { "grid-area-mobile": isMobile }
+  );
   const Header = (
-    <div className={className}>
+    <div className={containerClass}>
       <MenuButton />
-      <LibrarySelector className="filter-menu__grid-select" />
-      <FilterSearchBar className="mobile-search-bar filter-menu__grid-search" />
+      <LibrarySelector className="filter-menu__select" />
+      <FilterSearchBar className="mobile-search-bar filter-menu__search" />
       <ClearFilters />
       {/* <LanguageSelect /> */}
+      {
+        lib.active === ActiveLib.PROJECT ?
+          <FilterPills pills={[
+            { 
+              parent: 'nodeFilters',
+              payload: filter.nodeFilters,
+            }, {
+              parent: 'categoriesFilters', 
+              payload: filter.categoriesFilters
+            }
+          ]}/> :
+          null
+      }
     </div>
   );
 

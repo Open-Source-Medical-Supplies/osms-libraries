@@ -3,6 +3,8 @@ import { Action } from 'redux';
 import { FILTER_ACTIONS } from '../shared/constants/filter.constants';
 import { FilterState } from '../shared/types/filter.type';
 import { PARAMS, removeParam } from '../shared/utility/param-handling';
+import { BasicObject } from '../shared/types/shared.type';
+import { FilterNodeData } from '../shared/types/filter-node.type';
 
 export interface FilterAction extends Action<FILTER_ACTIONS> {
   payload?: Partial<FilterState>;
@@ -28,7 +30,7 @@ const FilterStateDefault: FilterState = {
     searchBar: "",
   },
   show: false,
-  isFiltering: false
+  isFiltering: false,
 };
 
 export const filterReducer = (
@@ -71,6 +73,16 @@ export const filterReducer = (
         }
       }
       return temp;
+    case FILTER_ACTIONS.REMOVE_ONE:
+      if (!action.payload) return state;
+      // Well. Here we are.
+      const tempState = {...state};
+      const filterSectionKey = Object.keys(action.payload)[0] as keyof FilterState;
+      const target = action.payload[filterSectionKey] as string;
+      delete (tempState[filterSectionKey] as FilterNodeData | BasicObject<any>)[target];
+      return {
+        ...tempState
+      };
     case FILTER_ACTIONS.TOGGLE_FILTER_MENU:
       return {
         ...state,

@@ -68,12 +68,18 @@ const LibraryMain = () => {
     }
   }, [lib._data.length > 0]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const libContainerClasses = classNames("library-main-container", {
-    "library-main-container__grid__menu-closed": !filter.show,
-    "library-main-container__grid__menu-open": filter.show,
-    mobile: isMobile,
-    desktop: !isMobile,
-  });
+  const libContainerClasses = classNames(
+    "library-main-container",
+    lib.active,
+    {
+      "library-main-container__category": lib.active === ActiveLib.CATEGORY,
+      "library-main-container__project": lib.active === ActiveLib.PROJECT,
+      "library-main-container__grid__menu-closed": !filter.show,
+      "library-main-container__grid__menu-open": filter.show,
+      mobile: isMobile,
+      desktop: !isMobile,
+    }
+  );
 
   return (
     <div className={libContainerClasses}>
