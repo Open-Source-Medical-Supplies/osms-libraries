@@ -19,6 +19,7 @@ const TileCard = ({
   className = '',
   buttonIcon = 'eye',
   children,
+  showButtons = true
 }: {
   mainText: string;
   subText?: string;
@@ -27,6 +28,7 @@ const TileCard = ({
   className?: string;
   buttonIcon?: string;
   children?: React.ReactNode;
+  showButtons?: boolean;
 }) => {
   let mainAction: TileCardAction;
   if (actions && actions.length) {
@@ -37,15 +39,15 @@ const TileCard = ({
   className = 'grayscale ' + className; 
   const headerImage = (
     typeof imageURL === 'string' ?
-      <button className='button-no-style w-100 pointer' onClick={() => mainAction.fn()}>
+      <button className='button-no-style w-100 pointer' onClick={(e) => mainAction.fn(e)}>
         <img className={'card-header__image centered-image'} alt={mainText} src={imageURL}/>
       </button>:
       <div className={'card-header__no-image center-flex'}>No image available</div>
   );
 
-  const footer = (
+  const footer = !(showButtons && actions && actions.length) ? null :
     <span style={{display: 'flex', justifyContent: 'flex-end'}}>
-      {actions && actions.length ? actions.reverse().map((a, i) => {
+      { actions.reverse().map((a, i) => {
         const icon = 'pi pi-' + (a.icon || buttonIcon);
         if (a.label !== null) {
           return <Button
@@ -65,9 +67,8 @@ const TileCard = ({
             style={{marginRight: i < actions.length ? '0.5rem' : ''}}
             className='p-button-raised p-button-rounded' />
         }
-      }) : null}
-    </span>
-  );
+      }) }
+    </span>;
 
   return (
     <Card header={headerImage} footer={footer} className={className}>

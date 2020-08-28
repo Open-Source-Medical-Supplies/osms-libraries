@@ -2,8 +2,12 @@
 
 #osms-lib {
   .category-list-card {
+    padding: 0;
     img.card-header__image, div.card-header__no-image {
       height: 75px;
+    }
+    .p-card-body {
+      padding: 0.5rem;
     }
   }
   

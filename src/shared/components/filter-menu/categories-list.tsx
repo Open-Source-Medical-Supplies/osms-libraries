@@ -89,6 +89,7 @@ const CategoriesList = () => {
         className={classes}
         mainText={o.name}
         imageURL={o.imageURL}
+        showButtons={false}
       ></TileCard>
     );
   };
