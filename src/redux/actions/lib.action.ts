@@ -5,6 +5,7 @@ import ActiveLib, { ActiveLibToClassName } from "../../shared/types/lib.enum";
 import { ActiveType, LIB_ACTIONS } from "../lib.reducer";
 import { RootState } from "../root.reducer";
 import { clearFilter } from "./filter.action";
+import { FILTER_ACTIONS } from "../../shared/constants/filter.constants";
 
 export interface SetLibOptions {
   keepFilter?: boolean;
@@ -25,13 +26,21 @@ export const setLib = (val: ActiveLib) => (dispatch: Dispatch<any>, getState: ()
 
 // Used as dispatch(setLib(...));
 // All dispatch calls run by default
-export const changeLib = (val: ActiveLib, options?: SetLibOptions) => (dispatch: Dispatch<any>, _: () => RootState) => {
+export const changeLib = (val: ActiveLib, options?: SetLibOptions) => (dispatch: Dispatch<any>, getState: () => RootState) => {
+  const state = getState();
+
   if (!options?.keepFilter) {
     dispatch(clearFilter());
   }
   
   if (!(options?.keepSelected)) {
     dispatch({ type: SELECTED_ACTIONS.CLEAR_SELECTED })
+  }
+
+  if (state.filter.show) {
+    dispatch({
+      type: FILTER_ACTIONS.TOGGLE_FILTER_MENU
+    })
   }
 
   dispatch(setLib(val));

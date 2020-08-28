@@ -1,3 +1,4 @@
+import { ProgressBar } from 'primereact/progressbar';
 import { SelectButton } from "primereact/selectbutton";
 import React, { useCallback } from "react";
 import { useDispatch } from "react-redux";
@@ -17,6 +18,7 @@ const LibrarySelector = ({ className = "" }: { className: string }) => {
   const dispatch = useDispatch();
   const lib = useTypedSelector(({ lib }) => lib);
   const Lang = getLang();
+
   const options = useCallback<() => SelectBtnOptions>(() => Lang.loading ? [] : [
     {
       label: Lang.get("categories"),
@@ -32,14 +34,18 @@ const LibrarySelector = ({ className = "" }: { className: string }) => {
     if (!toLib || toLib === lib.active) return;
     dispatch(changeLib(toLib));
   };
-  
+
   return (
     <div className={"library-selector " + className}>
-      <SelectButton
-        value={lib.active}
-        options={options()}
-        onChange={(e) => onChange(e.value)}
-      />
+      {
+        Lang.loading ?
+          <ProgressBar mode="indeterminate" style={{width: '100%', height: '2rem'}} /> : 
+          <SelectButton
+            value={lib.active}
+            options={options()}
+            onChange={(e) => onChange(e.value)}
+          />
+      }
     </div>
   );
 };
