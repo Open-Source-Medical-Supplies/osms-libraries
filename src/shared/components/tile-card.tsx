@@ -7,6 +7,7 @@ export interface TileCardAction {
   fn: Function;
   label?: string | null;
   icon?: string;
+  main?: boolean; // use with multiple functions
 }
 export type TileCardActions = TileCardAction[];
 
@@ -18,7 +19,6 @@ const TileCard = ({
   className = '',
   buttonIcon = 'eye',
   children,
-  actionOnCard = false
 }: {
   mainText: string;
   subText?: string;
@@ -27,20 +27,25 @@ const TileCard = ({
   className?: string;
   buttonIcon?: string;
   children?: React.ReactNode;
-  actionOnCard?: boolean;
 }) => {
+  let mainAction: TileCardAction;
+  if (actions && actions.length) {
+    mainAction = actions.find(a => a.main) || actions[0];
+  }
+
   const Lang = getLang();
   className = 'grayscale ' + className; 
-
   const headerImage = (
     typeof imageURL === 'string' ?
-      <img className={'card-header__image centered-image'} alt={mainText} src={imageURL}/> :
+      <button className='button-no-style w-100 pointer' onClick={() => mainAction.fn()}>
+        <img className={'card-header__image centered-image'} alt={mainText} src={imageURL}/>
+      </button>:
       <div className={'card-header__no-image center-flex'}>No image available</div>
   );
 
   const footer = (
     <span style={{display: 'flex', justifyContent: 'flex-end'}}>
-      {actions && !actionOnCard ? actions.reverse().map((a, i) => {
+      {actions && actions.length ? actions.reverse().map((a, i) => {
         const icon = 'pi pi-' + (a.icon || buttonIcon);
         if (a.label !== null) {
           return <Button
@@ -64,24 +69,11 @@ const TileCard = ({
     </span>
   );
 
-  const BaseCard = (
+  return (
     <Card header={headerImage} footer={footer} className={className}>
       { children || <h4 className='clamp-2' style={{textAlign: 'center'}}> {mainText} </h4> }
     </Card>
   );
-
-  const ActionCard = (
-    <button
-      className={className + ' tile-card button-no-style'}
-      onClick={(e) => (actions as TileCardActions)[0].fn(e)}>
-      <Card header={headerImage}>
-        <div className='tile-card__header clamp-2'> {mainText} </div>
-        { subText ? <div className='tile-card__sub-header clamp-1'> {subText} </div> : null }
-      </Card>
-    </button>
-  );
-
-  return actionOnCard && actions && actions.length ? ActionCard : BaseCard;
 }
 
 export default TileCard;

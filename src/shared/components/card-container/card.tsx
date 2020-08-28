@@ -18,13 +18,6 @@ const ProjectCard: React.FC<{data: Selected;}> = ({ data }) => {
   const selectCard = useCallback(() => {
     dispatch(setSelected(data));
   }, [data]); // eslint-disable-line react-hooks/exhaustive-deps
-  // const fitlerByCategory = useCallback(() => {
-  //   dispatch({
-  //     type: SELECTED_ACTIONS.SET_SELECTED,
-  //     data,
-  //     supportingDataSet: tables.loaded,
-  //   });
-  // }, [data]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!data) return null;
 
@@ -32,19 +25,15 @@ const ProjectCard: React.FC<{data: Selected;}> = ({ data }) => {
   const selectedName = selected?.displayName ? selected.displayName : "";
   const cardIsSelected = !!selectedName && selectedName === displayName;
 
-  const actions: TileCardActions = [
-    {
-      fn: selectCard
-    }
-  ]
-
+  const actions: TileCardActions = [];
+  actions.push({ fn: selectCard });
   if (lib.active === ActiveLib.CATEGORY) {
     // add filtering icon for category cards
     actions.push({
       fn: () => dispatch(filterFromCategoryToProjects(displayName)),
       label: null,
       icon: 'filter',
-    })
+    });
   }
 
   const highlight = classNames({ "card-selected": cardIsSelected });

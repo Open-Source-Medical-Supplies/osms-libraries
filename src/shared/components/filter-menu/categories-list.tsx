@@ -85,7 +85,6 @@ const CategoriesList = () => {
 
     return (
       <TileCard
-        actionOnCard={true}
         actions={[{ fn: (e: MouseEvent) => handleClick(e, o.name) }]}
         className={classes}
         mainText={o.name}

@@ -36,7 +36,6 @@ export const setSelected = (
     displayName,
     lib
   );
-  console.log(supportingData.length)
   setQueryParam({ key: PARAMS.SELECTED, val: displayName });
 
   dispatch({

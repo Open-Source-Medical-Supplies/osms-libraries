@@ -3,6 +3,7 @@
   margin: 0;
   padding: 0;
   border: none;
+  background: none;
 }
 
 .button-link-style {
@@ -172,4 +173,12 @@ $new-updated-max: 100px;
 
 .p-selectbutton .p-button.p-highlight span {
   color: $white;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.w-100 {
+  width: 100%;
 }
