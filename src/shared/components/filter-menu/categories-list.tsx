@@ -94,12 +94,23 @@ const CategoriesList = () => {
     );
   };
 
+  const listCard = (o: CategorySupply) => {
+    const classes = classNames('list-card-element', {
+      "highlight": toggleState[o.name]
+    })
+    return (
+      <div className={classes} onClick={(e: MouseEvent) => handleClick(e, o.name)}>
+        <img src={o.imageURL} alt={o.name} style={{height: '100%'}}/><span>{o.name}</span>
+      </div>
+    )
+  }
+
   return (
     <Panel header={Lang.get('categories')} className="filter-panel" toggleable={true}>
       <DataView
         value={categories.current}
         layout="grid"
-        itemTemplate={CategoryBlock}
+        itemTemplate={listCard}
       />
     </Panel>
   );

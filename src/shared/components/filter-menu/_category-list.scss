@@ -10,8 +10,20 @@
       padding: 0.5rem;
     }
   }
+
+  .list-card-element {
+    display: flex;
+    align-items: center;
+    height: 50px;
+    width: 100%;
+  }
   
   .highlight-child > div {
+    background-color: $blue;
+    border-color: $blue;
+    color: #ffffff;
+  }
+  .highlight {
     background-color: $blue;
     border-color: $blue;
     color: #ffffff;
