@@ -1,11 +1,13 @@
-.card-container__data-view {
-  overflow-y: auto;
-  
-  @media screen and (max-width: 768px) {
-    max-height: calc(100vh - 104px);
-  }
-  
-  @media screen and (min-width: 769px) {
-    max-height: calc(100vh - 48px);
+#osms-lib {
+  .card-container__data-view {
+    overflow-y: auto;
+    
+    @media screen and (max-width: 768px) {
+      max-height: calc(100vh - 104px);
+    }
+    
+    @media screen and (min-width: 769px) {
+      max-height: calc(100vh - 48px);
+    }
   }
 }
