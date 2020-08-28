@@ -10,7 +10,6 @@ import { CategorySupply } from "../../classes/category-supply.class";
 import { TABLE_MAPPING } from "../../constants/general.constants";
 import { empty, notEmpty } from "../../utility/general.utility";
 import { getLang } from "../../utility/language.utility";
-import TileCard from "../tile-card";
 import './_category-list.scss';
 
 /* eslint-disable react-hooks/exhaustive-deps */
@@ -74,24 +73,6 @@ const CategoriesList = () => {
 
     setToggleState(newState)
     dispatch(setCategories(categoriesFilters, previousState));
-  };
-
-  const CategoryBlock = (o: CategorySupply): JSX.Element => {
-    const classes = classNames(
-      "category-list-card",
-      "p-sm-6 p-md-4 p-lg-6 p-xl-4", {
-      "highlight-child": toggleState[o.name],
-    });
-
-    return (
-      <TileCard
-        actions={[{ fn: (e: MouseEvent) => handleClick(e, o.name) }]}
-        className={classes}
-        mainText={o.name}
-        imageURL={o.imageURL}
-        showButtons={false}
-      ></TileCard>
-    );
   };
 
   const listCard = (o: CategorySupply) => {
