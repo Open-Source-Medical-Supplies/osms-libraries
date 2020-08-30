@@ -92,7 +92,6 @@ const FilterMenu = ({ disabled = false }: { disabled: boolean }) => {
   // run on filter state changes
   useEffect(() => {
     if (!filter.loaded) return;
-    console.log('main')
     doFilter();
   }, [getFilterHash(filter, catCompare)]);
 

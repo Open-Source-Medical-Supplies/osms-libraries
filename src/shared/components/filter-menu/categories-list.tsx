@@ -65,7 +65,7 @@ const CategoriesList = () => {
       tempToggleState = categoriesFilters;
     }
     setCatState({ toggleState: tempToggleState });
-  }, [categoriesFilters]);
+  }, [Object.keys(categoriesFilters).length]);
 
   const handleClick = (e: MouseEvent, k: string) => {
     const isMulti = e.altKey || e.ctrlKey || e.metaKey || e.shiftKey;

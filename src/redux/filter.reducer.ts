@@ -75,7 +75,7 @@ export const filterReducer = (
       return temp;
     case FILTER_ACTIONS.REMOVE_ONE:
       if (!action.payload) return state;
-      // Well. Here we are.
+      // Well. Here we are. _gestures vaguely_ Hot mess town.
       const tempState = {...state};
       const filterSectionKey = Object.keys(action.payload)[0] as keyof FilterState;
       const target = action.payload[filterSectionKey] as string;
