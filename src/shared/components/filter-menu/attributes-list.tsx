@@ -38,7 +38,7 @@ const AttributesList = () => {
         selectionKeys={nodeFilters}
         onSelectionChange={setSelection}
         filter={true}
-        filterPlaceholder="Filter attributes"
+        filterPlaceholder="Search list"
       ></Tree>
     </Panel>
   );
