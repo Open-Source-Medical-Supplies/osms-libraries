@@ -64,7 +64,10 @@ const CategoriesList = () => {
       // loaded from params
       tempToggleState = categoriesFilters;
     }
-    setCatState({ toggleState: tempToggleState });
+
+    if (!!catState._categories.length) {
+      setCatState({ toggleState: tempToggleState });
+    }
   }, [Object.keys(categoriesFilters).length]);
 
   const handleClick = (e: MouseEvent, k: string) => {
@@ -117,26 +120,30 @@ const CategoriesList = () => {
     [catState._categories]
   );
 
+  const SearchCats = () => (
+    /* Hijacking existing CSS for the Cat / Attr search inputs to match */
+    <div className="p-tree">
+      <div className="p-tree-filter-container">
+        <input
+          onInput={(e) =>
+            updateCategories((e.target as HTMLInputElement).value)
+          }
+          type="text"
+          className="p-tree-filter p-inputtext p-component"
+          placeholder="Search list"
+        />
+        <span className="p-tree-filter-icon pi pi-search"></span>
+      </div>
+    </div>
+  );
+
   return (
     <Panel
       header={Lang.get("categories")}
       className="filter-panel"
       toggleable={true}
     >
-      {/* Hijacking existing CSS for the Cat / Attr search inputs to match */}
-      <div className="p-tree">
-        <div className="p-tree-filter-container">
-          <input
-            onInput={(e) =>
-              updateCategories((e.target as HTMLInputElement).value)
-            }
-            type="text"
-            className="p-tree-filter p-inputtext p-component"
-            placeholder="Search list"
-          />
-          <span className="p-tree-filter-icon pi pi-search"></span>
-        </div>
-      </div>
+      <SearchCats />
       <DataView
         value={catState.categories}
         layout="grid"
