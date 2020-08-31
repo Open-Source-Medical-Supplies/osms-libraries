@@ -44,16 +44,20 @@ const formatPills = (pillSets: PillsInput) => {
 
 // transition attribute in _filter-menu.scss
 const transitionTime = 300;
+const styleHide = {
+  height: 0,
+};
+const styleShow = { 
+  height: '100%',
+};
 const transitionData = {
-  style: {
-    height: 0
-  },
+  style: styleHide,
   transitionStyle: {
-    entering: { height: '31px' },
-    entered:  { height: '31px' },
-    exiting:  { height: 0 },
-    exited:   { height: 0 },
-    unmounted: { height: 0 }
+    entering: styleShow,
+    entered:  styleShow,
+    exiting: styleHide,
+    exited: styleHide,
+    unmounted: styleHide
   }
 }
 

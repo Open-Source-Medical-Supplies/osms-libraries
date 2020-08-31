@@ -109,3 +109,12 @@ div.p-grid, .p-dataview.p-component.p-dataview-grid {
     color: $white;
   }
 }
+
+.p-button.p-highlight {
+  background-color: $blue;
+  border: 1px solid $blue;
+}
+
+.p-treenode-content.p-highlight {
+  background-color: $blue;
+}

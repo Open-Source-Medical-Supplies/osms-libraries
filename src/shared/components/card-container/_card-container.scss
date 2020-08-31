@@ -1,6 +1,9 @@
 #osms-lib {
-  .card-container__data-view {
+  div.card-container__data-view {
     overflow-y: auto;
+    div.p-dataview-content {
+      padding: 0 !important;
+    }
   }
   
   .category .card-container__data-view {

@@ -1,5 +1,5 @@
 #osms-lib {
-  $max-col: 5;
+  $max-filter-col: 5;
 
   .filter-menu__{
     &select {
@@ -13,7 +13,7 @@
       transition: height 300ms ease-in-out;
 
       list-style-type: none;
-      margin: 0.5rem 0;
+      margin: 0;
       padding: 0;
 
       overflow-x: auto;
@@ -36,7 +36,7 @@
 
   .grid-area {
     display: grid;
-    grid-gap: 0.5rem;
+    gap: 1rem;
     // grid-template-columns: 48px 182px auto 48px 48px; // 5 columns
     grid-template-columns: 48px 182px auto 48px; // 4 columns
     grid-template-rows: 48px auto;
@@ -53,12 +53,12 @@
         }
         // language select
         // &:nth-of-type(3) {
-        //   grid-column: #{$max-col};
+        //   grid-column: #{$max-filter-col};
         // }
       }
 
       &pills {
-        grid-column: 1 / #{$max-col};
+        grid-column: 1 / #{$max-filter-col};
       }
   
       &select {
@@ -72,7 +72,7 @@
   
   .grid-area-mobile {
     display: grid;
-    grid-gap: 0.5rem;
+    gap: 0.5rem;
   
     grid-template-columns: 48px auto 48px;
     grid-template-rows: 48px 48px auto;
