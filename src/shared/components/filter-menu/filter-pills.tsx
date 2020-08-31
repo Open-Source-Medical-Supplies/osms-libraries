@@ -27,7 +27,6 @@ const formatPills = (pillSets: PillsInput) => {
   pillSets.forEach(pillData => {
     for (const key in pillData.payload) {
       const pill = pillData.payload[(key as keyof FilterState)];
-      
       if (!pill || noFalsePositiveNodes(pill as FilterNodeData)) continue;
 
       Object.keys(pillData.payload).forEach(key => {

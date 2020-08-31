@@ -1,17 +1,16 @@
-import { Dispatch } from 'react';
-import { Action } from 'redux';
-import { FILTER_ACTIONS } from '../shared/constants/filter.constants';
-import { FilterState } from '../shared/types/filter.type';
-import { PARAMS, removeParam } from '../shared/utility/param-handling';
-import { BasicObject } from '../shared/types/shared.type';
-import { FilterNodeData } from '../shared/types/filter-node.type';
+import { Dispatch } from "react";
+import { Action } from "redux";
+import { FILTER_ACTIONS } from "../shared/constants/filter.constants";
+import { FilterNodeData } from "../shared/types/filter-node.type";
+import { FilterState, FilterDatum } from "../shared/types/filter.type";
+import { BasicObject } from "../shared/types/shared.type";
+import { PARAMS, removeParam } from "../shared/utility/param-handling";
 
 export interface FilterAction extends Action<FILTER_ACTIONS> {
   payload?: Partial<FilterState>;
-};
+}
 
 export type DispatchFilterAction = Dispatch<FilterAction | Function>;
-
 
 export type SetFilterFn = (props: Partial<FilterState>) => void;
 
@@ -41,13 +40,13 @@ export const filterReducer = (
     case FILTER_ACTIONS.START_FILTERING:
       return {
         ...state,
-        isFiltering: true
-      }
+        isFiltering: true,
+      };
     case FILTER_ACTIONS.STOP_FILTERING:
       return {
         ...state,
-        isFiltering: false
-      }
+        isFiltering: false,
+      };
     case FILTER_ACTIONS.CLEAR_FILTER:
       removeParam(PARAMS.FILTERSTATE);
       return {
@@ -60,7 +59,7 @@ export const filterReducer = (
           nodeFilters: state.nodeFilters,
           categoriesFilters: state.categoriesFilters,
         },
-        isFiltering: false
+        isFiltering: false,
       };
     case FILTER_ACTIONS.SET_FILTER:
       if (!action?.payload) return state;
@@ -70,25 +69,60 @@ export const filterReducer = (
         previousFilters: {
           ...state.previousFilters,
           ...action.payload.previousFilters,
-        }
-      }
+        },
+      };
       return temp;
     case FILTER_ACTIONS.REMOVE_ONE:
-      if (!action.payload) return state;
       // Well. Here we are. _gestures vaguely_ Hot mess town.
-      const tempState = {...state};
+      if (!action.payload) return state;
+      // clone state-obj to update
+      const tempState = { ...state };
+      // grab primary-obj state key, e.g. 'nodeFilters', 'categoryFilters'
       const filterSectionKey = Object.keys(action.payload)[0] as keyof FilterState;
+      // grab the target-child key within the primary-obj
       const target = action.payload[filterSectionKey] as string;
-      delete (tempState[filterSectionKey] as FilterNodeData | BasicObject<any>)[target];
+      const targetContainer = tempState[filterSectionKey] as FilterNodeData | BasicObject<any>;
+      // if the target is from nodeFilters, check for its parent
+      const nodeData = state.flatNodes && state.flatNodes[target];
+      const parentKey = nodeData && nodeData.parentKey;
+      // if the target is from nodeFilters & has a parent (vs being the parent)
+      if (nodeData && parentKey) {
+        const parentActive = !!state.nodeFilters[parentKey];
+        const childList: FilterDatum[] | undefined = state.nodes.find(
+          (node) => node.key === parentKey
+        )?.children;
+        const onlyChild = childList &&
+          !childList.every(child => child.key && state.nodeFilters[child.key]);
+        if (parentActive && onlyChild) {
+          /**
+           * tldr if the target is a child of a node parent,
+           * and the only active one,
+           * delete the whole parent
+          */
+          delete targetContainer[parentKey]
+        }
+      } else if (nodeData && !parentKey) {
+        // is node parent
+        const childList: FilterDatum[] | undefined = state.nodes.find(
+          (node) => node.key === target
+        )?.children;
+        childList?.forEach(child => child.key && delete targetContainer[child.key]);
+      }
+      
+      // delete the target/child from the cloned state-obj
+      if (targetContainer) {
+        delete targetContainer[target];
+      }
+
       return {
-        ...tempState
+        ...tempState,
       };
     case FILTER_ACTIONS.TOGGLE_FILTER_MENU:
       return {
         ...state,
-        show: !state.show
-      }
+        show: !state.show,
+      };
     default:
       return state;
   }
-}
+};

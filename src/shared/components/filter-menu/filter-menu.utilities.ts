@@ -40,7 +40,11 @@ const buildTree = (data: FilterDatum, acc: any = {}) => {
 export const mapFilterData = (data: AirtableRecords<FilterDatum>) => {
   // filter data comes in as a flat tree with pointers b/w parent / child
   const tempNodes: BasicObject<any> = {};
-  const flatNodes: BasicObject<any> = {};
+  const flatNodes: BasicObject<{
+    key?: string;
+    parentKey?: string;
+    label?: string;
+  }> = {};
   data.forEach(({fields}) => {
     if (fields.icon) {
       fields.icon = "pi " + fields.icon;
