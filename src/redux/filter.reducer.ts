@@ -80,6 +80,7 @@ export const filterReducer = (
       const filterSectionKey = Object.keys(action.payload)[0] as keyof FilterState;
       const target = action.payload[filterSectionKey] as string;
       delete (tempState[filterSectionKey] as FilterNodeData | BasicObject<any>)[target];
+      debugger
       return {
         ...tempState
       };

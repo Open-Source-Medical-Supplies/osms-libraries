@@ -8,7 +8,8 @@ import { empty } from '../../utility/general.utility';
 import { FilterNodeData } from '../../types/filter-node.type';
 import { noFalsePositiveNodes } from './filter-menu.utilities';
 import { BasicObject } from '../../types/shared.type';
- 
+import { Transition } from 'react-transition-group';
+
 interface Pill {
   label: string;
   key: string;
@@ -39,6 +40,21 @@ const formatPills = (pillSets: PillsInput) => {
     }
   })
   return formattedPills;
+}
+
+// transition attribute in _filter-menu.scss
+const transitionTime = 300;
+const transitionData = {
+  style: {
+    height: 0
+  },
+  transitionStyle: {
+    entering: { height: '31px' },
+    entered:  { height: '31px' },
+    exiting:  { height: 0 },
+    exited:   { height: 0 },
+    unmounted: { height: 0 }
+  }
 }
 
 const FilterPills: React.FC<{pills: PillsInput}> = ({pills}) => {
@@ -74,14 +90,19 @@ const FilterPills: React.FC<{pills: PillsInput}> = ({pills}) => {
   )
 
   const stateKeys = Object.keys(state);
+  const pillElements = () => stateKeys.map(key => chipTemplate(state[key]));
+
   return (
-    <ul className='filter-menu__pills'>
-      {
-        stateKeys.length ?
-          stateKeys.map(key => chipTemplate(state[key])) :
-          <span>No filters active</span>
-      }
-    </ul>
+    <Transition in={!!stateKeys.length} timeout={transitionTime}>
+      {state => (
+        <ul className={'filter-menu__pills'} style={{
+          ...transitionData.style,
+          ...transitionData.transitionStyle[state]
+        }}>
+            { pillElements() }
+        </ul>
+      )}
+    </Transition>
   );
 };
 
