@@ -126,7 +126,7 @@ const FilterMenu = ({ disabled = false }: { disabled: boolean }) => {
   );
 
   const MenuButton = () => {
-    const icon = "pi pi-" + (disabled || filter.show ? "times" : "bars");
+    const icon = "pi pi-" + (disabled || filter.show ? "times" : "filter");
     const className = classNames(
       "mobile-button__square filter-menu__button disabled-button",
       {
@@ -135,6 +135,8 @@ const FilterMenu = ({ disabled = false }: { disabled: boolean }) => {
     );
     return (
       <Button
+        tooltip='Filter'
+        tooltipOptions={{position: 'bottom'}}
         style={{ marginRight: "0.5rem" }}
         className={className}
         onClick={disabled ? () => null : toggleSidebar}
