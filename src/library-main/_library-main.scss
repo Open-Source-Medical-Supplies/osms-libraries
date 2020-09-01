@@ -7,13 +7,7 @@
     // all of this bc of the filter menu pushing in vs sliding on top
     display: grid;
     grid-template-columns: 35% auto;
-
-    &__category {
-      grid-template-rows: 48px auto;
-    }
-    &__project {
-      grid-template-rows: auto auto;
-    }
+    grid-template-rows: auto auto;
   
     .filter-menu-container {
       grid-column: 1 / 3;

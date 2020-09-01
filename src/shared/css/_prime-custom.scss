@@ -76,6 +76,19 @@ div.p-grid, .p-dataview.p-component.p-dataview-grid {
   }
 }
 
+.p-xs- {
+  &6 {
+    @media screen and (max-width: 576px) {
+      width: 50%;
+    }
+  }
+  &12 {
+    @media screen and (max-width: 576px) {
+      width: 100%;
+    }
+  }
+}
+
 .p-card img, .p-card div.center-flex  {
   margin-top: 2px;
 }

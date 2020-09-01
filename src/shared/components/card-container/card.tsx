@@ -47,7 +47,7 @@ const ProjectCard: React.FC<{data: Selected;}> = ({ data }) => {
   }
 
   // must be divisors of 12
-  const sizing = 'p-sm-4 p-md-3 p-lg-3 p-xl-2';
+  const sizing = 'p-xs-6 p-sm-4 p-md-3 p-lg-3 p-xl-2';
   return (
     <div
       key={displayName}

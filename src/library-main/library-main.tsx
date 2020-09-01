@@ -72,8 +72,6 @@ const LibraryMain = () => {
     "library-main-container",
     lib.active,
     {
-      "library-main-container__category": lib.active === ActiveLib.CATEGORY,
-      "library-main-container__project": lib.active === ActiveLib.PROJECT,
       "library-main-container__grid__menu-closed": !filter.show,
       "library-main-container__grid__menu-open": filter.show,
       mobile: isMobile,
