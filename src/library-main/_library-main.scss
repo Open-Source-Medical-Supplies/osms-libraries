@@ -1,3 +1,5 @@
+@import 'src/shared/css/variables';
+
 #osms-lib {
   .mobile.library-main-container {
     display: flex;
@@ -6,8 +8,13 @@
   .desktop.library-main-container {
     // all of this bc of the filter menu pushing in vs sliding on top
     display: grid;
-    grid-template-columns: 35% auto;
     grid-template-rows: auto auto;
+    
+    @media screen and (min-width: $breakpoint-sm) { grid-template-columns: 35% auto; }
+    @media screen and (min-width: $breakpoint-md) { grid-template-columns: 35% auto; }
+    @media screen and (min-width: $breakpoint-lg) { grid-template-columns: 30% auto; }
+    @media screen and (min-width: $breakpoint-xl) { grid-template-columns: 25% auto; }
+    @media screen and (min-width: $breakpoint-xxl) { grid-template-columns: 20% auto; }
   
     .filter-menu-container {
       grid-column: 1 / 3;

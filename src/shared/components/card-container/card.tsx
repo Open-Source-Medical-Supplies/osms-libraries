@@ -8,12 +8,14 @@ import { Selected } from "../../types/selected.type";
 import NewUpdatedBanner from "../new-updated-banner";
 import TileCard, { TileCardActions } from "../tile-card";
 import { filterFromCategoryToProjects } from "../../../redux/actions/shared.action";
+import { getLang } from "../../utility/language.utility";
 
 const ProjectCard: React.FC<{data: Selected;}> = ({ data }) => {
   const dispatch = useDispatch();
   const { selected, lib } = useTypedSelector(
     ({ selected, lib }) => ({ selected: selected.data, lib })
   );
+  const Lang = getLang();
   const thisRef = useRef<HTMLDivElement>(null);
   const selectCard = useCallback(() => {
     dispatch(setSelected(data));
@@ -31,7 +33,7 @@ const ProjectCard: React.FC<{data: Selected;}> = ({ data }) => {
     // add filtering icon for category cards
     actions.push({
       fn: () => dispatch(filterFromCategoryToProjects(displayName)),
-      label: null,
+      label: Lang.get('projects'),
       icon: 'filter',
     });
   }
@@ -47,7 +49,7 @@ const ProjectCard: React.FC<{data: Selected;}> = ({ data }) => {
   }
 
   // must be divisors of 12
-  const sizing = 'p-xs-6 p-sm-4 p-md-3 p-lg-3 p-xl-2';
+  const sizing = 'p-xs-6 p-sm-4 p-md-4 p-lg-3 p-xl-3 p-xxl-2';
   return (
     <div
       key={displayName}
