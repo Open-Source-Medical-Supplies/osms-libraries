@@ -2,6 +2,7 @@ import { Button } from 'primereact/button';
 import { Card } from 'primereact/card';
 import React from 'react';
 import { getLang } from '../utility/language.utility';
+import classNames from "classnames";
 
 export interface TileCardAction {
   fn: Function;
@@ -30,16 +31,18 @@ const TileCard = ({
   children?: React.ReactNode;
   showButtons?: boolean;
 }) => {
-  let mainAction: TileCardAction;
+  let mainAction: TileCardAction | undefined = undefined;
   if (actions && actions.length) {
     mainAction = actions.find(a => a.main) || actions[0];
   }
-
   const Lang = getLang();
   className = 'grayscale ' + className; 
+  const headerButtonClasses = classNames('button-no-style w-100', {
+    pointer: !!mainAction
+  });
   const headerImage = (
     typeof imageURL === 'string' ?
-      <button className='button-no-style w-100 pointer' onClick={(e) => mainAction.fn(e)}>
+      <button className={headerButtonClasses} onClick={(e) => mainAction && mainAction?.fn(e)}>
         <img className={'card-header__image centered-image'} alt={mainText} src={imageURL}/>
       </button>:
       <div className={'card-header__no-image center-flex'}>No image available</div>
