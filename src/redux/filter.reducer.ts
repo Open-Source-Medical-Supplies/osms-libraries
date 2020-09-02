@@ -91,9 +91,14 @@ export const filterReducer = (
         const childList: FilterDatum[] | undefined = state.nodes.find(
           (node) => node.key === parentKey
         )?.children;
-        const onlyChild = childList &&
-          !childList.every(child => child.key && state.nodeFilters[child.key]);
-        if (parentActive && onlyChild) {
+        const activeChildrenCount = (
+          childList && childList.reduce((acc, child) => {
+            acc += +!!(child.key && state.nodeFilters[child.key]);
+            return acc;
+          }, 0)
+         ) || 0;
+        const onlyActiveChild = activeChildrenCount === 1;
+        if (parentActive && onlyActiveChild) {
           /**
            * tldr if the target is a child of a node parent,
            * and the only active one,
@@ -117,6 +122,16 @@ export const filterReducer = (
       return {
         ...tempState,
       };
+    case FILTER_ACTIONS.SHOW_MENU:
+      return {
+        ...state,
+        show: true
+      }
+    case FILTER_ACTIONS.HIDE_MENU:
+      return {
+        ...state,
+        show: false
+      }
     case FILTER_ACTIONS.TOGGLE_FILTER_MENU:
       return {
         ...state,

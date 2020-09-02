@@ -1,3 +1,8 @@
-.library-selector .p-selectbutton.p-buttonset.p-component.p-buttonset-3 {
-  display: flex;
+#osms-lib .library-selector {
+  .p-progressbar {
+    border-radius: 3px;
+  }
+  .p-selectbutton.p-buttonset.p-component.p-buttonset-3 {
+    display: flex;
+  }
 }

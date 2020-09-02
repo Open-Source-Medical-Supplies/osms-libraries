@@ -24,7 +24,7 @@ export const setLib = (val: ActiveLib) => (dispatch: Dispatch<any>, getState: ()
   });
 }
 
-// Used as dispatch(setLib(...));
+// Used as dispatch(changeLib(...));
 // All dispatch calls run by default
 export const changeLib = (val: ActiveLib, options?: SetLibOptions) => (dispatch: Dispatch<any>, getState: () => RootState) => {
   const state = getState();
@@ -37,10 +37,10 @@ export const changeLib = (val: ActiveLib, options?: SetLibOptions) => (dispatch:
     dispatch({ type: SELECTED_ACTIONS.CLEAR_SELECTED })
   }
 
-  if (state.filter.show) {
-    dispatch({
-      type: FILTER_ACTIONS.TOGGLE_FILTER_MENU
-    })
+  if (val === ActiveLib.CATEGORY && state.filter.show) {
+    dispatch({ type: FILTER_ACTIONS.HIDE_MENU });
+  } else if (val === ActiveLib.PROJECT && !state.filter.show) {
+    dispatch({ type: FILTER_ACTIONS.SHOW_MENU });
   }
 
   dispatch(setLib(val));

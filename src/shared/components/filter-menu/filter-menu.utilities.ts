@@ -54,9 +54,8 @@ export const mapFilterData = (data: AirtableRecords<FilterDatum>) => {
     // end nodes
 
     // flatNodes handling
-    if (fields && fields.key) {
-      const vk = fields.key;
-      flatNodes[vk] = fields;
+    if (fields?.key) {
+      flatNodes[fields.key] = fields;
     }
     // end flatNodes
   })

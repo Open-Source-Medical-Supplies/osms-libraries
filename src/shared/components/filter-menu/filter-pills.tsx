@@ -29,13 +29,11 @@ const formatPills = (pillSets: PillsInput) => {
       const pill = pillData.payload[(key as keyof FilterState)];
       if (!pill || noFalsePositiveNodes(pill as FilterNodeData)) continue;
 
-      Object.keys(pillData.payload).forEach(key => {
-        formattedPills[key] = {
-          key,
-          label: startCase(key),
-          parent: pillData.parent
-        }
-      })
+      formattedPills[key] = {
+        key,
+        label: startCase(key),
+        parent: pillData.parent
+      };
     }
   })
   return formattedPills;
