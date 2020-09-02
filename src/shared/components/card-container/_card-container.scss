@@ -1,6 +1,9 @@
+@import 'src/shared/css/_variables';
+
 #osms-lib {
   div.card-container__data-view {
     overflow-y: auto;
+    background-color: $gray;
     div.p-dataview-content {
       padding: 0 !important;
     }
