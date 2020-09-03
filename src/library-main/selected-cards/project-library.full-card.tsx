@@ -37,11 +37,14 @@ const ProjectFullCard = () => {
     externalLink,
   } = selected.data;
 
-  const linkAcross = () => {
-    const nom = name instanceof Array ? name[0] : name;
+  const goToCategory = (nom: string) => {
     dispatch(setLib(ActiveLib.CATEGORY));
     dispatch(setSelectedByName(nom, 'displayName', 'CategoryInfo', ActiveLib.CATEGORY))
   };
+
+  const goToCategoryButton = (nom: string) => (
+    <button onClick={() => goToCategory(nom)} className='button-link-style'> <h2>{nom}</h2></button>
+  );
 
   const headerImage =
     typeof imageURL !== "string" ? (
@@ -99,7 +102,13 @@ const ProjectFullCard = () => {
       <div className="full-card__content">
         {headerImage}
         <h1>{displayName}</h1>
-        {<button onClick={linkAcross} className='button-link-style'> <h2>{name}</h2></button>}
+        <div className='full-card__category-buttons'>
+          {
+            name instanceof Array ?
+              name.map(nom => goToCategoryButton(nom)) :
+              goToCategoryButton(name)
+          }
+        </div>
         {desc}
         {attributionOrg || creator ? (
           <div className="p-grid">
