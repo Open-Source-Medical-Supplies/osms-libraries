@@ -1,9 +1,10 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { Dispatch } from "react";
 import { TableAction, TABLE_ACTIONS } from "../redux/tables.reducer";
-import { ClassMap, FunctionMap, TABLE_MAPPING } from "../shared/constants/google-bucket.constants";
+import { ClassMap, FunctionMap } from "../shared/constants/google-bucket.constants";
 import { AirtableRecords } from "../shared/types/airtable.type";
 import { valueof } from "../shared/types/shared.type";
+import { TABLE_MAPPING } from "../shared/constants/general.constants";
 
 
 /** TableListItem based on the gBucket / gFunction setup */

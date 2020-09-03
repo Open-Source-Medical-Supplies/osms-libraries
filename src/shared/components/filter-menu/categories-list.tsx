@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import { DataView } from "primereact/dataview";
 import { Panel } from "primereact/panel";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, ChangeEvent } from "react";
 import { useDispatch } from "react-redux";
 import { setCategories } from "../../../redux/actions/filter.action";
 import { DispatchFilterAction } from "../../../redux/filter.reducer";
@@ -11,6 +11,7 @@ import { TABLE_MAPPING } from "../../constants/general.constants";
 import { empty, notEmpty } from "../../utility/general.utility";
 import { getLang } from "../../utility/language.utility";
 import "./_category-list.scss";
+import { InputText } from 'primereact/inputtext';
 
 /* eslint-disable react-hooks/exhaustive-deps */
 type MouseEvent = React.MouseEvent<HTMLElement>;
@@ -20,12 +21,14 @@ type CategoryState = {
   };
   _categories: CategorySupply[];
   categories: CategorySupply[];
+  search: string;
 };
 
 const defaultState: CategoryState = {
   toggleState: {},
   _categories: [],
   categories: [],
+  search: ''
 };
 
 const CategoriesList = () => {
@@ -95,7 +98,7 @@ const CategoriesList = () => {
     dispatch(setCategories(categoriesFilters, previousState));
   };
 
-  const listCard = (o: CategorySupply) => {
+  const listItemTemplate = (o: CategorySupply) => {
     const classes = classNames("list-card-element", {
       highlight: catState.toggleState[o.name],
     });
@@ -111,27 +114,29 @@ const CategoriesList = () => {
   };
 
   const updateCategories = useCallback(
-    (val: string) => {
+    (e: ChangeEvent<HTMLInputElement>) => {
+      const val = e.target.value;
       const tempState = catState._categories.filter((cat) => {
         return cat.name.toLocaleLowerCase().includes(val);
       });
-      setCatState({ categories: tempState });
+      setCatState({
+        categories: tempState,
+        search: val
+      });
     },
     [catState._categories]
   );
 
-  const SearchCats = () => (
+  const SearchCats = (
     /* Hijacking existing CSS for the Cat / Attr search inputs to match */
     <div className="p-tree">
       <div className="p-tree-filter-container">
-        <input
-          onInput={(e) =>
-            updateCategories((e.target as HTMLInputElement).value)
-          }
-          type="text"
+        <InputText
+          value={catState.search}
+          onChange={updateCategories}
           className="p-tree-filter p-inputtext p-component"
           placeholder="Search list"
-        />
+          />
         <span className="p-tree-filter-icon pi pi-search"></span>
       </div>
     </div>
@@ -143,11 +148,11 @@ const CategoriesList = () => {
       className="filter-panel"
       toggleable={true}
     >
-      <SearchCats />
+      {SearchCats }
       <DataView
         value={catState.categories}
         layout="grid"
-        itemTemplate={listCard}
+        itemTemplate={listItemTemplate}
       />
     </Panel>
   );

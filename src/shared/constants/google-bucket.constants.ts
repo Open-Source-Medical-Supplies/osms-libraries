@@ -5,6 +5,7 @@ import { Material } from "../classes/material.class";
 import { Project } from "../classes/project.class";
 import { valueof } from "../types/shared.type";
 import { mapLangData } from '../utility/language.utility';
+import { TABLE_MAPPING } from "./general.constants";
 
 /**
  * Either
@@ -12,14 +13,6 @@ import { mapLangData } from '../utility/language.utility';
  * or
  * provide a function that can handle an Array<{}>
  */
-export const TABLE_MAPPING = {
-  Project: "Project",
-  CategoryInfo: "CategoryInfo",
-  CategorySupply: "CategorySupply",
-  FilterMenu: "FilterMenu",
-  Material: "Material",
-  Translations: "Translations"
-}
 export const ClassMap: {[key in valueof<typeof TABLE_MAPPING>]: Function} = {
   Project,
   CategoryInfo,
