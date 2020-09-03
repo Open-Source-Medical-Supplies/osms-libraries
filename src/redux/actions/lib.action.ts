@@ -4,8 +4,7 @@ import { SELECTED_ACTIONS } from "../../shared/constants/selected.constants";
 import ActiveLib, { ActiveLibToClassName } from "../../shared/types/lib.enum";
 import { ActiveType, LIB_ACTIONS } from "../lib.reducer";
 import { RootState } from "../root.reducer";
-import { clearFilter } from "./filter.action";
-import { FILTER_ACTIONS } from "../../shared/constants/filter.constants";
+import { clearFilter, setMenuForUpcomingLib } from "./filter.action";
 
 export interface SetLibOptions {
   keepFilter?: boolean;
@@ -26,9 +25,7 @@ export const setLib = (val: ActiveLib) => (dispatch: Dispatch<any>, getState: ()
 
 // Used as dispatch(changeLib(...));
 // All dispatch calls run by default
-export const changeLib = (val: ActiveLib, options?: SetLibOptions) => (dispatch: Dispatch<any>, getState: () => RootState) => {
-  const state = getState();
-
+export const changeLib = (toLib: ActiveLib, options?: SetLibOptions) => (dispatch: Dispatch<any>, _: () => RootState) => {
   if (!options?.keepFilter) {
     dispatch(clearFilter());
   }
@@ -37,11 +34,7 @@ export const changeLib = (val: ActiveLib, options?: SetLibOptions) => (dispatch:
     dispatch({ type: SELECTED_ACTIONS.CLEAR_SELECTED })
   }
 
-  if (val === ActiveLib.CATEGORY && state.filter.show) {
-    dispatch({ type: FILTER_ACTIONS.HIDE_MENU });
-  } else if (val === ActiveLib.PROJECT && !state.filter.show) {
-    dispatch({ type: FILTER_ACTIONS.SHOW_MENU });
-  }
+  dispatch(setMenuForUpcomingLib(toLib))
 
-  dispatch(setLib(val));
+  dispatch(setLib(toLib));
 }

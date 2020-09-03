@@ -5,6 +5,7 @@ import { Selected } from '../../shared/types/selected.type';
 import { PARAMS, setQueryParam } from "../../shared/utility/param-handling";
 import { parseTablesToSupportingData } from "../../shared/utility/selected.utility";
 import { RootState } from "../root.reducer";
+import { setMenuForUpcomingLib } from './filter.action';
 
 export const setSelectedByName = (
   name: string,
@@ -37,6 +38,10 @@ export const setSelected = (
     lib
   );
   setQueryParam({ key: PARAMS.SELECTED, val: displayName });
+
+  if (lib) {
+    dispatch(setMenuForUpcomingLib(lib))
+  }
 
   dispatch({
     type: SELECTED_ACTIONS.SET_SELECTED,

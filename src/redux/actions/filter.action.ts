@@ -2,8 +2,9 @@ import { FILTER_ACTIONS } from "../../shared/constants/filter.constants";
 import { FilterState } from "../../shared/types/filter.type";
 import ActiveLib from "../../shared/types/lib.enum";
 import { LIB_ACTIONS } from "../lib.reducer";
-import { TypedThunkAction } from "../root.reducer";
+import { TypedThunkAction, RootState } from "../root.reducer";
 import { changeLib } from "./lib.action";
+import { Dispatch } from "react";
 
 export const filterInOtherLib = (
   targetLib: ActiveLib,
@@ -12,6 +13,16 @@ export const filterInOtherLib = (
 ): TypedThunkAction => (dispatch, getState) => {
   dispatch(changeLib(targetLib));
 };
+
+export const setMenuForUpcomingLib = (toLib: ActiveLib) => (dispatch: Dispatch<any>, getState: () => RootState) => {
+  const {filter: { show }} = getState();
+
+  if (toLib === ActiveLib.CATEGORY && show) {
+    dispatch({ type: FILTER_ACTIONS.HIDE_MENU });
+  } else if (toLib === ActiveLib.PROJECT && !show) {
+    dispatch({ type: FILTER_ACTIONS.SHOW_MENU });
+  }
+}
 
 export const clearFilter = () => (dispatch: (o: any) => Promise<any>) => {
   dispatch({ type: FILTER_ACTIONS.CLEAR_FILTER });
