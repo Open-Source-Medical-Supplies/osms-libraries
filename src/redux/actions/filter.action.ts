@@ -1,18 +1,9 @@
+import { Dispatch } from "react";
 import { FILTER_ACTIONS } from "../../shared/constants/filter.constants";
 import { FilterState } from "../../shared/types/filter.type";
 import ActiveLib from "../../shared/types/lib.enum";
 import { LIB_ACTIONS } from "../lib.reducer";
-import { TypedThunkAction, RootState } from "../root.reducer";
-import { changeLib } from "./lib.action";
-import { Dispatch } from "react";
-
-export const filterInOtherLib = (
-  targetLib: ActiveLib,
-  targetLabel: string,
-  targetType: Pick<FilterState, "categories" | "searchBar">
-): TypedThunkAction => (dispatch, getState) => {
-  dispatch(changeLib(targetLib));
-};
+import { RootState, TypedThunkAction } from "../root.reducer";
 
 export const setMenuForUpcomingLib = (toLib: ActiveLib) => (dispatch: Dispatch<any>, getState: () => RootState) => {
   const {filter: { show }} = getState();

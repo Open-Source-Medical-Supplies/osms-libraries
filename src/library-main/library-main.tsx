@@ -38,22 +38,26 @@ const LibraryMain = () => {
         TABLE_MAPPING[ActiveLibToClassName[lib.active]]
       ] as Project[] | CategoryInfo[];
 
-      dispatch({
-        type: LANG_ACTIONS.INIT_LANGS,
-        base: tables.loaded[TABLE_MAPPING.Translations]
+      new Promise(resolve => {
+        dispatch({
+          type: LANG_ACTIONS.INIT_LANGS,
+          base: tables.loaded[TABLE_MAPPING.Translations]
+        })
+  
+        dispatch<LibAction>({
+          type: LIB_ACTIONS.SET_LIB,
+          _data: focus,
+          data: focus,
+        });
+        return resolve();
+      }).then(() => {
+        dispatch<SelectAction>({
+          type: SELECTED_ACTIONS.CHECK_SELECTED,
+          dataSet: focus,
+          supportingDataSet: tables.loaded,
+        });
       })
 
-      dispatch<LibAction>({
-        type: LIB_ACTIONS.SET_LIB,
-        _data: focus,
-        data: focus,
-      });
-
-      dispatch<SelectAction>({
-        type: SELECTED_ACTIONS.CHECK_SELECTED,
-        dataSet: focus,
-        supportingDataSet: tables.loaded,
-      });
     }
   }, [tables.completed]); // eslint-disable-line react-hooks/exhaustive-deps
 
