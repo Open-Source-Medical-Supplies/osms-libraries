@@ -72,7 +72,7 @@ const FilterMenu = ({ disabled = false }: { disabled: boolean }) => {
       dispatchFilter({
         type: FILTER_ACTIONS.SET_FILTER,
         payload: {
-          show: lib.active === ActiveLib.PROJECT,
+          show: !isMobile && lib.active === ActiveLib.PROJECT,
           loaded: true,
           categories: tables.loaded[
             TABLE_MAPPING.CategorySupply

@@ -6,12 +6,14 @@ import { LIB_ACTIONS } from "../lib.reducer";
 import { RootState, TypedThunkAction } from "../root.reducer";
 
 export const setMenuForUpcomingLib = (toLib: ActiveLib) => (dispatch: Dispatch<any>, getState: () => RootState) => {
-  const {filter: { show }} = getState();
+  const {filter: { show }, env: { isMobile }} = getState();
 
-  if (toLib === ActiveLib.CATEGORY && show) {
-    dispatch({ type: FILTER_ACTIONS.HIDE_MENU });
-  } else if (toLib === ActiveLib.PROJECT && !show) {
-    dispatch({ type: FILTER_ACTIONS.SHOW_MENU });
+  if (!isMobile) {
+    if (toLib === ActiveLib.CATEGORY && show) {
+      dispatch({ type: FILTER_ACTIONS.HIDE_MENU });
+    } else if (toLib === ActiveLib.PROJECT && !show) {
+      dispatch({ type: FILTER_ACTIONS.SHOW_MENU });
+    }
   }
 }
 
