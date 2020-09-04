@@ -49,7 +49,7 @@ const TileCard = ({
   );
 
   const footer = !(showButtons && actions && actions.length) ? null :
-    <span style={{display: 'flex', justifyContent: 'flex-end'}}>
+    <div className='tile-card__footer'>
       { actions.reverse().map((a, i) => {
         const icon = 'pi pi-' + (a.icon || buttonIcon);
         if (a.label !== null) {
@@ -71,7 +71,7 @@ const TileCard = ({
             className='p-button-raised p-button-rounded' />
         }
       }) }
-    </span>;
+    </div>;
 
   return (
     <Card header={headerImage} footer={footer} className={className}>
