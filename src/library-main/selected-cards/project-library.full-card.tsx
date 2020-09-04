@@ -43,7 +43,7 @@ const ProjectFullCard = () => {
   };
 
   const goToCategoryButton = (nom: string) => (
-    <button onClick={() => goToCategory(nom)} className='button-link-style'> <h2>{nom}</h2></button>
+    <button key={nom} onClick={() => goToCategory(nom)} className='button-link-style'> <h2>{nom}</h2></button>
   );
 
   const headerImage =
