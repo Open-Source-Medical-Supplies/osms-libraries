@@ -20,7 +20,8 @@ const TileCard = ({
   className = '',
   buttonIcon = 'eye',
   children,
-  showButtons = true
+  showButtons = true,
+  absolute = false
 }: {
   mainText: string;
   subText?: string;
@@ -30,6 +31,7 @@ const TileCard = ({
   buttonIcon?: string;
   children?: React.ReactNode;
   showButtons?: boolean;
+  absolute?: boolean;
 }) => {
   let mainAction: TileCardAction | undefined = undefined;
   if (actions && actions.length) {

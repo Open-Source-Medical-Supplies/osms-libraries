@@ -5,13 +5,10 @@ import { setSelected } from "../../redux/actions/selected.action";
 import { useTypedSelector } from "../../redux/root.reducer";
 import { CategoryInfo } from "../../shared/classes/category-info.class";
 import { Project } from "../../shared/classes/project.class";
-import ImageCarousel from "../../shared/components/detail-window/image-carousel";
+import FullCardWrapper from "../../shared/components/detail-window/full-card-wrapper";
 import MarkdownSection from "../../shared/components/markdown/markdown-section";
-import TileCard from "../../shared/components/tile-card";
 import ActiveLib from "../../shared/types/lib.enum";
 import { Indexable } from "../../shared/types/shared.type";
-import { openExternal } from "../../shared/utility/general.utility";
-import { getLang } from "../../shared/utility/language.utility";
 import SelectedImageCarousel, {
   CarouselItems,
 } from "./selected-card-image-carousel";
@@ -21,7 +18,6 @@ const CategoryLibFullCard = () => {
   const { selected } = useTypedSelector(({ selected }) => ({
     selected,
   }));
-  const Lang = getLang();
 
   const countSections = useMemo(() => {
     if (selected.data) {
@@ -54,31 +50,6 @@ const CategoryLibFullCard = () => {
     dispatch(setLib(ActiveLib.PROJECT));
     dispatch(setSelected(data, ActiveLib.PROJECT));
   };
-  const ICCardTemplate = (data: Project) => {
-    const { displayName, imageURL, externalLink } = data;
-    const actions = [
-      {
-        label: Lang.get("viewSource"),
-        icon: "external-link",
-        fn: openExternal(externalLink),
-      },
-      {
-        label: Lang.get("viewDetails"),
-        icon: "eye",
-        fn: linkAcross(data),
-      },
-    ];
-
-    return (
-      <TileCard
-        className={"fullcard-carousel-cards"}
-        mainText={displayName}
-        imageURL={imageURL}
-        buttonIcon="external-link"
-        actions={actions}
-      />
-    );
-  };
 
   const Links = () => {
     const LinkMap: CarouselItems = links.map((data) => {
@@ -87,22 +58,26 @@ const CategoryLibFullCard = () => {
         thumbnail: data.imageRaw?.thumbnails.small.url,
         original: data.imageRaw?.thumbnails.large.url,
         fullscreen: data.imageRaw?.thumbnails.full.url,
+        description: data.displayName,
         originalAlt: data.displayName,
-        thumbnailAlt: data.displayName
+        thumbnailAlt: data.displayName,
       };
     });
 
-    return links && links.length ? (
+    return (
       <React.Fragment>
         <h3>Projects</h3>
-        {SelectedImageCarousel({
-          items: LinkMap,
-          actions: { external: true, across: true },
-          linkAcross,
-        })}
+        {links && links.length ? (
+          SelectedImageCarousel({
+            items: LinkMap,
+            actions: { external: true, across: true },
+            linkAcross,
+            showPlayButton: LinkMap.length > 1,
+          })
+        ) : (
+          <div>No associated projects on file</div>
+        )}
       </React.Fragment>
-    ) : (
-      <div>No associated projects on file</div>
     );
   };
 
@@ -121,14 +96,12 @@ const CategoryLibFullCard = () => {
   };
 
   return (
-    <div className="full-card">
-      <div className="full-card__content">
-        {headerImage}
-        <h1>{displayName}</h1>
-        <CardInfo />
-        <Links />
-      </div>
-    </div>
+    <FullCardWrapper
+      headerImage={headerImage}
+      displayName={displayName}
+      CardInfo={CardInfo}
+      Links={Links}
+    />
   );
 };
 export default CategoryLibFullCard;

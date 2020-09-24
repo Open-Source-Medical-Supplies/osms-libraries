@@ -43,6 +43,18 @@
   }
 
   .selected-image-carousel {
+    .image-gallery-slide .image-gallery-image {
+      margin-top: 2rem;
+    }
+    span.image-gallery-description,
+    div.image-gallery-description {
+      background-color: $black80 !important;
+      top: 1rem;
+      bottom: unset;
+      *:not(a) {
+        color: $white;
+      }
+    }
     div.selected-image-carousel__link-container {
       bottom: 1rem;
       left: 0;

@@ -1,3 +1,4 @@
+import { AirtableImage } from "../types/airtable.type";
 import { BasicObject } from "../types/shared.type";
 import DataConverter from "./data-converter";
 
@@ -6,7 +7,7 @@ const RawMap = {
   'Full Project Name': 'name',
   'Function': 'fn',
   'Ideal Material Name': 'idealCaption',
-  ...DataConverter.classMaps.IMAGE_URL,
+  'Image': [DataConverter.classMaps.imageURL, DataConverter.classMaps.imageRaw], 
 };
 
 export class Material {
@@ -15,6 +16,7 @@ export class Material {
   fn!: string;
   idealCaption!: string;
   imageURL!: string;
+  imageRaw!: AirtableImage;
   raw: BasicObject<any> = {};
 
   constructor(data: BasicObject<any>) {

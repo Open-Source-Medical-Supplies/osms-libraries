@@ -6,16 +6,16 @@ import { Project } from "../../shared/classes/project.class";
 import { openExternal } from "../../shared/utility/general.utility";
 import { getLang } from "../../shared/utility/language.utility";
 
-export type CarouselItems = Array<
-  ReactImageGalleryItem & {
-    data: Project | Material;
-  }
->;
+export interface CarouselItem extends ReactImageGalleryItem {
+	data: Project | Material;
+};
+export type CarouselItems = CarouselItem[];
 interface ActionType {
 	label: string;
 	icon: string;
 	fn: Function;
 }
+
 const getActions = (
   Lang: ReturnType<typeof getLang>,
   linkAcross: Function | undefined
@@ -46,11 +46,15 @@ const buttonEl = (action: ActionType) => (
 const SelectedImageCarousel = ({
   items,
   actions,
-  linkAcross,
+	linkAcross,
+	showFullscreenButton = true,
+	showPlayButton = true
 }: {
   items: CarouselItems;
   actions?: { external?: boolean; across?: boolean };
-  linkAcross?: Function;
+	linkAcross?: Function;
+	showFullscreenButton?: boolean;
+	showPlayButton?: boolean;
 }) => {
   const Lang = getLang();
   const ref = useRef<ImageGallery | null>();
@@ -110,7 +114,9 @@ const SelectedImageCarousel = ({
       additionalClass="selected-image-carousel"
       items={items}
       showIndex={true}
-      lazyLoad={true}
+			lazyLoad={true}
+			showFullscreenButton={showFullscreenButton}
+			showPlayButton={showPlayButton}
       renderCustomControls={customControls}
     />
   );
