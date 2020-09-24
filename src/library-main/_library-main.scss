@@ -41,4 +41,30 @@
       }
     }
   }
+
+  .selected-image-carousel {
+    div.selected-image-carousel__link-container {
+      bottom: 1rem;
+      left: 0;
+      margin: 0 auto;
+      position: absolute;
+      right: 0;
+      z-index: 4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    button.selected-image-carousel__link {
+      background-color: $gray;
+      color: $text;
+      padding: 0.5rem;
+      position: relative;
+    }
+    .image-gallery-slides {
+      min-height: 200px;
+      max-width: 400px;
+      max-height: 400px;
+      margin: 0 auto;
+    }
+  }
 }

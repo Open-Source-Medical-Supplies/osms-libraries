@@ -12,6 +12,9 @@ import ActiveLib from "../../shared/types/lib.enum";
 import { Indexable } from "../../shared/types/shared.type";
 import { openExternal } from "../../shared/utility/general.utility";
 import { getLang } from "../../shared/utility/language.utility";
+import SelectedImageCarousel, {
+  CarouselItems,
+} from "./selected-card-image-carousel";
 
 const CategoryLibFullCard = () => {
   const dispatch = useDispatch();
@@ -19,7 +22,7 @@ const CategoryLibFullCard = () => {
     selected,
   }));
   const Lang = getLang();
-  
+
   const countSections = useMemo(() => {
     if (selected.data) {
       return !!CategoryInfo.CardSections.reduce(
@@ -49,7 +52,7 @@ const CategoryLibFullCard = () => {
   const linkAcross = (data: Project) => () => {
     // set project as selected
     dispatch(setLib(ActiveLib.PROJECT));
-    dispatch(setSelected(data, ActiveLib.PROJECT))
+    dispatch(setSelected(data, ActiveLib.PROJECT));
   };
   const ICCardTemplate = (data: Project) => {
     const { displayName, imageURL, externalLink } = data;
@@ -78,36 +81,44 @@ const CategoryLibFullCard = () => {
   };
 
   const Links = () => {
+    const LinkMap: CarouselItems = links.map((data) => {
+      return {
+        data,
+        thumbnail: data.imageRaw?.thumbnails.small.url,
+        original: data.imageRaw?.thumbnails.large.url,
+        fullscreen: data.imageRaw?.thumbnails.full.url,
+        originalAlt: data.displayName,
+        thumbnailAlt: data.displayName
+      };
+    });
+
     return links && links.length ? (
       <React.Fragment>
         <h3>Projects</h3>
-        {ImageCarousel<Project>({
-          links,
-          cardTemplate: ICCardTemplate,
+        {SelectedImageCarousel({
+          items: LinkMap,
+          actions: { external: true, across: true },
+          linkAcross,
         })}
       </React.Fragment>
     ) : (
-      <div>
-        No associated projects on file
-      </div>
-    )
-  }
+      <div>No associated projects on file</div>
+    );
+  };
 
   const CardInfo = () => {
     return (
       <React.Fragment>
-        {
-          countSections ? 
+        {countSections ? (
           CategoryInfo.CardSections.map(({ key, value }) => {
             return MarkdownSection(value, (selected.data as Indexable)[key]);
-          }) :
-          <div>
-            No category information on file
-          </div>
-        }
+          })
+        ) : (
+          <div>No category information on file</div>
+        )}
       </React.Fragment>
-    )
-  }
+    );
+  };
 
   return (
     <div className="full-card">
@@ -115,7 +126,7 @@ const CategoryLibFullCard = () => {
         {headerImage}
         <h1>{displayName}</h1>
         <CardInfo />
-        <Links/>
+        <Links />
       </div>
     </div>
   );
