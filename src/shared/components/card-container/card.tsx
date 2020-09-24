@@ -28,7 +28,6 @@ const ProjectCard: React.FC<{data: Selected;}> = ({ data }) => {
   const cardIsSelected = !!selectedName && selectedName === displayName;
 
   const actions: TileCardActions = [];
-  actions.push({ fn: selectCard });
   if (lib.active === ActiveLib.CATEGORY) {
     // add filtering icon for category cards
     actions.push({
@@ -37,6 +36,7 @@ const ProjectCard: React.FC<{data: Selected;}> = ({ data }) => {
       icon: 'filter',
     });
   }
+  actions.push({ fn: selectCard });
 
   const highlight = classNames({ "card-selected": cardIsSelected });
 
