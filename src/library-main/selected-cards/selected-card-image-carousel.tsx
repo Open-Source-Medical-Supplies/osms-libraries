@@ -34,8 +34,8 @@ const getActions = (
 
 const buttonEl = (action: ActionType) => (
 	<Button
-		className="selected-image-carousel__link image-gallery-icon"
-		key={"foo"}
+		className="p-button-raised p-button-rounded selected-image-carousel__link"
+		key={action.label}
 		onClick={() => action.fn()}
 		label={action.label}
 		icon={action.icon}
@@ -94,8 +94,8 @@ const SelectedImageCarousel = ({
       return (
         <div className='selected-image-carousel__link-container'>
           <Button
-            className="selected-image-carousel__link image-gallery-icon"
-            key={"foo"}
+            className="p-button-raised p-button-rounded selected-image-carousel__link"
+            key={acrossData.label}
             onClick={() => acrossData.fn()}
             label={acrossData.label}
             icon={acrossData.icon}

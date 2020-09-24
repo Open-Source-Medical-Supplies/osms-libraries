@@ -67,10 +67,8 @@
       align-items: center;
     }
     button.selected-image-carousel__link {
-      background-color: $gray;
-      color: $text;
-      padding: 0.5rem;
       position: relative;
+      padding: 0.25rem;
     }
     .image-gallery-slides {
       min-height: 200px;

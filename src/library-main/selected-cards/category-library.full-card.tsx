@@ -1,7 +1,10 @@
+import { Button } from "primereact/button";
 import React, { useMemo } from "react";
 import { useDispatch } from "react-redux";
 import { setLib } from "../../redux/actions/lib.action";
+import { setCategories } from "../../redux/actions/filter.action";
 import { setSelected } from "../../redux/actions/selected.action";
+import { filterFromCategoryToProjects } from "../../redux/actions/shared.action";
 import { useTypedSelector } from "../../redux/root.reducer";
 import { CategoryInfo } from "../../shared/classes/category-info.class";
 import { Project } from "../../shared/classes/project.class";
@@ -9,12 +12,15 @@ import FullCardWrapper from "../../shared/components/detail-window/full-card-wra
 import MarkdownSection from "../../shared/components/markdown/markdown-section";
 import ActiveLib from "../../shared/types/lib.enum";
 import { Indexable } from "../../shared/types/shared.type";
+import { getLang } from "../../shared/utility/language.utility";
 import SelectedImageCarousel, {
   CarouselItems,
 } from "./selected-card-image-carousel";
 
 const CategoryLibFullCard = () => {
   const dispatch = useDispatch();
+  const Lang = getLang();
+
   const { selected } = useTypedSelector(({ selected }) => ({
     selected,
   }));
@@ -47,8 +53,17 @@ const CategoryLibFullCard = () => {
 
   const linkAcross = (data: Project) => () => {
     // set project as selected
-    dispatch(setLib(ActiveLib.PROJECT));
-    dispatch(setSelected(data, ActiveLib.PROJECT));
+    new Promise(r => {
+      dispatch(setLib(ActiveLib.PROJECT));
+      dispatch(
+        setCategories({
+          [displayName]: true,
+        })
+      );
+      r();
+    }).then(() => {
+      dispatch(setSelected(data, ActiveLib.PROJECT));
+    });
   };
 
   const Links = () => {
@@ -67,6 +82,13 @@ const CategoryLibFullCard = () => {
     return (
       <React.Fragment>
         <h3>Projects</h3>
+        <Button
+          className="p-button-raised p-button-rounded"
+          onClick={() => dispatch(filterFromCategoryToProjects(displayName))}
+          icon="pi pi-filter"
+          iconPos="right"
+          label={Lang.get("viewAllProjects")}
+        ></Button>
         {links && links.length ? (
           SelectedImageCarousel({
             items: LinkMap,
