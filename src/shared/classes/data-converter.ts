@@ -3,7 +3,7 @@ import { BasicObject } from "../types/shared.type";
 type KeyMap = BasicObject<string | string[]>;
 
 const setKlassAtr = (klass: any, klassKey: string, val: any) => {
-  const onlyImageURL: boolean = klassKey === DataConverter.classMaps.imageURL;
+  const onlyImageURL: boolean = klassKey === DataConverter.classMaps.imageURL && val && val[0]?.thumbnails;
   if (onlyImageURL) {
     klass[klassKey] = val[0].thumbnails.large.url;
   } else if (Array.isArray(val) && val.length === 1) {
