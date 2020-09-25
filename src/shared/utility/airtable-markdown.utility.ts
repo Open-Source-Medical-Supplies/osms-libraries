@@ -5,12 +5,12 @@
  *  "... out in public [[1][1]]. As supplies continue ... [1]: https://example.com"
  * and the problem is compounded.
  * 
- * @constant urlRxMatch - localized regex to test for the existence of the default "[1]" phenomenom
+ * @constant urlRxMatch - localized regex to test for the existence of the default "[1]:" phenomenom
  * @constant bracketNotation - a modified version to test for "[[n][n]]" with a subgroup
  * @constant linkRx - a modified modified version to capture the URL itself
  */
 
-const urlRxMatch = new RegExp(/\[\d+\]/);
+const urlRxMatch = new RegExp(/\[\d+\]:/);
 const bracketNotation = new RegExp(/\[(\[\d+\])+\]/g);
 const linkRx = new RegExp(/(?:\[\d+\]:\s)(.+)/g);
 const getLinks = (md: string) => Array.from(md.matchAll(linkRx), (g) => g[1]);
