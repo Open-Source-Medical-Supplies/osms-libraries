@@ -70,9 +70,9 @@ const CategoryLibFullCard = () => {
     const LinkMap: CarouselItems = links.map((data) => {
       return {
         data,
-        thumbnail: data.imageRaw?.thumbnails.small.url,
-        original: data.imageRaw?.thumbnails.large.url,
-        fullscreen: data.imageRaw?.thumbnails.full.url,
+        thumbnail: data.imageRaw?.thumbnails?.small.url,
+        original: data.imageRaw?.thumbnails?.large.url,
+        fullscreen: data.imageRaw?.thumbnails?.full.url,
         description: data.displayName,
         originalAlt: data.displayName,
         thumbnailAlt: data.displayName,

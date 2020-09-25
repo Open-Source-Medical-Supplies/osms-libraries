@@ -46,7 +46,7 @@ const CategoriesList = () => {
     if (tables.completed) {
       const loadedCategories = (tables.loaded[
         TABLE_MAPPING.CategorySupply
-      ] as CategorySupply[]).sort((a, b) => a.name.localeCompare(b.name));
+      ] as CategorySupply[]).sort((a, b) => a.name?.localeCompare(b.name));
 
       setCatState({
         _categories: loadedCategories,
