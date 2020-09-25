@@ -8,7 +8,10 @@ import {
 } from "../shared/utility/param-handling";
 import { parseTablesToSupportingData } from "../shared/utility/selected.utility";
 
-const defaultState = {};
+const defaultState: SelectedState = {
+  data: undefined,
+  supportingData: undefined
+};
 
 export const selectedReducer = (
   _ = defaultState,
@@ -43,6 +46,7 @@ export const selectedReducer = (
       return {
         data: action.data,
         supportingData: action.supportingData,
+        origin: action.origin
       };
     case SELECTED_ACTIONS.CLEAR_SELECTED:
       removeParam(PARAMS.SELECTED);

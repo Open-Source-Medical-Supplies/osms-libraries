@@ -1,21 +1,19 @@
 import { Button } from "primereact/button";
 import React, { useMemo } from "react";
 import { useDispatch } from "react-redux";
-import { setLib } from "../../redux/actions/lib.action";
-import { setCategories } from "../../redux/actions/filter.action";
-import { setSelected } from "../../redux/actions/selected.action";
 import { filterFromCategoryToProjects } from "../../redux/actions/shared.action";
 import { useTypedSelector } from "../../redux/root.reducer";
 import { CategoryInfo } from "../../shared/classes/category-info.class";
 import { Project } from "../../shared/classes/project.class";
+import BackToOrigin from "../../shared/components/back-to-origin";
 import FullCardWrapper from "../../shared/components/detail-window/full-card-wrapper";
 import MarkdownSection from "../../shared/components/markdown/markdown-section";
-import ActiveLib from "../../shared/types/lib.enum";
 import { Indexable } from "../../shared/types/shared.type";
 import { getLang } from "../../shared/utility/language.utility";
 import SelectedImageCarousel, {
-  CarouselItems,
+  CarouselItems
 } from "./selected-card-image-carousel";
+import { linkAcross } from '../../redux/actions/shared.action';
 
 const CategoryLibFullCard = () => {
   const dispatch = useDispatch();
@@ -51,20 +49,7 @@ const CategoryLibFullCard = () => {
       />
     );
 
-  const linkAcross = (data: Project) => () => {
-    // set project as selected
-    new Promise(r => {
-      dispatch(setLib(ActiveLib.PROJECT));
-      dispatch(
-        setCategories({
-          [displayName]: true,
-        })
-      );
-      r();
-    }).then(() => {
-      dispatch(setSelected(data, ActiveLib.PROJECT));
-    });
-  };
+  const categoryLinkAcross = (data: Project) => linkAcross(data, displayName, selected.data);
 
   const Links = () => {
     const LinkMap: CarouselItems = links.map((data) => {
@@ -83,7 +68,7 @@ const CategoryLibFullCard = () => {
       <React.Fragment>
         <h3>Projects</h3>
         <Button
-          className="p-button-raised p-button-rounded"
+          className="p-button-raised p-button-rounded mb-1"
           onClick={() => dispatch(filterFromCategoryToProjects(displayName))}
           icon="pi pi-filter"
           iconPos="right"
@@ -93,7 +78,7 @@ const CategoryLibFullCard = () => {
           SelectedImageCarousel({
             items: LinkMap,
             actions: { external: true, across: true },
-            linkAcross,
+            linkAcross: categoryLinkAcross,
             showPlayButton: LinkMap.length > 1,
           })
         ) : (
@@ -106,6 +91,7 @@ const CategoryLibFullCard = () => {
   const CardInfo = () => {
     return (
       <React.Fragment>
+        <BackToOrigin origin={selected.origin}/>
         {countSections ? (
           CategoryInfo.CardSections.map(({ key, value }) => {
             return MarkdownSection(value, (selected.data as Indexable)[key]);

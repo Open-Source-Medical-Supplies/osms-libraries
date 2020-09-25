@@ -43,6 +43,9 @@
   }
 
   .selected-image-carousel {
+    .image-gallery-slide-wrapper {
+      box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);
+    }
     .image-gallery-slide .image-gallery-image {
       margin-top: 2rem;
     }

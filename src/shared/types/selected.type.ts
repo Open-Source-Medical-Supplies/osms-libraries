@@ -18,6 +18,7 @@ export interface SelectedState {
   supportingData?: SupportingData;
   supportingDataSet?: TableState['loaded'];
   selector?: string;
+  origin?: Selected;
 }
 
 export type SelectAction = Action<SELECTED_ACTIONS> & SelectedState;

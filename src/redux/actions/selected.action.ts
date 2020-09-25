@@ -11,20 +11,22 @@ export const setSelectedByName = (
   name: string,
   matcher: string,
   fromType: string,
-  toLib: ActiveLib
+  toLib: ActiveLib,
+  origin?: Selected
 ) => (
   dispatch: Dispatch<any>,
   getState: () => RootState
 ) => {
   const {tables} = getState();
   const data = (tables.loaded[fromType] as any[]).find((o: any) => o && o[matcher] === name)
-  dispatch(setSelected(data, toLib));
+  dispatch(setSelected(data, toLib, origin));
 }
 
 // pass 'lib' if it's not the current lib
 export const setSelected = (
   data: Selected,
-  lib?: ActiveLib
+  lib?: ActiveLib,
+  origin?: Selected
 ) => (
   dispatch: Dispatch<any>,
   getState: () => RootState
@@ -45,6 +47,8 @@ export const setSelected = (
 
   dispatch({
     type: SELECTED_ACTIONS.SET_SELECTED,
-    data, supportingData
+    data,
+    supportingData,
+    origin
   })
 };

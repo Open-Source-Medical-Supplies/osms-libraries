@@ -1,8 +1,15 @@
+#full-card__back-to-origin {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+}
+
 .full-card {
   display: flex;
   flex-direction: column;
   position: relative;
   height: 100%;
+
 
   img {
     margin: 0 auto;

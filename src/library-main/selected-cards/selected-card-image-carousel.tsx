@@ -1,6 +1,7 @@
 import { Button } from "primereact/button";
-import React, { useCallback, useMemo, useRef } from "react";
+import React, { Dispatch, useCallback, useMemo, useRef } from "react";
 import ImageGallery, { ReactImageGalleryItem } from "react-image-gallery";
+import { useDispatch } from "react-redux";
 import { Material } from "../../shared/classes/material.class";
 import { Project } from "../../shared/classes/project.class";
 import { openExternal } from "../../shared/utility/general.utility";
@@ -13,12 +14,13 @@ export type CarouselItems = CarouselItem[];
 interface ActionType {
 	label: string;
 	icon: string;
-	fn: Function;
+	fn: Function | undefined;
 }
 
 const getActions = (
   Lang: ReturnType<typeof getLang>,
-  linkAcross: Function | undefined
+  linkAcross: Function | undefined,
+  dispatch: Dispatch<any>
 ) => ({
   external: (link: string) => ({
     label: Lang.get("viewSource"),
@@ -28,7 +30,7 @@ const getActions = (
   across: (data: Project | Material) => ({
     label: Lang.get("viewDetails"),
     icon: "pi pi-eye",
-    fn: linkAcross && linkAcross(data),
+    fn: linkAcross && (() => dispatch(linkAcross(data))) as Function,
   }),
 });
 
@@ -36,7 +38,7 @@ const buttonEl = (action: ActionType) => (
 	<Button
 		className="p-button-raised p-button-rounded selected-image-carousel__link"
 		key={action.label}
-		onClick={() => action.fn()}
+		onClick={() => action.fn ? action.fn() : null}
 		label={action.label}
 		icon={action.icon}
 		iconPos="right"
@@ -58,7 +60,10 @@ const SelectedImageCarousel = ({
 }) => {
   const Lang = getLang();
   const ref = useRef<ImageGallery | null>();
-  const Actions = useMemo(() => getActions(Lang, linkAcross), [
+  const dispatch = useDispatch();
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const Actions = useMemo(() => getActions(Lang, linkAcross, dispatch), [
     Lang,
     linkAcross,
 	]);
@@ -96,7 +101,7 @@ const SelectedImageCarousel = ({
           <Button
             className="p-button-raised p-button-rounded selected-image-carousel__link"
             key={acrossData.label}
-            onClick={() => acrossData.fn()}
+            onClick={() => acrossData.fn ? acrossData.fn() : null}
             label={acrossData.label}
             icon={acrossData.icon}
 						iconPos="right"

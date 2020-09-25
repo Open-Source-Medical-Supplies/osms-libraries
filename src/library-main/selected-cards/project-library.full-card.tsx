@@ -7,6 +7,7 @@ import { setSelectedByName } from "../../redux/actions/selected.action";
 import { useTypedSelector } from "../../redux/root.reducer";
 import { Material } from "../../shared/classes/material.class";
 import { Project } from "../../shared/classes/project.class";
+import BackToOrigin from "../../shared/components/back-to-origin";
 import FullCardWrapper from "../../shared/components/detail-window/full-card-wrapper";
 import MarkdownSection from "../../shared/components/markdown/markdown-section";
 import ActiveLib from "../../shared/types/lib.enum";
@@ -43,7 +44,13 @@ const ProjectFullCard = () => {
   const goToCategory = (nom: string) => {
     dispatch(setLib(ActiveLib.CATEGORY));
     dispatch(
-      setSelectedByName(nom, "displayName", "CategoryInfo", ActiveLib.CATEGORY)
+      setSelectedByName(
+        nom,
+        "displayName",
+        "CategoryInfo",
+        ActiveLib.CATEGORY,
+        selected.data
+      )
     );
   };
 
@@ -151,6 +158,7 @@ const ProjectFullCard = () => {
 
   const CardInfo = () => (
     <React.Fragment>
+      <BackToOrigin origin={selected.origin}/>
       <div className="full-card__category-buttons">
         {name instanceof Array
           ? name.map((nom) => goToCategoryButton(nom))
