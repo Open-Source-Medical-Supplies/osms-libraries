@@ -91,7 +91,7 @@ const CategoryLibFullCard = () => {
   const CardInfo = () => {
     return (
       <React.Fragment>
-        <BackToOrigin origin={selected.origin}/>
+        <BackToOrigin origin={selected.origin} displayName={displayName}/>
         {countSections ? (
           CategoryInfo.CardSections.map(({ key, value }) => {
             return MarkdownSection(value, (selected.data as Indexable)[key]);

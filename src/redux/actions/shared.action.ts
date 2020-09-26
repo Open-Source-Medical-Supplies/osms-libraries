@@ -1,40 +1,75 @@
-import { Dispatch } from "react";
 import { CategoryInfo } from "../../shared/classes/category-info.class";
+import { Project } from "../../shared/classes/project.class";
 import ActiveLib from "../../shared/types/lib.enum";
 import { Selected } from "../../shared/types/selected.type";
-import { RootState, TypedThunkAction } from "../root.reducer";
+import { TypedThunkAction } from "../root.reducer";
 import { setCategories } from "./filter.action";
 import { changeLib, setLib } from "./lib.action";
-import { setSelected } from "./selected.action";
+import { setSelected, setSelectedByName } from "./selected.action";
 
 export const filterFromCategoryToProjects = (
-  category: CategoryInfo['displayName']
+  category: CategoryInfo["displayName"]
 ): TypedThunkAction => (dispatch, _) => {
-  dispatch(changeLib(ActiveLib.PROJECT))
-  dispatch(setCategories({
-    [category]: true
-  }))
+  dispatch(changeLib(ActiveLib.PROJECT));
+  dispatch(
+    setCategories({
+      [category]: true,
+    })
+  );
+};
+
+export const libToProjAndSetFilter = (
+  displayName: string
+): TypedThunkAction => (dispatch, _) => {
+  dispatch(setLib(ActiveLib.PROJECT));
+  dispatch(
+    setCategories({
+      [displayName]: true,
+    })
+  );
+};
+
+export const libToCatAndSelectCategory = (
+  displayName: string,
+  selected: Selected
+): TypedThunkAction => (dispatch, _) => {
+  dispatch(setLib(ActiveLib.CATEGORY));
+  dispatch(
+    setSelectedByName(
+      displayName,
+      "displayName",
+      "CategoryInfo",
+      ActiveLib.CATEGORY,
+      selected
+    )
+  );
 };
 
 export const linkAcross = (
-  data: Selected,
+  selected: Selected,
   displayName: string,
-  origin: Selected
-  ) => (dispatch: Dispatch<any>, getState: () => RootState) => {
-  // set project as selected
-  new Promise(r => {
-    dispatch(setLib(ActiveLib.PROJECT));
-    dispatch(
-      setCategories({
-        [displayName]: true,
-      })
-    );
+  origin?: Selected
+): TypedThunkAction => (dispatch, _) => {
+  new Promise((r) => {
+    if (selected instanceof Project) {
+      dispatch(libToProjAndSetFilter(displayName));
+    } else if (selected instanceof CategoryInfo) {
+      dispatch(setLib(ActiveLib.CATEGORY));
+    }
     r();
   }).then(() => {
-    dispatch(setSelected(
-      data,
-      ActiveLib.PROJECT, 
-      origin
-    ));
+    // for race issue
+    if (selected instanceof Project) {
+      dispatch(setSelected(selected, ActiveLib.PROJECT, origin));
+    } else if (selected instanceof CategoryInfo) {
+      dispatch(
+        setSelectedByName(
+          displayName,
+          "displayName",
+          "CategoryInfo",
+          ActiveLib.CATEGORY
+        )
+      );
+    }
   });
 };

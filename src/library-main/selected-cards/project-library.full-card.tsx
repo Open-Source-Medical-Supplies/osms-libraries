@@ -2,15 +2,13 @@ import { Button } from "primereact/button";
 import React from "react";
 import ReactMarkdown from "react-markdown";
 import { useDispatch } from "react-redux";
-import { setLib } from "../../redux/actions/lib.action";
-import { setSelectedByName } from "../../redux/actions/selected.action";
+import { libToCatAndSelectCategory } from "../../redux/actions/shared.action";
 import { useTypedSelector } from "../../redux/root.reducer";
 import { Material } from "../../shared/classes/material.class";
 import { Project } from "../../shared/classes/project.class";
 import BackToOrigin from "../../shared/components/back-to-origin";
 import FullCardWrapper from "../../shared/components/detail-window/full-card-wrapper";
 import MarkdownSection from "../../shared/components/markdown/markdown-section";
-import ActiveLib from "../../shared/types/lib.enum";
 import { openExternal } from "../../shared/utility/general.utility";
 import { getLang } from "../../shared/utility/language.utility";
 import SelectedImageCarousel, {
@@ -41,23 +39,10 @@ const ProjectFullCard = () => {
     externalLink,
   } = selected.data;
 
-  const goToCategory = (nom: string) => {
-    dispatch(setLib(ActiveLib.CATEGORY));
-    dispatch(
-      setSelectedByName(
-        nom,
-        "displayName",
-        "CategoryInfo",
-        ActiveLib.CATEGORY,
-        selected.data
-      )
-    );
-  };
-
   const goToCategoryButton = (nom: string) => (
     <button
       key={nom}
-      onClick={() => goToCategory(nom)}
+      onClick={() => dispatch(libToCatAndSelectCategory(nom, selected.data))}
       className="button-link-style"
     >
       <h2>{nom}</h2>
@@ -158,7 +143,7 @@ const ProjectFullCard = () => {
 
   const CardInfo = () => (
     <React.Fragment>
-      <BackToOrigin origin={selected.origin}/>
+      <BackToOrigin origin={selected.origin} displayName={selected.origin?.displayName}/>
       <div className="full-card__category-buttons">
         {name instanceof Array
           ? name.map((nom) => goToCategoryButton(nom))
