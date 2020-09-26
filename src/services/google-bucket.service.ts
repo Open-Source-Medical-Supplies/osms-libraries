@@ -5,6 +5,7 @@ import { ClassMap, FunctionMap } from "../shared/constants/google-bucket.constan
 import { AirtableRecords } from "../shared/types/airtable.type";
 import { valueof } from "../shared/types/shared.type";
 import { TABLE_MAPPING } from "../shared/constants/general.constants";
+import { CategoryInfo } from "../shared/classes/category-info.class";
 
 
 /** TableListItem based on the gBucket / gFunction setup */

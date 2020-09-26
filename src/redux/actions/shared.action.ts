@@ -1,5 +1,6 @@
 import { CategoryInfo } from "../../shared/classes/category-info.class";
 import { Project } from "../../shared/classes/project.class";
+import { TABLE_MAPPING } from "../../shared/constants/general.constants";
 import ActiveLib from "../../shared/types/lib.enum";
 import { Selected } from "../../shared/types/selected.type";
 import { TypedThunkAction } from "../root.reducer";
@@ -38,7 +39,7 @@ export const libToCatAndSelectCategory = (
     setSelectedByName(
       displayName,
       "displayName",
-      "CategoryInfo",
+      TABLE_MAPPING.CategoryInfo,
       ActiveLib.CATEGORY,
       selected
     )
@@ -66,7 +67,7 @@ export const linkAcross = (
         setSelectedByName(
           displayName,
           "displayName",
-          "CategoryInfo",
+          TABLE_MAPPING.CategoryInfo,
           ActiveLib.CATEGORY
         )
       );

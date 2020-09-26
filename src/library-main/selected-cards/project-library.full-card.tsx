@@ -4,24 +4,34 @@ import ReactMarkdown from "react-markdown";
 import { useDispatch } from "react-redux";
 import { libToCatAndSelectCategory } from "../../redux/actions/shared.action";
 import { useTypedSelector } from "../../redux/root.reducer";
+import { CategoryInfo } from "../../shared/classes/category-info.class";
 import { Material } from "../../shared/classes/material.class";
 import { Project } from "../../shared/classes/project.class";
 import BackToOrigin from "../../shared/components/back-to-origin";
 import FullCardWrapper from "../../shared/components/detail-window/full-card-wrapper";
 import MarkdownSection from "../../shared/components/markdown/markdown-section";
+import { TABLE_MAPPING } from "../../shared/constants/general.constants";
+import { BasicObject } from "../../shared/types/shared.type";
 import { openExternal } from "../../shared/utility/general.utility";
 import { getLang } from "../../shared/utility/language.utility";
 import SelectedImageCarousel, {
   CarouselItem,
-  CarouselItems
+  CarouselItems,
 } from "./selected-card-image-carousel";
 
 const ProjectFullCard = () => {
   const dispatch = useDispatch();
-  const { selected } = useTypedSelector(({ selected }) => ({
-    selected,
-  }));
+  const { selected, categoryInfo } = useTypedSelector(
+    ({ selected, tables }) => ({
+      selected,
+      categoryInfo: tables.loaded[TABLE_MAPPING.CategoryInfo] as CategoryInfo[],
+    })
+  );
   const Lang = getLang();
+  const catDict = categoryInfo?.reduce((acc, cat) => {
+    acc[cat.displayName] = true;
+    return acc;
+  }, {} as BasicObject<boolean>);
 
   if (!selected || !(selected.data instanceof Project)) return <div></div>;
   const links = selected.supportingData as Material[];
@@ -39,15 +49,20 @@ const ProjectFullCard = () => {
     externalLink,
   } = selected.data;
 
-  const goToCategoryButton = (nom: string) => (
-    <button
-      key={nom}
-      onClick={() => dispatch(libToCatAndSelectCategory(nom, selected.data))}
-      className="button-link-style"
-    >
-      <h2>{nom}</h2>
-    </button>
-  );
+  const goToCategoryButton = (nom: string) => {
+    const goToCat = () =>
+      dispatch(libToCatAndSelectCategory(nom, selected.data));
+    // prevent a button from showing up if it doesn't have an actual category
+    if (catDict[nom]) {
+      return (
+        <button key={nom} onClick={goToCat} className="button-link-style">
+          <h2>{nom}</h2>
+        </button>
+      );
+    } else {
+      return null;
+    }
+  };
 
   const headerImage =
     typeof imageURL !== "string" ? (
@@ -100,9 +115,7 @@ const ProjectFullCard = () => {
         />
 
         <div className="image-gallery-description">
-          <div className="tile-card__header">
-            {item.originalTitle}
-          </div>
+          <div className="tile-card__header">{item.originalTitle}</div>
           {item.description ? (
             <ReactMarkdown source={item.description} />
           ) : null}
@@ -130,20 +143,25 @@ const ProjectFullCard = () => {
     return (
       <React.Fragment>
         <h3>Materials</h3>
-        { links && links.length ? 
-            SelectedImageCarousel({
-              items: LinkMap,
-              showFullscreenButton: false,
-              showPlayButton: LinkMap.length > 1
-            }) : <div>No associated materials on file</div>
-        }
+        {links && links.length ? (
+          SelectedImageCarousel({
+            items: LinkMap,
+            showFullscreenButton: false,
+            showPlayButton: LinkMap.length > 1,
+          })
+        ) : (
+          <div>No associated materials on file</div>
+        )}
       </React.Fragment>
-    )
+    );
   };
 
   const CardInfo = () => (
     <React.Fragment>
-      <BackToOrigin origin={selected.origin} displayName={selected.origin?.displayName}/>
+      <BackToOrigin
+        origin={selected.origin}
+        displayName={selected.origin?.displayName}
+      />
       <div className="full-card__category-buttons">
         {name instanceof Array
           ? name.map((nom) => goToCategoryButton(nom))
