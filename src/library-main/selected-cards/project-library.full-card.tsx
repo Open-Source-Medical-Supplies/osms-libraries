@@ -1,5 +1,5 @@
 import { Button } from "primereact/button";
-import React from "react";
+import React, { useMemo } from "react";
 import ReactMarkdown from "react-markdown";
 import { useDispatch } from "react-redux";
 import { libToCatAndSelectCategory } from "../../redux/actions/shared.action";
@@ -28,10 +28,11 @@ const ProjectFullCard = () => {
     })
   );
   const Lang = getLang();
-  const catDict = categoryInfo?.reduce((acc, cat) => {
+  /** Used to prevent a go-to-cat button from showing up if it doesn't have an actual category */
+  const catDict = useMemo(() => categoryInfo?.reduce((acc, cat) => {
     acc[cat.displayName] = true;
     return acc;
-  }, {} as BasicObject<boolean>);
+  }, {} as BasicObject<boolean>), [categoryInfo]);
 
   if (!selected || !(selected.data instanceof Project)) return <div></div>;
   const links = selected.supportingData as Material[];
@@ -52,12 +53,15 @@ const ProjectFullCard = () => {
   const goToCategoryButton = (nom: string) => {
     const goToCat = () =>
       dispatch(libToCatAndSelectCategory(nom, selected.data));
-    // prevent a button from showing up if it doesn't have an actual category
     if (catDict[nom]) {
       return (
-        <button key={nom} onClick={goToCat} className="button-link-style">
-          <h2>{nom}</h2>
-        </button>
+        <Button
+          className="p-button-raised p-button-rounded mb-1"
+          onClick={goToCat}
+          icon="pi pi-eye"
+          iconPos="right"
+          label={nom}
+      ></Button>
       );
     } else {
       return null;
