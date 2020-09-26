@@ -23,20 +23,14 @@ export const libToCatAndSelectCategory = (
   displayName: string,
   selected: Selected
 ): TypedThunkAction => (dispatch, _) => {
-  new Promise((r) => {
-    dispatch(changeLib(ActiveLib.CATEGORY));
-    r();
-  }).then(() => {
-    dispatch(
-      setSelectedByName(
-        displayName,
-        "displayName",
-        TABLE_MAPPING.CategoryInfo,
-        ActiveLib.CATEGORY,
-        selected
-      )
-    );
-  });
+  dispatch(changeLib(ActiveLib.CATEGORY));
+  setTimeout(() => dispatch(setSelectedByName(
+    displayName,
+    "displayName",
+    TABLE_MAPPING.CategoryInfo,
+    ActiveLib.CATEGORY,
+    selected
+  )));
 };
 
 export const linkAcross = (
@@ -54,9 +48,5 @@ export const linkAcross = (
   }
 
   // for race issue
-  setTimeout(() => dispatch(setSelected(
-    selected,
-    toLib,
-    origin
-  )));
+  setTimeout(() => dispatch(setSelected(selected, toLib, origin)));
 };
