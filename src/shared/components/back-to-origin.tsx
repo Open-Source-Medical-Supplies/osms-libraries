@@ -2,6 +2,7 @@ import { Button } from "primereact/button";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { linkAcross } from "../../redux/actions/shared.action";
+import { Project } from "../classes/project.class";
 import { Selected } from "../types/selected.type";
 
 const BackToOrigin = ({
@@ -20,11 +21,14 @@ const BackToOrigin = ({
     dispatch(linkAcross(origin, displayName));
   }
 
+  const backToText = 'Back to';
+    
+
   return (
     <div id="full-card__back-to-origin">
       <Button
         className="p-button-raised p-button-rounded"
-        label="Back to previous"
+        label={backToText + ' ' + (origin instanceof Project ? 'project' : 'category')}
         onClick={takeMeHome}
         iconPos="left"
         icon="pi pi-undo"
