@@ -1,6 +1,7 @@
 import { CategoryInfo } from "../classes/category-info.class";
 import { mapFilterData } from "../components/filter-menu/filter-menu.utilities";
 import { FilterNodeData } from "./filter-node.type";
+import { BasicObject } from "./shared.type";
 
 export interface PreviousFilterState {
   nodeFilters?: FilterNodeData;
@@ -14,12 +15,12 @@ export interface FilterState {
   flatNodes: ReturnType<typeof mapFilterData>['flatNodes'];
   nodeFilters: FilterNodeData;
   categories: CategoryInfo[];
-  categoriesFilters: {};
-  filters: {};
+  categoriesFilters: BasicObject<any>;
+  filters: BasicObject<any>;
   searchBar: string;
   previousFilters: PreviousFilterState;
+  show: boolean;
   isFiltering: boolean;
-  showMobileFilters: boolean;
 };
 
 export interface FilterDatum {

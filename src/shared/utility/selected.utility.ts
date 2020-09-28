@@ -1,9 +1,9 @@
 import { TableState } from "../../redux/tables.reducer";
-import { SupportingDataMap } from "../constants/selected.constants";
 import ActiveLib from "../types/lib.enum";
 import { SelectedState, SupportingData, SupportingDatum, SupportingDataSet } from "../types/selected.type";
 import { toDict } from "./general.utility";
 import { getParam, PARAMS } from "./param-handling";
+import { SupportingDataMap } from "../constants/selected.constants";
 
 export const getSupportingData = (selected: string, supportingDataSet: SelectedState['supportingDataSet']) => {
   if ( !selected || !supportingDataSet ) {
@@ -15,8 +15,9 @@ export const getSupportingData = (selected: string, supportingDataSet: SelectedS
 
 export const parseTablesToSupportingDataSet = (
   tables: TableState['loaded'],
+  lib?: ActiveLib
 ): SupportingDataSet => {
-  const activeLib = getParam(PARAMS.LIBRARY) as ActiveLib;
+  const activeLib = lib || getParam(PARAMS.LIBRARY) as ActiveLib;
   let table;
 
   try {
@@ -25,12 +26,19 @@ export const parseTablesToSupportingDataSet = (
     return {}
   }
 
-  return toDict<SupportingDatum>(table , 'name')
+  return toDict<SupportingDatum>(table, 'name')
 }
 
 export const parseTablesToSupportingData = (
   tables: TableState['loaded'],
-  supportTarget: string
+  supportTarget: string,
+  lib?: ActiveLib
 ): SupportingData => {
-  return parseTablesToSupportingDataSet(tables)[supportTarget]
+  const dict = parseTablesToSupportingDataSet(tables, lib);
+  return Object.keys(dict).reduce((acc: SupportingData, key) => {
+    if (key.includes(supportTarget)) {
+      acc.push(...dict[key])
+    }
+    return acc;
+  }, []);
 }

@@ -1,3 +1,4 @@
+import { AirtableImage } from "../types/airtable.type";
 import { BasicObject } from "../types/shared.type";
 import DataConverter from "./data-converter";
 
@@ -10,7 +11,7 @@ const RawMap = {
   "Difficulty": 'difficulty',
   "Full Project Name": DataConverter.classMaps.displayName,
   "General Skills/Tools": 'generalSkillsTools',
-  "HeaderImage": DataConverter.classMaps.imageURL,
+  "HeaderImage": [DataConverter.classMaps.imageURL, DataConverter.classMaps.imageRaw],
   "Hyperlink Text": 'hyperLinkText',
   "Link": 'externalLink',
   "Medical Status": 'medicalStatus',
@@ -44,6 +45,7 @@ export class Project {
   name!: string | string[];
   generalSkillsTools!: string;
   imageURL!: string;
+  imageRaw!: AirtableImage;
   hyperLinkText!: string;
   externalLink!: string;
   medicalStatus!: string;

@@ -1,13 +1,31 @@
 @import '../../css/variables';
 
-.category-list-card {
-  img.card-header__image, div.card-header__no-image {
-    height: 75px;
+#osms-lib {
+  .category-list-card {
+    padding: 0;
+    img.card-header__image, div.card-header__no-image {
+      height: 75px;
+    }
+    .p-card-body {
+      padding: 0.5rem;
+    }
   }
-}
 
-.highlight-child > div {
-  background-color: $blue;
-  border-color: $blue;
-  color: #ffffff;
+  .list-card-element {
+    display: flex;
+    align-items: center;
+    height: 50px;
+    width: 100%;
+  }
+  
+  .highlight-child > div {
+    background-color: $blue;
+    border-color: $blue;
+    color: #ffffff;
+  }
+  .highlight {
+    background-color: $blue;
+    border-color: $blue;
+    color: #ffffff;
+  }
 }

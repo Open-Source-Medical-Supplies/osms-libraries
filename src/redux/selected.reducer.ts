@@ -4,11 +4,14 @@ import { SelectAction, Selected, SelectedState, SupportingData } from "../shared
 import {
   getParam,
   PARAMS,
-  removeParam, setQueryParam
+  removeParam
 } from "../shared/utility/param-handling";
 import { parseTablesToSupportingData } from "../shared/utility/selected.utility";
 
-const defaultState = {};
+const defaultState: SelectedState = {
+  data: undefined,
+  supportingData: undefined
+};
 
 export const selectedReducer = (
   _ = defaultState,
@@ -17,7 +20,7 @@ export const selectedReducer = (
   let supportingData: SupportingData;
   
   switch (action.type) {
-    case SELECTED_ACTIONS.CHECK:
+    case SELECTED_ACTIONS.CHECK_SELECTED:
       const selector = action.selector || "displayName";
       const param = getParam(PARAMS.SELECTED);
       
@@ -35,20 +38,17 @@ export const selectedReducer = (
         }
       }
       return defaultState;
-    case SELECTED_ACTIONS.SET:
-      if (!action.data || !action.supportingDataSet) {
+    case SELECTED_ACTIONS.SET_SELECTED:
+      if (!action.data || !action.supportingData) {
         console.warn('Attempted to set selected view without enough data');
         return defaultState;
       }
-      const { displayName } = action.data;
-      setQueryParam({ key: PARAMS.SELECTED, val: displayName });
-      supportingData = parseTablesToSupportingData(action.supportingDataSet, displayName);
-
       return {
         data: action.data,
-        supportingData,
+        supportingData: action.supportingData,
+        origin: action.origin
       };
-    case SELECTED_ACTIONS.CLEAR:
+    case SELECTED_ACTIONS.CLEAR_SELECTED:
       removeParam(PARAMS.SELECTED);
       return defaultState;
     default:

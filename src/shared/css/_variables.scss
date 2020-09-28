@@ -1,5 +1,20 @@
 $primary: #F66E0B;
-$blue: #007ad9;
+$blue: #306FB6;
 $accent: #FF971E; // eh
 $gray: #D0D0D0;
 $bg: rgba(1, 45, 116, 0.1);
+$black80: rgba(0, 0, 0, 0.8);
+$text: #2C3A4F;
+$white: #fff;
+$warn: $accent;
+$success: #34A835;
+$danger: #e91224;
+
+// breakpoints
+
+$breakpoint-xs:576px;
+$breakpoint-sm:576px;
+$breakpoint-md:768px;
+$breakpoint-lg:992px;
+$breakpoint-xl:1200px;
+$breakpoint-xxl:1500px;

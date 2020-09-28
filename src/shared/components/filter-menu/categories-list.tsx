@@ -1,90 +1,159 @@
 import classNames from "classnames";
-import { DataView } from 'primereact/dataview';
-import { Panel } from 'primereact/panel';
-import React, { useEffect, useState } from "react";
+import { DataView } from "primereact/dataview";
+import { Panel } from "primereact/panel";
+import React, { useCallback, useEffect, useState, ChangeEvent } from "react";
+import { useDispatch } from "react-redux";
+import { setCategories } from "../../../redux/actions/filter.action";
+import { DispatchFilterAction } from "../../../redux/filter.reducer";
+import { useTypedSelector } from "../../../redux/root.reducer";
 import { CategorySupply } from "../../classes/category-supply.class";
+import { TABLE_MAPPING } from "../../constants/general.constants";
 import { empty, notEmpty } from "../../utility/general.utility";
-import TileCard from "../tile-card";
+import { getLang } from "../../utility/language.utility";
+import "./_category-list.scss";
+import { InputText } from 'primereact/inputtext';
 
 /* eslint-disable react-hooks/exhaustive-deps */
 type MouseEvent = React.MouseEvent<HTMLElement>;
-type CategoryState = {[k: string]: boolean};
+type CategoryState = {
+  toggleState: {
+    [k: string]: boolean;
+  };
+  _categories: CategorySupply[];
+  categories: CategorySupply[];
+  search: string;
+};
 
-const CategoriesList = (
-  {
-    setFilterState, categoriesFilters, categories
-  }: {
-    setFilterState: Function,
-    categoriesFilters: any,
-    categories: CategorySupply[]
-  }
-) => {
-  const [toggleState, setToggleState] = useState<CategoryState>({});
+const defaultState: CategoryState = {
+  toggleState: {},
+  _categories: [],
+  categories: [],
+  search: ''
+};
 
-  // ensure category list is sorted alphabetically
-  categories = categories.sort((a, b) => a.name.localeCompare(b.name));
+const CategoriesList = () => {
+  const [catState, setBaseCatState] = useState<CategoryState>(defaultState);
+  const setCatState = (props?: Partial<CategoryState>) => setBaseCatState({ ...catState, ...props });
+  const dispatch = useDispatch<DispatchFilterAction>();
+  const { tables, filter } = useTypedSelector(({ tables, filter }) => ({
+    tables,
+    filter,
+  }));
+  let { categoriesFilters } = filter;
+  const Lang = getLang();
 
   useEffect(() => {
-    let tempState: CategoryState = {};
-    // ensure deactivated toggles on selection-clear
-    if (empty(categoriesFilters) && notEmpty(toggleState)) {
-      tempState = Object.assign({}, toggleState);
-      for (const k in tempState) {
-        tempState[k] = false;
-      }
-    } else if ( notEmpty(categoriesFilters) ) {
-      // loaded from params
-      tempState = categoriesFilters;
+    if (tables.completed) {
+      const loadedCategories = (tables.loaded[
+        TABLE_MAPPING.CategorySupply
+      ] as CategorySupply[]).sort((a, b) => a.name?.localeCompare(b.name));
+
+      setCatState({
+        _categories: loadedCategories,
+        categories: loadedCategories,
+      });
     }
-    setToggleState(tempState);
-  }, [categoriesFilters])
-  
+  }, [tables.completed]);
+
+  useEffect(() => {
+    let tempToggleState: CategoryState["toggleState"] = {};
+    // ensure deactivated toggles on selection-clear
+    if (empty(categoriesFilters) && notEmpty(catState)) {
+      tempToggleState = Object.assign({}, catState.toggleState);
+      for (const k in tempToggleState) {
+        tempToggleState[k] = false;
+      }
+    } else if (notEmpty(categoriesFilters)) {
+      // loaded from params
+      tempToggleState = categoriesFilters;
+    }
+
+    if (!!catState._categories.length) {
+      setCatState({ toggleState: tempToggleState });
+    }
+  }, [Object.keys(categoriesFilters).length]);
+
   const handleClick = (e: MouseEvent, k: string) => {
     const isMulti = e.altKey || e.ctrlKey || e.metaKey || e.shiftKey;
     const previousState = Object.assign({}, categoriesFilters);
+    let newState = {};
 
-    if (categoriesFilters[k] && toggleState[k]) {
+    if (categoriesFilters[k] && catState.toggleState[k]) {
       // toggled = true
       delete categoriesFilters[k];
-      delete toggleState[k]
-      setToggleState(toggleState);
+      delete catState.toggleState[k];
+      newState = catState;
     } else if (isMulti) {
       // add to selection / set toggle
       categoriesFilters[k] = true;
-      setToggleState({...toggleState, [k]: true});
+      newState = { ...catState.toggleState, [k]: true };
     } else {
       // delete all except clicked
       categoriesFilters = {};
       categoriesFilters[k] = true;
-      setToggleState({[k]: true});
+      newState = { [k]: true };
     }
 
-    setFilterState({
-      categoriesFilters,
-      previousFilters: {
-        categoriesFilters: previousState
-      }
-    });
+    setCatState({ toggleState: newState });
+    dispatch(setCategories(categoriesFilters, previousState));
   };
 
-  const CategoryBlock = (o: CategorySupply): JSX.Element => {
-    const classes = classNames(
-      'category-list-card p-col-6',
-      { 'highlight-child': toggleState[o.name] }
-    );
+  const listItemTemplate = (o: CategorySupply) => {
+    const classes = classNames("list-card-element", {
+      highlight: catState.toggleState[o.name],
+    });
     return (
-      <TileCard
-        actionOnCard={true}
-        actions={[{fn: (e: MouseEvent) => handleClick(e, o.name)}]}
+      <div
         className={classes}
-        mainText={o.name}
-        imageURL={o.imageURL}></TileCard>
+        onClick={(e: MouseEvent) => handleClick(e, o.name)}
+      >
+        <img src={o.imageURL} alt={o.name} style={{ height: "100%" }} />
+        <span>{o.name}</span>
+      </div>
     );
   };
-  
+
+  const updateCategories = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      const val = e.target.value;
+      const tempState = catState._categories.filter((cat) => {
+        return cat.name.toLocaleLowerCase().includes(val);
+      });
+      setCatState({
+        categories: tempState,
+        search: val
+      });
+    },
+    [catState._categories]
+  );
+
+  const SearchCats = (
+    /* Hijacking existing CSS for the Cat / Attr search inputs to match */
+    <div className="p-tree">
+      <div className="p-tree-filter-container">
+        <InputText
+          value={catState.search}
+          onChange={updateCategories}
+          className="p-tree-filter p-inputtext p-component"
+          placeholder="Search list"
+          />
+        <span className="p-tree-filter-icon pi pi-search"></span>
+      </div>
+    </div>
+  );
+
   return (
-    <Panel header={'Categories'} className='filter-panel' toggleable={true}>
-      <DataView value={categories} layout='grid' itemTemplate={CategoryBlock} />
+    <Panel
+      header={Lang.get("categories")}
+      className="filter-panel"
+      toggleable={true}
+    >
+      {SearchCats }
+      <DataView
+        value={catState.categories}
+        layout="grid"
+        itemTemplate={listItemTemplate}
+      />
     </Panel>
   );
 };

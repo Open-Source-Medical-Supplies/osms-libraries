@@ -12,12 +12,33 @@ code {
 }
 
 h1, h2, h3, h4, h5, h6, p {
+  color: $text;
+}
+h1, h2, h3, h4, h5, h6, p {
   margin-top: 0 !important;
   margin-bottom: 0.5rem !important;
 }
-h3, a:hover {
-  color: $primary !important;
+
+button.p-button-raised > * {
+  color: $white;
 }
+
+a {
+  & > * {
+    color: inherit;
+  }
+  color: $primary !important;
+  text-decoration: underline !important;
+  &:hover {
+    color: $accent !important;
+    text-decoration: none !important;
+  }
+}
+
 section {
   margin-bottom: 1rem;
+}
+
+.markdown-section {
+  padding: 0;
 }

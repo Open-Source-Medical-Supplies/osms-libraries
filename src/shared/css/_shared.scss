@@ -3,10 +3,36 @@
   margin: 0;
   padding: 0;
   border: none;
+  background: none;
+}
+
+.button-link-style {
+  margin: 0;
+  padding: 0;
+  border: none;
+  text-decoration: underline;
+  background: none;
+  cursor: pointer;
+  
+  color: $primary;
+  > * {
+    color: $primary;
+  }
+
+  &:hover {
+    color: $accent !important;
+    text-decoration: none !important;
+    background: none;
+  }
 }
 
 .clamp-1 {
   @include clamp-n(1);
+}
+.clamp-2{
+  @include clamp-n(2);
+  height: 3.3em;
+  margin-bottom: 0 !important;
 }
 
 .divider-1 {
@@ -55,7 +81,7 @@
 .p-sidebar-close {
   position: absolute;
   top: 1rem;
-  right: 1rem;
+  right: 2.5rem;
   z-index: 10000;
   
   span.p-sidebar-close-icon.pi.pi-times {
@@ -134,4 +160,25 @@ $new-updated-max: 100px;
   ul, li, ol {
     list-style: inside disc !important;
   }
+}
+
+.disabled-button {
+  opacity: 1;
+
+  &__true {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.p-selectbutton .p-button.p-highlight span {
+  color: $white;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.w-100 {
+  width: 100%;
 }

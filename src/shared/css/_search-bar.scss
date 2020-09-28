@@ -1,25 +1,21 @@
+.library-selector {
+  width: 100%;
+}
 
-.search-bar-wrapper {
-  display: flex;
+#search-bar-container {
+  margin-right: 0.5rem;
+  height: 31px;
+  width: 100%;
 
-  &.sticky-top-0 {
-    z-index: 100;
-    background-color: $gray;
-    padding-bottom: 0.5rem;
-    margin-bottom: -0.5rem;
-  }
-
-  #search-bar-container {
-    margin-right: 0.5rem;
-    height: 31px;
-    width: 100%;
-
-  }
-  #searchBar {
-    height: 32.6px;
-  }
+}
+#searchBar {
+  height: 32.6px;
 }
 
 .mobile-search-bar#search-bar-container #searchBar {
   height: 3rem;
+}
+
+#search-bar-label {
+  left: 0.5em;
 }

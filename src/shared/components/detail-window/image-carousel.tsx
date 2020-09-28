@@ -1,14 +1,28 @@
 import { Carousel } from "primereact/carousel";
 import React from "react";
 
+export interface ResponsiveOption {
+  breakpoint: string;
+  numVisible: number;
+  numScroll: number;
+}
+
 const ImageCarousel = <T extends any>({
   links,
-  cardTemplate
+  cardTemplate,
+  numVisible = 3,
+  numScroll = 2,
+  circular = true,
+  responsiveOptions
 }: {
   links: T[];
   cardTemplate: (data: T) => JSX.Element;
+  numVisible?: number;
+  numScroll?: number;
+  circular?: boolean;
+  responsiveOptions?: ResponsiveOption[]
 }) => {
-  const responsiveOptions = [
+  responsiveOptions = responsiveOptions || [
     {
       breakpoint: "1024px",
       numVisible: 3,
@@ -28,10 +42,11 @@ const ImageCarousel = <T extends any>({
 
   return links && links.length ?
     <Carousel
+      circular={circular}
       value={links}
       itemTemplate={cardTemplate}
-      numVisible={3}
-      numScroll={2}
+      numVisible={numVisible}
+      numScroll={numScroll}
       responsiveOptions={responsiveOptions}
     /> : null;
 };

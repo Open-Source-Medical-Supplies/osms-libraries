@@ -1,11 +1,11 @@
 import ActiveLib from "../types/lib.enum";
 import { valueof } from "../types/shared.type";
-import { TABLE_MAPPING } from "./google-bucket.constants";
+import { TABLE_MAPPING } from "./general.constants";
 
 export enum SELECTED_ACTIONS {
-  SET = 'SET',
-  CHECK = 'CHECK',
-  CLEAR = 'CLEAR',
+  SET_SELECTED = 'SET_SELECTED',
+  CHECK_SELECTED = 'CHECK_SELECTED',
+  CLEAR_SELECTED = 'CLEAR_SELECTED',
 }
 
 export const SupportingDataMap: {[key in ActiveLib]: valueof<typeof TABLE_MAPPING>} = {

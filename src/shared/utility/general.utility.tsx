@@ -36,8 +36,8 @@ export class CategoryComparator {
   state: any;
   previous: any;
 
-  compareKeys (state: {}, previous: {}): boolean {
-    if (state === this.state && previous === this.previous) {
+  compareKeys (state: {}, previous: {} | undefined): boolean {
+    if (!previous || (state === this.state && previous === this.previous)) {
       return false;
     }
     this.state = state;
@@ -115,3 +115,14 @@ export const hideSelected = (setState: Function) => () => {
   removeParam(PARAMS.SELECTED);
   setState(HIDE_SELECTED);
 };
+
+export const scrollToTop = () => {
+  try {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  } catch (e) {
+    document.documentElement.scrollTop = 0;
+  }
+}

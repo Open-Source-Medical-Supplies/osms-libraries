@@ -1,17 +1,26 @@
+import classNames from "classnames";
 import { Button } from "primereact/button";
 import { Sidebar } from "primereact/sidebar";
-import React, { useCallback, useEffect, useState } from "react";
-import { shallowEqual } from "react-redux";
+import React, { useEffect } from "react";
+import { shallowEqual, useDispatch } from "react-redux";
+import { clearFilter } from "../../../redux/actions/filter.action";
+import { DispatchFilterAction } from "../../../redux/filter.reducer";
+import { DispatchLibAction, LIB_ACTIONS } from "../../../redux/lib.reducer";
 import { useTypedSelector } from "../../../redux/root.reducer";
 import { CategoryInfo } from "../../classes/category-info.class";
-import { TABLE_MAPPING } from "../../constants/google-bucket.constants";
+import { Project } from "../../classes/project.class";
+import { FILTER_ACTIONS } from "../../constants/filter.constants";
+import { TABLE_MAPPING } from "../../constants/general.constants";
 import { FilterState } from "../../types/filter.type";
-import { CategoryComparator, createUUID } from "../../utility/general.utility";
+import ActiveLib from "../../types/lib.enum";
+import { CategoryComparator } from "../../utility/general.utility";
 import { getParam, PARAMS } from "../../utility/param-handling";
+import DetailWindow from "../detail-window/detail-window";
+import LibrarySelector from "../library-selector/library-selector";
 import AttributesList from "./attributes-list";
 import CategoriesList from "./categories-list";
-import ClearFilters from "./clear-filers";
-import { filterBy, setFilterParams } from "./filter-menu.utilities";
+import { filterBy, getFilterHash, setFilterParams } from "./filter-menu.utilities";
+import FilterPills from "./filter-pills";
 import { FilterSearchBar } from "./filter-search-bar";
 import "./_filter-menu.scss";
 
@@ -21,169 +30,164 @@ const catCompare = new CategoryComparator();
 
 export type SetFilterFn = (props: Partial<FilterState>) => void;
 
-const FilterStateDefault: FilterState = {
-  loaded: false,
-  nodes: [], // attributes
-  flatNodes: {},
-  nodeFilters: {},
-  categories: [],
-  categoriesFilters: {},
-  filters: {},
-  searchBar: "",
-  previousFilters: {
-    nodeFilters: {},
-    categoriesFilters: {},
-    searchBar: "",
-  },
-  isFiltering: false,
-  showMobileFilters: false,
-};
+const FilterMenu = ({ disabled = false }: { disabled: boolean }) => {
+  const dispatchFilter = useDispatch<DispatchFilterAction>();
+  const dispatchLib = useDispatch<DispatchLibAction>();
+  const { isMobile, tables, lib, filter } = useTypedSelector(
+    ({ env, tables, lib, filter }) => ({
+      isMobile: env.isMobile,
+      tables,
+      lib,
+      filter,
+    }),
+    shallowEqual
+  );
 
-const FilterMenu = ({
-  state,
-  setState,
-}: {
-  state: any;
-  setState: Function;
-}) => {
-  const {
-    isMobile,
-    tables,
-   } = useTypedSelector(({
-    env,
-    tables,
-  }) => ({
-    isMobile: env.isMobile,
-    tables,
-  }), shallowEqual);
-  
-  const { _records, records } = state;
-  const [filterState, baseSetFilterState] = useState(FilterStateDefault);
-  const setFilterState: SetFilterFn = (props: Partial<FilterState>) => {
-    const update = {
-      ...props,
-      previousFilters: {
-        ...filterState.previousFilters,
-        ...props.previousFilters,
-      },
-    };
-    baseSetFilterState({ ...filterState, ...update });
+  const toggleSidebar = () => dispatchFilter({
+    type: FILTER_ACTIONS.TOGGLE_FILTER_MENU
+  });
+
+  const clearFilters = () => dispatchFilter(clearFilter());
+  const doFilter = () => {
+    setFilterParams(filter);
+    
+    const {_data, data} = lib;
+    const filtered = filterBy( filter, _data as Project[], data as Project[] );
+
+    dispatchFilter({
+      type: filtered.length < lib._data.length ? 
+        FILTER_ACTIONS.START_FILTERING :
+        FILTER_ACTIONS.STOP_FILTERING
+    });
+    dispatchLib({
+      type: LIB_ACTIONS.FILTER_LIB,
+      data: filtered,
+    });
   };
 
-  const doFilter = useCallback(() => {
-    const filteredRecords = filterBy(filterState, _records, records);
-    setFilterState({ isFiltering: _records.length > filteredRecords.length })
-    setState({ records: filteredRecords }, true); // when loading from a param, had a race condition. Kinda hacky
-  }, [filterState, records]);
-
-  // load menu
+  // run on tables loaded
   useEffect(() => {
     if (tables.completed) {
-      const params = getParam(PARAMS.FILTERSTATE) as Partial<FilterState> || {};
-      setFilterState({
-        loaded: true,
-        categories: tables.loaded[TABLE_MAPPING.CategorySupply] as CategoryInfo[],
-        ...tables.loaded[TABLE_MAPPING.FilterMenu],
-        ...params
+      const params = getParam<Partial<FilterState>>(PARAMS.FILTERSTATE) || {};
+      dispatchFilter({
+        type: FILTER_ACTIONS.SET_FILTER,
+        payload: {
+          show: !isMobile && lib.active === ActiveLib.PROJECT,
+          loaded: true,
+          categories: tables.loaded[
+            TABLE_MAPPING.CategorySupply
+          ] as CategoryInfo[],
+          ...tables.loaded[TABLE_MAPPING.FilterMenu],
+          ...params,
+        },
       });
     }
   }, [tables.completed]);
 
-  const nodeFiltersBool = Object.keys(filterState.nodeFilters).length;
-
-  const catFilterBool = catCompare.compareKeys(
-    filterState.categoriesFilters,
-    filterState.previousFilters.categoriesFilters || {}
-  ) ? createUUID() : false;
-
-  useEffect(() => doFilter(), [_records])
-  
-  // filter-changes
+  // run on filters loaded
   useEffect(() => {
-    if (!filterState.loaded) return;
-    setFilterParams(filterState)
+    if (!filter.loaded) return;
     doFilter();
-  }, [
-    catFilterBool,
-    nodeFiltersBool,
-    filterState.searchBar,
-    filterState.nodeFilters,
-    filterState.categoriesFilters,
-  ]);
+  }, [filter.loaded]);
+
+  // run on filter state changes
+  useEffect(() => {
+    if (!filter.loaded) return;
+    doFilter();
+  }, [getFilterHash(filter, catCompare)]);
 
   const Filters = (
     <React.Fragment>
-      <CategoriesList
-        categories={filterState.categories}
-        categoriesFilters={filterState.categoriesFilters}
-        setFilterState={setFilterState}
-      />
+      <CategoriesList />
       <div className="mb-1"></div>
-      <AttributesList
-        nodes={filterState.nodes}
-        nodeFilters={filterState.nodeFilters}
-        setFilterState={setFilterState}
-      />
+      <AttributesList />
     </React.Fragment>
   );
 
-  const DesktopFormat = (
-    <div>
-      <div className="search-bar-wrapper">
-        <FilterSearchBar
-          searchBarText={filterState.searchBar}
-          setFilterState={setFilterState}
-        />
-        <ClearFilters
-          setFilterState={setFilterState}
-          isFiltering={filterState.isFiltering}
-        />
-      </div>
-      <div className="mb-1"></div>
+  const SideMenu = isMobile ? (
+    <Sidebar
+      onHide={toggleSidebar}
+      position="left"
+      visible={filter.show}
+      showCloseIcon={true}
+      fullScreen={true}
+    >
       {Filters}
+      <div className="mb-3-5"></div>
+    </Sidebar>
+  ) : (
+    <DetailWindow
+      position="left"
+      visible={filter.show}
+      showCloseIcon={false}
+      className="p-sidebar-md"
+    >
+      {Filters}
+    </DetailWindow>
+  );
+
+  const MenuButton = () => {
+    const icon = "pi pi-" + (disabled || filter.show ? "times" : "filter");
+    const className = classNames(
+      "mobile-button__square filter-menu__button disabled-button",
+      {
+        "disabled-button__true": disabled,
+      }
+    );
+    return (
+      <Button
+        tooltip='Filter'
+        tooltipOptions={{position: 'bottom'}}
+        style={{ marginRight: "0.5rem" }}
+        className={className}
+        onClick={disabled ? () => null : toggleSidebar}
+        icon={icon}
+      />
+    );
+  };
+
+  const ClearFilters = () => (
+    <Button
+      className="mobile-button__square filter-menu__button"
+      icon="pi pi-undo"
+      disabled={!filter.isFiltering}
+      onClick={clearFilters}
+    />
+  );
+
+  const containerClass = classNames(
+    "filter-menu-container grid-area",
+    { "grid-area-mobile": isMobile }
+  );
+  const Header = (
+    <div className={containerClass}>
+      <MenuButton />
+      <LibrarySelector className="filter-menu__select" />
+      <FilterSearchBar className="mobile-search-bar filter-menu__search" />
+      <ClearFilters />
+      {/* <LanguageSelect /> */}
+      {
+        lib.active === ActiveLib.PROJECT ?
+          <FilterPills pills={[
+            { 
+              parent: 'nodeFilters',
+              payload: filter.nodeFilters,
+            }, {
+              parent: 'categoriesFilters', 
+              payload: filter.categoriesFilters
+            }
+          ]}/> :
+          null
+      }
     </div>
   );
 
-  // MOBILE
-  const showFilterSidebar = () => setFilterState({ showMobileFilters: true });
-  const hideSidebar = () => setFilterState({ showMobileFilters: false });
-  const OpenMobileFitlers = () => (
-    <Button
-      style={{ marginRight: "0.5rem" }}
-      className="mobile-button__square"
-      onClick={showFilterSidebar}
-      icon="pi pi-bars"
-    ></Button>
-  );
-
-  const MobileFormat = (
+  return (
     <React.Fragment>
-      <div className="search-bar-wrapper sticky-top-0">
-        <OpenMobileFitlers />
-        <FilterSearchBar
-          className="mobile-search-bar"
-          searchBarText={filterState.searchBar}
-          setFilterState={setFilterState}
-        />
-        <ClearFilters
-          className="mobile-button__square"
-          setFilterState={setFilterState}
-          isFiltering={filterState.isFiltering}
-        />
-      </div>
-      <Sidebar
-        position="left"
-        fullScreen={true}
-        visible={filterState.showMobileFilters}
-        onHide={hideSidebar}
-      >
-        <div className="mb-3-5"></div>
-        {Filters}
-      </Sidebar>
+      {Header}
+      {disabled ? null : SideMenu}
     </React.Fragment>
   );
-
-  return isMobile ? MobileFormat : DesktopFormat;
 };
 
 export default FilterMenu;

@@ -1,62 +1,70 @@
 import classNames from "classnames";
-import React, { Dispatch, useRef } from 'react';
+import React, { useCallback, useRef } from "react";
 import { useDispatch } from "react-redux";
+import { setSelected } from "../../../redux/actions/selected.action";
 import { useTypedSelector } from "../../../redux/root.reducer";
-import { CategoryInfo } from "../../classes/category-info.class";
-import { Project } from '../../classes/project.class';
-import { SELECTED_ACTIONS } from "../../constants/selected.constants";
 import ActiveLib from "../../types/lib.enum";
-import { SelectAction } from "../../types/selected.type";
-import { getParam, PARAMS } from "../../utility/param-handling";
+import { Selected } from "../../types/selected.type";
 import NewUpdatedBanner from "../new-updated-banner";
-import TileCard from "../tile-card";
+import TileCard, { TileCardActions } from "../tile-card";
+import { filterFromCategoryToProjects } from "../../../redux/actions/shared.action";
+import { getLang } from "../../utility/language.utility";
 
-const ProjectCard: React.FC<{
-  data: Project | CategoryInfo;
-  selected: Project | CategoryInfo;
-  isMobile: boolean;
-}> = ({
-  data, selected, isMobile
-}) => {
-  const dispatch = useDispatch<Dispatch<SelectAction>>();
-  const tables = useTypedSelector(({ tables }) => tables);
-  const activeLib = getParam<ActiveLib>(PARAMS.LIBRARY);
-
+const ProjectCard: React.FC<{data: Selected;}> = ({ data }) => {
+  const dispatch = useDispatch();
+  const { selected, lib } = useTypedSelector(
+    ({ selected, lib }) => ({ selected: selected.data, lib })
+  );
+  const Lang = getLang();
   const thisRef = useRef<HTMLDivElement>(null);
-  
+  const selectCard = useCallback(() => {
+    dispatch(setSelected(data));
+  }, [data]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  if (!data) return null;
+
   const { displayName, imageURL } = data;
-  const selectedName = selected && selected.displayName ? selected.displayName : '';
+  const selectedName = selected?.displayName ? selected.displayName : "";
   const cardIsSelected = !!selectedName && selectedName === displayName;
 
-  const selectCard = () => {
-    dispatch({
-      type: SELECTED_ACTIONS.SET,
-      data,
-      supportingDataSet: tables.loaded
+  const actions: TileCardActions = [];
+  if (lib.active === ActiveLib.CATEGORY) {
+    // add filtering icon for category cards
+    actions.push({
+      fn: () => dispatch(filterFromCategoryToProjects(displayName)),
+      label: Lang.get('projects'),
+      icon: 'filter',
     });
-  };
-  
+  }
+  actions.push({ fn: selectCard });
+
   const highlight = classNames({ "card-selected": cardIsSelected });
 
   if (cardIsSelected && thisRef.current) {
     thisRef.current.scrollIntoView({
-      behavior: 'smooth',
-      block: 'center',
-      inline: 'center'
+      behavior: "smooth",
+      block: "center",
+      inline: "center",
     });
   }
 
-  let sizing = isMobile ? 'p-col-6' : 'p-col-2'; // show all
-  if (!isMobile && !!selectedName) {
-    // not mobile, card selected -> condense to share w/ fullcard
-    sizing = activeLib === ActiveLib.PROJECT ? 'p-col-6': 'p-col-12';
-  }
-
+  // must be divisors of 12
+  const sizing = 'p-xs-6 p-sm-4 p-md-4 p-lg-3 p-xl-3 p-xxl-2';
   return (
-    <div key={displayName} ref={thisRef} style={{position: 'relative'}} className={sizing}>
+    <div
+      key={displayName}
+      ref={thisRef}
+      style={{ position: "relative" }}
+      className={sizing}
+    >
       <NewUpdatedBanner data={data} />
-      <TileCard mainText={displayName} imageURL={imageURL} actions={[{fn: selectCard}]} className={highlight}/>
+      <TileCard
+        mainText={displayName}
+        imageURL={imageURL}
+        actions={actions}
+        className={highlight}
+      />
     </div>
   );
-}
+};
 export default ProjectCard;

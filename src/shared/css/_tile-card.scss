@@ -1,0 +1,15 @@
+.tile-card__footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+@media screen and (max-width: $breakpoint-md) {
+  .tile-card__footer {
+    justify-content: center;
+    flex-wrap: wrap;
+    
+    button {
+      margin-bottom: 0.5rem;
+    }
+  }
+}

@@ -1,1 +1,115 @@
-@import './category-list';
+#osms-lib {
+  $max-filter-col: 5;
+
+  .filter-menu__{
+    &select {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    &pills {
+      display: flex;
+      align-items: center;
+      transition: height 300ms ease-in-out;
+
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+
+      overflow-x: auto;
+      overflow-y: hidden;
+
+      li {
+        display: flex;
+        align-items: center;
+        padding: 0.5rem 0.75rem;
+        white-space: nowrap;
+        cursor: pointer;
+
+        span,
+        &:not(:last-of-type) {
+          margin-right: 0.5rem;  
+        }
+      }
+    }
+  }
+
+  .grid-area {
+    display: grid;
+    gap: 1rem;
+    // grid-template-columns: 48px 182px auto 48px 48px; // 5 columns
+    grid-template-columns: 48px 182px auto 48px; // 4 columns
+    grid-template-rows: 48px auto;
+
+    .filter-menu__ {
+      &button {
+        // menu icon
+        &:first-of-type {
+          grid-column: 1;
+        }
+        // refresh icon
+        &:nth-of-type(2) {
+          grid-column: 4;
+        }
+        // language select
+        // &:nth-of-type(3) {
+        //   grid-column: #{$max-filter-col};
+        // }
+      }
+
+      &pills {
+        grid-column: 1 / #{$max-filter-col};
+      }
+  
+      &select {
+        grid-column: 2;
+      }
+      &search {
+        grid-column: 3;
+      }
+    }
+  }
+  
+  .grid-area-mobile {
+    display: grid;
+    gap: 0.5rem;
+  
+    grid-template-columns: 48px auto 48px;
+    grid-template-rows: 48px 48px auto;
+
+    .filter-menu__ {
+      &button {
+        // menu icon
+        &:first-of-type {
+          grid-row: 2;
+          grid-column: 1;
+        }
+        // refresh icon
+        &:nth-of-type(2) {
+          grid-row: 2;
+          grid-column: 3;
+        }
+        // language select
+        // &:nth-of-type(3) {
+        //   grid-row: 3;
+        //   grid-column: 4;
+        // }
+      }
+
+      &pills {
+        grid-row: 3;
+        grid-column: 1 / 4;
+      }
+  
+      &search {
+        grid-row: 1;
+        grid-column: 1 / 4;
+      }
+      &select {
+        grid-row: 2;
+        grid-column: 2;
+      }
+      
+    }
+  }
+}

@@ -1,3 +1,17 @@
+/*
+  Default vars from https://github.com/primefaces/primeflex/blob/master/src/_variables.scss
+  $sm:576px !default;
+  $md:768px !default;
+  $lg:992px !default;
+  $xl:1200px !default;
+  $gutter:.5rem !default;
+
+  $fieldMargin: 1rem !default;
+  $fieldLabelMargin: .5rem !default;
+  $helperTextMargin: .25rem !default;
+
+  $spacer:1rem !default;
+*/
 // prime overrides / customization
 .p-datascroller-list {
   list-style: none;
@@ -52,13 +66,88 @@ div.p-grid, .p-dataview.p-component.p-dataview-grid {
   margin: 0 !important;
 }
 
-.p-sidebar-right-custom {
+.p-sidebar-custom {
   position: relative !important;
   height: 100vh;
   width: calc(100% - 0.5rem) !important;
+}
+
+.p-sidebar-right-custom {
   margin-left: 0.5rem !important;
+}
+.p-sidebar-left-custom {
+  margin-right: 0.5rem !important;
+}
+
+.p-sidebar-left.p-sidebar-lg,
+.p-sidebar-right.p-sidebar-lg {
+  // from https://www.primefaces.org/primereact/showcase/#/flexgrid
+  @media screen and (max-width: 999px) {
+    width: 100% !important;
+  }
+  @media screen and (min-width: 1000px) {
+    width: 60rem !important;
+  }
+}
+
+.p-xs- {
+  &6 {
+    @media screen and (max-width: 576px) {
+      width: 50%;
+    }
+  }
+  &12 {
+    @media screen and (max-width: 576px) {
+      width: 100%;
+    }
+  }
+}
+
+.p-xxl-2 {
+  @media screen and (min-width: 1500px) {
+    width: 16.6667%;
+  }
 }
 
 .p-card img, .p-card div.center-flex  {
   margin-top: 2px;
+}
+
+// bc they don't include p-tag ?? no idea
+.p-tag {
+  background: $blue;
+  padding: 0.25rem 0.4rem;
+  border-radius: 3px;
+
+  span, i {
+    color: $white;
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+
+  &-success {
+    background-color: $success;
+    color: $white;
+  }
+  &-info {
+    background-color: $blue;
+    color: $white;
+  }
+  &-warning {
+    background-color: $accent;
+    color: $text;
+  }
+  &-danger {
+    background-color: $danger;
+    color: $white;
+  }
+}
+
+.p-button.p-highlight {
+  background-color: $blue;
+  border: 1px solid $blue;
+}
+
+.p-treenode-content.p-highlight {
+  background-color: $blue;
 }

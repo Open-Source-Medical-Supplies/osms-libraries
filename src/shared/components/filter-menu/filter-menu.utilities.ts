@@ -1,15 +1,15 @@
 import { Project } from "../../classes/project.class";
 import { AirtableRecords } from "../../types/airtable.type";
 import { FilterNodeData } from "../../types/filter-node.type";
+import { FilterDatum, Filters, FilterState } from "../../types/filter.type";
 import { BasicObject } from "../../types/shared.type";
-import { allNotEmpty, notEmpty } from "../../utility/general.utility";
+import { allNotEmpty, notEmpty, CategoryComparator, createUUID } from "../../utility/general.utility";
 import {
   getParam,
   PARAMS,
   QueryParams,
   setQueryParam
 } from "../../utility/param-handling";
-import { FilterDatum, FilterState, Filters } from "../../types/filter.type";
 
 const buildTree = (data: FilterDatum, acc: any = {}) => {
   const { key, parentKey } = data;
@@ -40,7 +40,11 @@ const buildTree = (data: FilterDatum, acc: any = {}) => {
 export const mapFilterData = (data: AirtableRecords<FilterDatum>) => {
   // filter data comes in as a flat tree with pointers b/w parent / child
   const tempNodes: BasicObject<any> = {};
-  const flatNodes: BasicObject<any> = {};
+  const flatNodes: BasicObject<{
+    key?: string;
+    parentKey?: string;
+    label?: string;
+  }> = {};
   data.forEach(({fields}) => {
     if (fields.icon) {
       fields.icon = "pi " + fields.icon;
@@ -50,9 +54,8 @@ export const mapFilterData = (data: AirtableRecords<FilterDatum>) => {
     // end nodes
 
     // flatNodes handling
-    if (fields && fields.key) {
-      const vk = fields.key;
-      flatNodes[vk] = fields;
+    if (fields?.key) {
+      flatNodes[fields.key] = fields;
     }
     // end flatNodes
   })
@@ -156,7 +159,7 @@ const checkCategories = (cats: any, projectJSON: Project): boolean => {
   return false;
 };
 
-const noFalsePositives = (attrs: FilterNodeData | undefined) => {
+export const noFalsePositiveNodes = (attrs: FilterNodeData | undefined) => {
   if (!attrs || !Object.keys(attrs)) return true;
 
   let check = false;
@@ -175,12 +178,12 @@ const filteringLevel = (filters: Filters, filterState: FilterState) => {
    * If debugging, don't compare 'current' to 'prev' since they don't account for the search string
    * Instead, look at 'stricter' && 'numFilters'
    */
-  const byAttributes = notEmpty(filters.attributes) && noFalsePositives(filterState.nodeFilters);
+  const byAttributes = notEmpty(filters.attributes) && noFalsePositiveNodes(filterState.nodeFilters);
   const byCategories = notEmpty(filters.categories);
   const byText = filters.searchBar.length;
   const current = +byAttributes + +byCategories;
 
-  const prevByAttributes = noFalsePositives(filterState.previousFilters.nodeFilters);
+  const prevByAttributes = noFalsePositiveNodes(filterState.previousFilters.nodeFilters);
   const prevByCategories = notEmpty(filterState.previousFilters.categoriesFilters);
   const prevByText = (filterState.previousFilters.searchBar || "").length
   const prev = +prevByAttributes + +prevByCategories;
@@ -226,7 +229,7 @@ export const filterBy = (
 export const filtersToParams = (filterState: FilterState): QueryParams => {
   const { nodeFilters, categoriesFilters, searchBar } = filterState;
   return {
-    key: "filterState",
+    key: PARAMS.FILTERSTATE,
     val: JSON.stringify({
       nodeFilters,
       categoriesFilters,
@@ -243,3 +246,20 @@ export const setFilterParams = (filterState: FilterState): void => {
     setQueryParam(createdParams);
   }
 };
+
+/** Returns a grotesque string that acts as a hash token for useEffect */
+export const getFilterHash = (filter: FilterState, catCompare: CategoryComparator) => {
+  const nodeFiltersBool = Object.keys(filter.nodeFilters).length;
+  const catFilterBool = catCompare.compareKeys(
+    filter.categoriesFilters,
+    filter.previousFilters.categoriesFilters
+  ) ? createUUID() : false;
+
+  return [
+    catFilterBool,
+    nodeFiltersBool,
+    filter.searchBar,
+    JSON.stringify(filter.nodeFilters),
+    JSON.stringify(filter.categoriesFilters),
+  ].join();
+}

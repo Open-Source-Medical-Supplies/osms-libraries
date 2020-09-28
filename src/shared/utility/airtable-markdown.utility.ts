@@ -5,8 +5,6 @@
  *  "... out in public [[1][1]]. As supplies continue ... [1]: https://example.com"
  * and the problem is compounded.
  * 
- * 20.09.09 - Looks like AT is finally sending their links as proper MD.
- * 
  * @constant urlRxMatch - localized regex to test for the existence of the default "[1]:" phenomenom
  * @constant bracketNotation - a modified version to test for "[[n][n]]" with a subgroup
  * @constant linkRx - a modified modified version to capture the URL itself

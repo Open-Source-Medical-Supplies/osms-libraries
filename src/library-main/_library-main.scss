@@ -1,0 +1,83 @@
+@import 'src/shared/css/variables';
+
+#osms-lib {
+  .mobile.library-main-container {
+    display: flex;
+    flex-direction: column;
+  }
+  .desktop.library-main-container {
+    // all of this bc of the filter menu pushing in vs sliding on top
+    display: grid;
+    grid-template-rows: auto auto;
+    
+    @media screen and (min-width: $breakpoint-sm) { grid-template-columns: 35% auto; }
+    @media screen and (min-width: $breakpoint-md) { grid-template-columns: 35% auto; }
+    @media screen and (min-width: $breakpoint-lg) { grid-template-columns: 30% auto; }
+    @media screen and (min-width: $breakpoint-xl) { grid-template-columns: 25% auto; }
+    @media screen and (min-width: $breakpoint-xxl) { grid-template-columns: 20% auto; }
+  
+    .filter-menu-container {
+      grid-column: 1 / 3;
+      grid-row: 1;
+      margin-bottom: 1rem;
+    }
+  
+    &__grid {
+      &__menu-closed {
+        .card-container__data-view {
+          grid-column: 1 / 3;
+          grid-row: 2;
+        }
+      }
+      &__menu-open {
+        .p-sidebar-md.p-sidebar-left.p-sidebar-active {
+          grid-column: 1;
+          grid-row: 2;
+        }
+        .card-container_data-view {
+          grid-column: 2;
+          grid-row: 2;
+        }
+      }
+    }
+  }
+
+  .selected-image-carousel {
+    .image-gallery-slide-wrapper {
+      box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);
+    }
+    .image-gallery-slide .image-gallery-image {
+      margin-top: 2rem;
+    }
+    span.image-gallery-description,
+    div.image-gallery-description {
+      background-color: $black80 !important;
+      top: 1rem;
+      bottom: unset;
+      *:not(a) {
+        color: $white;
+      }
+    }
+    div.selected-image-carousel__link-container {
+      bottom: 1rem;
+      left: 0;
+      margin: 0 auto;
+      position: absolute;
+      right: 0;
+      z-index: 4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    button.selected-image-carousel__link {
+      position: relative;
+      padding: 0.25rem;
+    }
+    .image-gallery-slides {
+      min-height: 200px;
+      max-width: 400px;
+      max-height: 400px;
+      margin: 0 auto;
+    }
+  }
+}
