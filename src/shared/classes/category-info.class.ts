@@ -1,22 +1,8 @@
 import { BasicObject } from "../types/shared.type";
 import DataConverter from "./data-converter";
 
-const RawMap = {
-  "Assembly/Fabrication Requirements": 'fabReqs',
-  "CategoryName": DataConverter.classMaps.displayName,
-  "Current Global Resources": 'currentGlobalResources',
-  "Disclaimer": 'disclaimer',
-  "Disclaimer Designs": 'designDisclaimers',
-  "Engineering Requirements": 'engReqs',
-  "Medical Supply Category": 'categoryKey',
-  "Resources": 'resources',
-  "The Problem": 'problem',
-  ...DataConverter.classMaps.DISPLAY_NAME,
-  ...DataConverter.classMaps.IMAGE_URL,
-  ...DataConverter.classMaps.WEB_NAME,
-  ...DataConverter.sharedFields
-};
-
+// IMPORTANT
+// If you add a new column in AT, it needs to be added to CardSections
 const CardSections = [
 	{
     key: 'disclaimer',
@@ -41,6 +27,20 @@ const CardSections = [
     value: 'Disclaimer Designs'
   }
 ];
+const mappedSections = CardSections.reduce<BasicObject<string>>((acc, section) => {
+  acc[section.value] = section.key;
+  return acc;
+}, {});
+
+const RawMap = {
+  "CategoryName": DataConverter.classMaps.displayName,
+  "Medical Supply Category": 'categoryKey',
+  ...DataConverter.classMaps.DISPLAY_NAME,
+  ...DataConverter.classMaps.IMAGE_URL,
+  ...DataConverter.classMaps.WEB_NAME,
+  ...DataConverter.sharedFields,
+  ...mappedSections
+};
 
 export class CategoryInfo {
   // used by the Category Library
