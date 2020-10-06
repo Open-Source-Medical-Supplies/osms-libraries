@@ -98,7 +98,6 @@ export const timeNow = (): number => {
   return new Date().getTime();
 }
 
-
 export const toDict = <T extends any> (data: T[], index: string) => {
   // do NOT change the key name otherwise it won't match elsewhere
   return data.reduce((acc: BasicObject<T[]>, datum: T) => {
