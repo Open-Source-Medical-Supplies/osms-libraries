@@ -49,7 +49,22 @@ const replaceStandardLinks = (md: string) => {
   }
   return tempMD;
 }
+const dateInBracketsRx = new RegExp(/\[\d+\/\d+\/\d+\]/g); // this works, but is brittle as it only applies to a specific date string
+// try getting this to work -> \[.+\](?!\() aka anything in square brackets, but not a MD link.
 export const fixMdUrls = (md: string): string => {
+  if (dateInBracketsRx.test(md)) {
+    const a = md.match(dateInBracketsRx);
+    if (a) {
+      const b = md.split(dateInBracketsRx)
+      md = b.reduce((acc, str, ix) => {
+        acc += str;
+        if (a[ix]) {
+          acc += "\\"+ a[ix].slice(0, a[ix].length - 1) + "\\]"
+        }
+      return acc;
+      }, '')
+    }
+  }
   if (bracketNotation.test(md)) {
     return replaceBracketLinks(md);
   }
