@@ -10,6 +10,7 @@
  * @constant linkRx - a modified modified version to capture the URL itself
  */
 
+
 const urlRxMatch = new RegExp(/\[\d+\]:/);
 const bracketNotation = new RegExp(/\[(\[\d+\])+\]/g);
 const linkRx = new RegExp(/(?:\[\d+\]:\s)(.+)/g);
@@ -49,17 +50,24 @@ const replaceStandardLinks = (md: string) => {
   }
   return tempMD;
 }
-const dateInBracketsRx = new RegExp(/\[\d+\/\d+\/\d+\]/g); // this works, but is brittle as it only applies to a specific date string
-// try getting this to work -> \[.+\](?!\() aka anything in square brackets, but not a MD link.
+const hasBracketText = new RegExp(/\[.*?\]/g);
+const isUrlText = new RegExp(/\[.*?\]\(.*?\)/g);
 export const fixMdUrls = (md: string): string => {
-  if (dateInBracketsRx.test(md)) {
-    const a = md.match(dateInBracketsRx);
-    if (a) {
-      const b = md.split(dateInBracketsRx)
-      md = b.reduce((acc, str, ix) => {
+  if (hasBracketText.test(md)) {
+    const allBracketText = md.match(hasBracketText); // includes bracket text of URLs
+    const allUrlText = md.match(isUrlText)?.join(); // smashes URLs together into a string for simpler '.includes' lookup below
+    if (allBracketText) {
+      /** This feels odd, but
+       * Splitting on the Regex removes / splits into the number of entries of the allBracketText match fn
+       * so the index can be used to... index into the match-array and pulled out.
+      */
+      return md.split(hasBracketText).reduce((acc, str, ix) => {
         acc += str;
-        if (a[ix]) {
-          acc += "\\"+ a[ix].slice(0, a[ix].length - 1) + "\\]"
+        // if it's a bracket'd string, but not one that's a MD-URL string
+        if (allBracketText[ix] && !allUrlText?.includes(allBracketText[ix])) {
+          acc += "\\"+ allBracketText[ix].slice(0, allBracketText[ix].length - 1) + "\\]"
+        } else {
+          acc += allBracketText[ix];
         }
       return acc;
       }, '')
