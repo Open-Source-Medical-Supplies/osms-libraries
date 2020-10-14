@@ -65,11 +65,11 @@ export const fixMdUrls = (md: string): string => {
         acc += str;
         // if it's a bracket'd string, but not one that's a MD-URL string
         if (allBracketText[ix] && !allUrlText?.includes(allBracketText[ix])) {
-          acc += "\\"+ allBracketText[ix].slice(0, allBracketText[ix].length - 1) + "\\]"
-        } else {
+          acc += "\\"+ allBracketText[ix].slice(0, allBracketText[ix].length - 1) + "\\]";
+        } else if (allBracketText[ix] && allUrlText?.includes(allBracketText[ix])) {
           acc += allBracketText[ix];
         }
-      return acc;
+        return acc;
       }, '')
     }
   }
