@@ -78,12 +78,19 @@
   width: 100%;
 }
 
+.mobile .p-sidebar-close {
+  right: 4rem;
+}
+
+.desktop .p-sidebar-close {
+  right: 2.5rem;
+}
+
 .p-sidebar-close {
   position: absolute;
   top: 1rem;
-  right: 2.5rem;
   z-index: 10000;
-  
+
   span.p-sidebar-close-icon.pi.pi-times {
     padding: 0.5rem !important;
     background: $primary !important;
