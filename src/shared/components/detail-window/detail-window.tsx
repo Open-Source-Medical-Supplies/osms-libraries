@@ -1,6 +1,7 @@
 import classNames from "classnames";
 import DomHandler from "primereact/components/utils/DomHandler";
 import React from "react";
+import { Indexable } from "../../types/shared.type";
 
 interface SidebarProps {
     id?: string;
@@ -233,13 +234,17 @@ export default class DetailWindow extends React.Component<SidebarProps,any> {
       }
     );
     const closeIcon = this.renderCloseIcon();
+    const elStyle = { height: '100%', ...this.props.style};
+    if ((elStyle as Indexable)['height'] === 'unset') {
+      delete (elStyle as Indexable)['height'];
+    }
 
     return (
       <div
         ref={(el) => (this.container = el)}
         id={this.props.id}
         className={className}
-        style={{height: '100%', ...this.props.style}}
+        style={elStyle}
         role="complementary"
       >
         {this.props.showCloseIcon ? closeIcon : null}

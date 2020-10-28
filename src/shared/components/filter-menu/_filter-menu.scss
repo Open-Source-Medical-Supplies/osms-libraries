@@ -34,6 +34,11 @@
     }
   }
 
+  div.filter-sidebar {
+    height: calc(100vh - 140px);
+    overflow-y: auto;
+  }
+
   .grid-area {
     display: grid;
     gap: 1rem;

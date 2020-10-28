@@ -98,9 +98,9 @@ const FilterMenu = ({ disabled = false }: { disabled: boolean }) => {
 
   const Filters = (
     <React.Fragment>
-      <CategoriesList />
-      <div className="mb-1"></div>
       <AttributesList />
+      <div className="mb-1"></div>
+      <CategoriesList />
     </React.Fragment>
   );
 
@@ -111,6 +111,7 @@ const FilterMenu = ({ disabled = false }: { disabled: boolean }) => {
       visible={filter.show}
       showCloseIcon={true}
       fullScreen={true}
+      className='filter-siderbar'
     >
       {Filters}
       <div className="mb-3-5"></div>
@@ -120,7 +121,8 @@ const FilterMenu = ({ disabled = false }: { disabled: boolean }) => {
       position="left"
       visible={filter.show}
       showCloseIcon={false}
-      className="p-sidebar-md"
+      style={{height: 'unset'}}
+      className="p-sidebar-md filter-sidebar"
     >
       {Filters}
     </DetailWindow>
