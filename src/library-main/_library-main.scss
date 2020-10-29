@@ -1,9 +1,17 @@
 @import 'src/shared/css/variables';
 
 #osms-lib {
+  .library-main-container {
+    height: calc(100vh - 1rem);
+  }
+  
   .mobile.library-main-container {
     display: flex;
     flex-direction: column;
+    
+    .p-sidebar {
+      overflow-y: auto;
+    }
   }
   .desktop.library-main-container {
     // all of this bc of the filter menu pushing in vs sliding on top

@@ -8,25 +8,10 @@
       padding: 0 !important;
     }
   }
-  
+
+  .project .card-container__data-view ,
   .category .card-container__data-view {
-    @media screen and (max-width: 768px) {
-      max-height: calc(100vh - 104px);
-    }
-    
-    @media screen and (min-width: 769px) {
-      max-height: calc(100vh - 48px - 0.5rem);
-    }
-  }
-  
-  .project .card-container__data-view {
-    @media screen and (max-width: 768px) {
-      max-height: calc(100vh - 146px - 1.5rem);
-    }
-    
-    @media screen and (min-width: 769px) {
-      max-height: calc(100vh - 90px - 1.5rem);
-    }
+    height: 100%;
   }
 }
 
