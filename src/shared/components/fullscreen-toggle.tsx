@@ -16,14 +16,14 @@ const fullscreenOn = (el: any | null) => {
 };
 
 const FullscreenToggle = () => {
-  const [state, setState] = useState("fas fa-expand-alt");
+  const [state, setState] = useState("pi pi-window-maximize");
 
   const fullscreenUpdate = useCallback(() => {
     if (!!document.fullscreenElement) {
-      setState("fas fa-expand-alt");
+      setState("pi pi-window-maximize");
       document.exitFullscreen();
     } else {
-      setState("fas fa-compress-alt");
+      setState("pi pi-window-minimize");
       fullscreenOn(document.getElementById("osms-lib"));
     }
 	}, []);
