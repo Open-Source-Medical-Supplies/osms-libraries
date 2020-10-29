@@ -16,6 +16,7 @@ import ActiveLib from "../../types/lib.enum";
 import { CategoryComparator } from "../../utility/general.utility";
 import { getParam, PARAMS } from "../../utility/param-handling";
 import DetailWindow from "../detail-window/detail-window";
+import FullscreenToggle from "../fullscreen-toggle";
 import LibrarySelector from "../library-selector/library-selector";
 import AttributesList from "./attributes-list";
 import CategoriesList from "./categories-list";
@@ -167,7 +168,7 @@ const FilterMenu = ({ disabled = false }: { disabled: boolean }) => {
       <LibrarySelector className="filter-menu__select" />
       <FilterSearchBar className="mobile-search-bar filter-menu__search" />
       <ClearFilters />
-      {/* <LanguageSelect /> */}
+      { isMobile ? null : <FullscreenToggle />}
       {
         lib.active === ActiveLib.PROJECT ?
           <FilterPills pills={[

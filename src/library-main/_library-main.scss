@@ -1,5 +1,12 @@
 @import 'src/shared/css/variables';
 
+#osms-lib:fullscreen,
+#osms-lib:-webkit-full-screen,
+#osms-lib:-ms-fullscreen,
+#osms-lib:-moz-full-screen {
+  padding: 0.5rem;
+  background-color: $white;
+}
 #osms-lib {
   .library-main-container {
     height: calc(100vh - 1rem);
