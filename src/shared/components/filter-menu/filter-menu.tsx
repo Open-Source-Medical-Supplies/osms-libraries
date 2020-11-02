@@ -14,6 +14,7 @@ import { TABLE_MAPPING } from "../../constants/general.constants";
 import { FilterState } from "../../types/filter.type";
 import ActiveLib from "../../types/lib.enum";
 import { CategoryComparator } from "../../utility/general.utility";
+import { getLang } from "../../utility/language.utility";
 import { getParam, PARAMS } from "../../utility/param-handling";
 import DetailWindow from "../detail-window/detail-window";
 import FullscreenToggle from "../fullscreen-toggle";
@@ -32,6 +33,7 @@ const catCompare = new CategoryComparator();
 export type SetFilterFn = (props: Partial<FilterState>) => void;
 
 const FilterMenu = ({ disabled = false }: { disabled: boolean }) => {
+  const Lang = getLang();
   const dispatchFilter = useDispatch<DispatchFilterAction>();
   const dispatchLib = useDispatch<DispatchLibAction>();
   const { isMobile, tables, lib, filter } = useTypedSelector(
@@ -99,6 +101,7 @@ const FilterMenu = ({ disabled = false }: { disabled: boolean }) => {
 
   const Filters = (
     <React.Fragment>
+      <h2>{Lang.get('filterBy')}</h2>
       <AttributesList />
       <div className="mb-1"></div>
       <CategoriesList />
