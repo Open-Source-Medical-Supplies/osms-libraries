@@ -1,5 +1,5 @@
 import { Button } from "primereact/button";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const fullscreenOn = (el: any | null) => {
   if (!el) return;
@@ -15,18 +15,47 @@ const fullscreenOn = (el: any | null) => {
   }
 };
 
-const FullscreenToggle = () => {
-  const [state, setState] = useState("pi pi-window-maximize");
+const EventListeners = [
+	'fullscreenchange',
+	'webkitfullscreenchange',
+	'mozfullscreenchange',
+	'MSFullscreenChange'
+]
 
-  const fullscreenUpdate = useCallback(() => {
+const FullscreenToggle = () => {
+	const [state, setState] = useState("pi pi-window-maximize");
+	const setToMax = () => {
+		setState("pi pi-window-minimize");
+		fullscreenOn(document.getElementById("osms-lib"));
+	}
+	const setToMin = () => {
+		setState("pi pi-window-maximize");
+		if (!!document.fullscreenElement) {
+			document.exitFullscreen()
+		};
+	}
+
+  const fullscreenUpdate = () => {
     if (!!document.fullscreenElement) {
-      setState("pi pi-window-maximize");
-      document.exitFullscreen();
+			setToMin();
     } else {
-      setState("pi pi-window-minimize");
-      fullscreenOn(document.getElementById("osms-lib"));
+      setToMax();
     }
-	}, []);
+	};
+
+	const escHandler = (e: any) => {
+		if (!document.fullscreenElement && !(document as any).webkitIsFullScreen && !(document as any).mozFullScreen && !(document as any).msFullscreenElement) {
+			setToMin();
+		}
+	}
+
+	useEffect(() => {
+		EventListeners.forEach(event => {
+			document.addEventListener(event, escHandler);
+		});
+
+    return () => EventListeners.forEach(event => document.removeEventListener(event, escHandler));
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Button
