@@ -1,7 +1,7 @@
 import { Button } from 'primereact/button';
 import { MenuItem } from 'primereact/components/menuitem/MenuItem';
 import { SlideMenu } from 'primereact/slidemenu';
-import React, { useRef } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { DispatchLanguageAction, LanguageBase, LANG_ACTIONS } from '../../redux/language.reducer';
 import { useTypedSelector } from '../../redux/root.reducer';
@@ -13,26 +13,34 @@ const LanguageSelect = ({klass}: {klass?: string}) => {
   const {base, selected} = useTypedSelector(({ lang: { base, selected } }) => ({base, selected}));
   const menuEl = useRef<SlideMenu | null>();
   const dispatch = useDispatch<DispatchLanguageAction>();
+	
+	const menuItems: MenuItem[] = useMemo(() => {
+		if (empty(base)) {
+			return [];
+		}
 
+		return Object.keys(base as LanguageBase)
+			.map((key): MenuItem => ({
+				icon: 'flag-icon flag-icon-' + key.slice(3,5).toLowerCase(), // 'en-US' -> 'US'
+				label: key,
+				command: () => dispatch({
+					type: LANG_ACTIONS.SELECT_LANG,
+					selected: key as IETF
+				})
+			}))
+			.sort((a,b) => a.label && b.label ? a.label.localeCompare(b.label) : 0);
+	}, [base]); // eslint-disable-line react-hooks/exhaustive-deps
+	
   if (!selected && empty(base)) {
     return <Button type="button" disabled={true} icon='pi pi-globe' />
   }
-
-  let menuItems: MenuItem[] = Object.keys(base as LanguageBase).map((key): MenuItem => {
-    return {
-			icon: 'flag-icon flag-icon-' + key.slice(3,5).toLowerCase(), // 'en-US' -> 'US'
-			label: key,
-      command: () => dispatch({
-        type: LANG_ACTIONS.SELECT_LANG,
-        selected: key as IETF
-      })
-    }
-  })
 
 	const className = classNames(
 		"language-selector-container",
 		klass
 	);
+
+	console.log(menuEl.current)
 	
   return (
     <div className={className}>
