@@ -18,6 +18,7 @@ import { getLang } from "../../utility/language.utility";
 import { getParam, PARAMS } from "../../utility/param-handling";
 import DetailWindow from "../detail-window/detail-window";
 import FullscreenToggle from "../fullscreen-toggle";
+import LanguageSelect from "../language-select";
 import LibrarySelector from "../library-selector/library-selector";
 import AttributesList from "./attributes-list";
 import CategoriesList from "./categories-list";
@@ -135,7 +136,7 @@ const FilterMenu = ({ disabled = false }: { disabled: boolean }) => {
   const MenuButton = () => {
     const icon = "pi pi-" + (disabled || filter.show ? "times" : "filter");
     const className = classNames(
-      "mobile-button__square filter-menu__button disabled-button",
+      "mobile-button__square filter-menu__button filter-menu__grid disabled-button",
       {
         "disabled-button__true": disabled,
       }
@@ -154,7 +155,7 @@ const FilterMenu = ({ disabled = false }: { disabled: boolean }) => {
 
   const ClearFilters = () => (
     <Button
-      className="mobile-button__square filter-menu__button"
+      className="mobile-button__square filter-menu__button filter-menu__grid"
       icon="pi pi-undo"
       disabled={!filter.isFiltering}
       onClick={clearFilters}
@@ -162,16 +163,20 @@ const FilterMenu = ({ disabled = false }: { disabled: boolean }) => {
   );
 
   const containerClass = classNames(
-    "filter-menu-container grid-area",
-    { "grid-area-mobile": isMobile }
+    "filter-menu-container",
+    {
+			"grid-area": !isMobile,
+			"grid-area-mobile": isMobile
+		}
   );
   const Header = (
     <div className={containerClass}>
       <MenuButton />
-      <LibrarySelector className="filter-menu__select" />
-      <FilterSearchBar className="mobile-search-bar filter-menu__search" />
+      <LibrarySelector className="filter-menu__select filter-menu__grid" />
+      <FilterSearchBar className="mobile-search-bar filter-menu__search filter-menu__grid" />
       <ClearFilters />
-      { isMobile ? null : <FullscreenToggle />}
+      { isMobile ? null : <FullscreenToggle klass="filter-menu__grid" />}
+      <LanguageSelect klass="filter-menu__grid"/>
       {
         lib.active === ActiveLib.PROJECT ?
           <FilterPills pills={[

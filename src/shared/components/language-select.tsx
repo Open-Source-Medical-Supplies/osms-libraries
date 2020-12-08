@@ -7,8 +7,9 @@ import { DispatchLanguageAction, LanguageBase, LANG_ACTIONS } from '../../redux/
 import { useTypedSelector } from '../../redux/root.reducer';
 import { IETF } from '../constants/ietf.constants';
 import { empty } from '../utility/general.utility';
+import classNames from "classnames";
 
-const LanguageSelect = () => {
+const LanguageSelect = ({klass}: {klass?: string}) => {
   const {base, selected} = useTypedSelector(({ lang: { base, selected } }) => ({base, selected}));
   const menuEl = useRef<SlideMenu | null>();
   const dispatch = useDispatch<DispatchLanguageAction>();
@@ -19,7 +20,8 @@ const LanguageSelect = () => {
 
   let menuItems: MenuItem[] = Object.keys(base as LanguageBase).map((key): MenuItem => {
     return {
-      icon: 'flag-icon flag-icon-' + key.slice(3,5).toLowerCase(), // 'en-US' -> 'US'
+			icon: 'flag-icon flag-icon-' + key.slice(3,5).toLowerCase(), // 'en-US' -> 'US'
+			label: key,
       command: () => dispatch({
         type: LANG_ACTIONS.SELECT_LANG,
         selected: key as IETF
@@ -27,8 +29,13 @@ const LanguageSelect = () => {
     }
   })
 
+	const className = classNames(
+		"language-selector-container",
+		klass
+	);
+	
   return (
-    <div className='language-selector-container'>
+    <div className={className}>
       <Button
         className='mobile-button__square'
         type="button"

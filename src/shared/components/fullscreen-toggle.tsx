@@ -1,5 +1,6 @@
 import { Button } from "primereact/button";
 import React, { useEffect, useState } from "react";
+import classNames from 'classnames';
 
 const fullscreenOn = (el: any | null) => {
   if (!el) return;
@@ -22,7 +23,7 @@ const EventListeners = [
 	'MSFullscreenChange'
 ]
 
-const FullscreenToggle = () => {
+const FullscreenToggle = ({klass}: {klass?: string}) => {
 	const [state, setState] = useState("pi pi-window-maximize");
 	const setToMax = () => {
 		setState("pi pi-window-minimize");
@@ -57,9 +58,14 @@ const FullscreenToggle = () => {
     return () => EventListeners.forEach(event => document.removeEventListener(event, escHandler));
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+	const className = classNames(
+	"mobile-button__square",
+		klass
+	)
+
   return (
     <Button
-      className="mobile-button__square"
+      className={className}
       type="button"
       icon={state}
       onClick={() => fullscreenUpdate()}
