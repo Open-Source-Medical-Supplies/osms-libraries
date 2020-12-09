@@ -16,6 +16,8 @@ import { SelectAction } from "../shared/types/selected.type";
 import FullCard from "./selected-cards/full-card";
 import "./_library-main.scss";
 import { LANG_ACTIONS } from "../redux/language.reducer";
+import popsicle from "../shared/assets/404-popsicle.svg";
+import ErrorBoundary from "../shared/components/error-boundary";
 
 const LibraryMain = () => {
   const dispatch = useDispatch();
@@ -33,7 +35,7 @@ const LibraryMain = () => {
 
   // load initial tables / change on lib-change
   useEffect(() => {
-    if (tables.completed) {
+    if (tables.completed && !(tables.error && tables.error.full)) {
       const focus = tables.loaded[
         TABLE_MAPPING[ActiveLibToClassName[lib.active]]
       ] as Project[] | CategoryInfo[];
@@ -59,7 +61,17 @@ const LibraryMain = () => {
       })
 
     }
-  }, [tables.completed]); // eslint-disable-line react-hooks/exhaustive-deps
+	}, [tables.completed]); // eslint-disable-line react-hooks/exhaustive-deps
+	
+	useEffect(() => {
+		if (tables.error) {
+			if (tables.error.partial) {
+				console.error('partial table error ' + navigator.language, tables)
+			} else if (tables.error.full) {
+				console.error('full table error ' + navigator.language)
+			}
+		}
+	}, [tables.error]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // updated selected on lib change
   useEffect(() => {
@@ -83,8 +95,8 @@ const LibraryMain = () => {
     }
   );
 
-  return (
-    <div className={libContainerClasses}>
+	const LibraryElement = (
+		<div className={libContainerClasses}>
       <FilterMenu disabled={lib.active === ActiveLib.CATEGORY} />
       <Loading loading={!tables.completed}>
         <CardContainer records={lib.data} />
@@ -99,6 +111,30 @@ const LibraryMain = () => {
         <FullCard />
       </Sidebar>
     </div>
-  );
+	);
+
+	const ErrorElement = (
+		<div className='main-error-element'>
+			<h2>
+				A critical error occured when loading the database.
+			</h2>
+			<span>Please contact&nbsp;
+				<a 
+					href={
+						"mailto:dev@opensourcemedicalsupplies.org" +
+						"?subject=Table Load Error" +
+						"&body=" +
+						"lang:" + navigator.language + "%0A" +
+						"tables: " + 
+						Object.keys(tables.loaded)
+							.map(k => (tables.loaded[k] as any).error ? k : null ).join(' ')
+					}>
+						dev@opensourcemedicalsupplies.org</a>
+			</span>
+			<img src={popsicle} alt="error"/>
+		</div>
+	)
+	
+  return tables.error ? ErrorElement : LibraryElement;
 };
 export default LibraryMain;

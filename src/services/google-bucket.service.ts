@@ -3,101 +3,116 @@ import { Dispatch } from "react";
 import { TableAction, TABLE_ACTIONS } from "../redux/tables.reducer";
 import { TABLE_MAPPING } from "../shared/constants/general.constants";
 import { ClassMap, FunctionMap } from "../shared/constants/google-bucket.constants";
+import { IETF } from "../shared/constants/ietf.constants";
 import { AirtableRecords } from "../shared/types/airtable.type";
 import { valueof } from "../shared/types/shared.type";
 
 
 /** TableListItem based on the gBucket / gFunction setup */
 interface TableListItem {
-  encoded: string;
-  spaced: string;
-  underscored: string;
-  camelCased: string;
-  type: valueof<typeof TABLE_MAPPING>;
+	encoded: string;
+	spaced: string;
+	underscored: string;
+	camelCased: string;
+	type: valueof<typeof TABLE_MAPPING>;
 }
 type TableList = TableListItem[];
 
 interface AirtableStaging {
-  staging?: boolean | [boolean]; // airtable, I swear
-  Staging?: boolean | [boolean];
+	staging?: boolean | [boolean]; // airtable, I swear
+	Staging?: boolean | [boolean];
 }
 
 const BUCKET_NAME = "opensourcemedicalsupplies.org";
 const url = (table: string) =>
-  `https://storage.googleapis.com/${BUCKET_NAME}/${table}.json`;
+	`https://storage.googleapis.com/${BUCKET_NAME}/${table}.json`;
 const config: AxiosRequestConfig = {
-  headers: {
-    "Content-Type": "application/json",
-  },
+	headers: {
+		"Content-Type": "application/json",
+	},
 };
 const axiosGet = <T = any>(urlString: string) =>
-  axios.get<T>(url(urlString), config);
+	axios.get<T>(url(urlString), config);
 
 const notInStaging = (v: AirtableStaging): boolean => {
-  // returns true if staging is undefined || false
-  const val = v.staging || v.Staging;
-  return !(val && val instanceof Array ? val[0] : val);
+	// returns true if staging is undefined || false
+	const val = v.staging || v.Staging;
+	return !(val && val instanceof Array ? val[0] : val);
 }
 
 const dataToClass = (
-  data: AirtableRecords<AirtableStaging>,
-  mapper: valueof<typeof ClassMap>
-) => data.reduce((acc: any[], {fields}) => {
-  if (notInStaging(fields)) {
-    acc.push(new mapper.prototype.constructor(fields));
-  }
-  return acc;
+	data: AirtableRecords<AirtableStaging>,
+	mapper: valueof<typeof ClassMap>
+) => data.reduce((acc: any[], { fields }) => {
+	if (notInStaging(fields)) {
+		acc.push(new mapper.prototype.constructor(fields));
+	}
+	return acc;
 }, []);
 
-const loadTables = (dispatch: Dispatch<TableAction>): void => {
-  axiosGet<TableList>("table_list").then(
-    ({ data: tableList }) => {
-      dispatch({
-        type: TABLE_ACTIONS.SET_TABLE_LIST,
-        data: tableList,
-      });
+const loadTables = (dispatch: Dispatch<TableAction>, lang?: IETF): void => {
+	axiosGet<TableList>("table_list").then(
+		({ data: tableList }) => {
+			dispatch({
+				type: TABLE_ACTIONS.SET_TABLE_LIST,
+				data: tableList,
+			});
 
-      tableList.forEach(({ underscored, type, camelCased }) => {
-        axiosGet<AirtableRecords<AirtableStaging>>(underscored).then(
-          ({ data }) => {
+			tableList.forEach(({ underscored, type, camelCased }) => {
+				// there's a better way to handle the language change, but here we are.
+				const navLang = lang || navigator.language as IETF;
+				const tableName = navLang === IETF["en-US"] ?
+					underscored :
+					`${navLang}/${underscored}`;
 
-            if (ClassMap[type]) {
-              data = dataToClass(data, ClassMap[type]);
-            } else if (FunctionMap[type]) {
-              data = FunctionMap[type](data.filter(v => notInStaging(v.fields)));
-            }
+				loadTable(tableName, type, camelCased, dispatch)
+			})
+		},
+		(e) => {
+			// catch for table-list data request
+			console.warn(e);
 
-            dispatch({
-              type: TABLE_ACTIONS.LOAD_TABLE,
-              table: camelCased,
-              data,
-              tableType: type,
-            });
-          },
-          (e) => {
-            // catch for each table's data request
-            console.warn(e);
-
-            dispatch({
-              type: TABLE_ACTIONS.LOAD_TABLE,
-              table: camelCased,
-              data: { error: true },
-              tableType: type,
-            });
-          }
-        );
-      });
-    },
-    (e) => {
-      // catch for table-list data request
-      console.warn(e);
-
-      dispatch({
-        type: TABLE_ACTIONS.SET_TABLE_LIST,
-        data: { error: true },
-      });
-    }
-  );
+			dispatch({
+				type: TABLE_ACTIONS.SET_TABLE_LIST,
+				data: { error: true },
+			});
+		}
+	);
 };
+
+const loadTable = (
+	tableName: string,
+	type: string,
+	camelCased: string,
+	dispatch: Dispatch<TableAction>
+) => {
+	axiosGet<AirtableRecords<AirtableStaging>>(tableName).then(
+		({ data }) => {
+			if (ClassMap[type]) {
+				data = dataToClass(data, ClassMap[type]);
+			} else if (FunctionMap[type]) {
+				data = FunctionMap[type](data.filter(v => notInStaging(v.fields)));
+			}
+
+			dispatch({
+				type: TABLE_ACTIONS.LOAD_TABLE,
+				table: camelCased,
+				data,
+				tableType: type,
+			});
+		},
+		(e) => {
+			// catch for each table's data request
+			console.warn(e);
+
+			dispatch({
+				type: TABLE_ACTIONS.LOAD_TABLE,
+				table: camelCased,
+				data: { error: true },
+				tableType: type,
+			});
+		}
+	);
+}
 
 export default loadTables;

@@ -21,7 +21,7 @@ const AttributesList = () => {
   const Lang = getLang();
 
   useEffect(() => {
-    if (tables.completed) {
+    if (tables.completed && !(tables.error && tables.error.full)) {
       nodes.current = (tables.loaded[TABLE_MAPPING.FilterMenu] as ReturnType<typeof mapFilterData>).nodes;
     }
   }, [tables.completed]); // eslint-disable-line react-hooks/exhaustive-deps

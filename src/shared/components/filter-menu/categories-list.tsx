@@ -43,7 +43,7 @@ const CategoriesList = () => {
   const Lang = getLang();
 
   useEffect(() => {
-    if (tables.completed) {
+    if (tables.completed && !(tables.error && tables.error.full)) {
       const loadedCategories = (tables.loaded[
         TABLE_MAPPING.CategorySupply
       ] as CategorySupply[]).sort((a, b) => a.name?.localeCompare(b.name));

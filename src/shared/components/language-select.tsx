@@ -40,8 +40,6 @@ const LanguageSelect = ({klass}: {klass?: string}) => {
 		klass
 	);
 
-	console.log(menuEl.current)
-	
   return (
     <div className={className}>
       <Button

@@ -23,7 +23,17 @@ export const getLang = () =>
         loading: true,
         selected,
       };
-    }
+		}
+		
+		if (base.error) {
+			console.error('Language table load error');
+			return {
+        get: () => "Error",
+        loading: false,
+        selected,
+      };
+		}
+
     return {
       get: (key: string) => getLangVal(base, key, selected),
       loading: false,

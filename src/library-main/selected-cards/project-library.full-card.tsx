@@ -15,24 +15,25 @@ import { BasicObject } from "../../shared/types/shared.type";
 import { openExternal } from "../../shared/utility/general.utility";
 import { getLang } from "../../shared/utility/language.utility";
 import SelectedImageCarousel, {
-  CarouselItem,
-  CarouselItems,
+	CarouselItem,
+	CarouselItems
 } from "./selected-card-image-carousel";
 
 const ProjectFullCard = () => {
   const dispatch = useDispatch();
-  const { selected, categoryInfo } = useTypedSelector(
+  const { selected, categoryInfo, tableError } = useTypedSelector(
     ({ selected, tables }) => ({
-      selected,
+			selected,
+			tableError: !(tables.error && tables.error.full),
       categoryInfo: tables.loaded[TABLE_MAPPING.CategoryInfo] as CategoryInfo[],
     })
   );
   const Lang = getLang();
-  /** Used to prevent a go-to-cat button from showing up if it doesn't have an actual category */
-  const catDict = useMemo(() => categoryInfo?.reduce((acc, cat) => {
+	/** Used to prevent a go-to-cat button from showing up if it doesn't have an actual category */
+  const catDict = useMemo(() =>  tableError ? {} : categoryInfo?.reduce((acc, cat) => {
     acc[cat.displayName] = true;
     return acc;
-  }, {} as BasicObject<boolean>), [categoryInfo]);
+  }, {} as BasicObject<boolean>), [tableError, categoryInfo]);
 
   if (!selected || !(selected.data instanceof Project)) return <div></div>;
   const links = selected.supportingData as Material[];

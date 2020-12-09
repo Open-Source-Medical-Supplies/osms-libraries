@@ -71,7 +71,7 @@ const FilterMenu = ({ disabled = false }: { disabled: boolean }) => {
 
   // run on tables loaded
   useEffect(() => {
-    if (tables.completed) {
+    if (tables.completed && !(tables.error && tables.error.full)) {
       const params = getParam<Partial<FilterState>>(PARAMS.FILTERSTATE) || {};
       dispatchFilter({
         type: FILTER_ACTIONS.SET_FILTER,
