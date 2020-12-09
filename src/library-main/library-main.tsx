@@ -2,8 +2,10 @@ import classNames from "classnames";
 import { Sidebar } from "primereact/sidebar";
 import React, { useEffect } from "react";
 import { shallowEqual, useDispatch } from "react-redux";
+import { LANG_ACTIONS } from "../redux/language.reducer";
 import { LibAction, LIB_ACTIONS } from "../redux/lib.reducer";
 import { useTypedSelector } from "../redux/root.reducer";
+import popsicle from "../shared/assets/404-popsicle.svg";
 import { CategoryInfo } from "../shared/classes/category-info.class";
 import { Project } from "../shared/classes/project.class";
 import CardContainer from "../shared/components/card-container/card-container";
@@ -15,9 +17,6 @@ import ActiveLib, { ActiveLibToClassName } from "../shared/types/lib.enum";
 import { SelectAction } from "../shared/types/selected.type";
 import FullCard from "./selected-cards/full-card";
 import "./_library-main.scss";
-import { LANG_ACTIONS } from "../redux/language.reducer";
-import popsicle from "../shared/assets/404-popsicle.svg";
-import ErrorBoundary from "../shared/components/error-boundary";
 
 const LibraryMain = () => {
   const dispatch = useDispatch();

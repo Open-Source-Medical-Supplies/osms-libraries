@@ -25,11 +25,25 @@ export enum LANG_ACTIONS {
 export interface LanguageAction extends Action<LANG_ACTIONS>, LanguageState {}
 export type DispatchLanguageAction = Dispatch<LanguageAction>;
 
+// fn duplicated because of compile-time errors
+const getNavLangAsIETF = (): IETF => {
+	const navLang = navigator.language;
+	if (navigator.language.length === 5) {
+		return navLang as IETF;
+	}
+	const foundLang = Object.values(IETF).find(k => k.includes(navLang));
+	if (foundLang) {
+		return foundLang;
+	}
+	console.warn('could not find language based on navigator.language');
+	return IETF['en-US']
+}
+
 export const languageReducer = (
   state: LanguageState = LangState,
   action: LanguageAction
 ): LanguageState => {
-  const navLang = navigator.language as IETF;
+  const navLang = getNavLangAsIETF();
   switch(action.type) {
     case LANG_ACTIONS.INIT_LANGS:
       return {

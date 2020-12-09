@@ -1,6 +1,6 @@
 import { LanguageBase } from "../../redux/language.reducer";
 import { useTypedSelector } from "../../redux/root.reducer";
-import { IETF } from "../constants/ietf.constants";
+import { IETF, IETF_MAIN, iIETF } from "../constants/ietf.constants";
 import { AirtableRecords } from "../types/airtable.type";
 import { BasicObject } from "../types/shared.type";
 import { empty } from "./general.utility";
@@ -39,7 +39,20 @@ export const getLang = () =>
       loading: false,
       selected,
     };
-  });
+	});
+	
+export const getNavLangAsIETF = (): iIETF => {
+	const navLang = navigator.language;
+	if (navigator.language.length === 5) {
+		return navLang as IETF;
+	}
+	const foundLang = Object.values(IETF_MAIN).find(k => k.includes(navLang));
+	if (foundLang) {
+		return foundLang;
+	}
+	console.warn('could not find language based on navigator.language');
+	return IETF['en-US']
+}
 
 /** Handles fall-back scenarios during language retrieval */
 export const getLangVal = (

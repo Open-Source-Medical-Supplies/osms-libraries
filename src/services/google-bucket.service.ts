@@ -6,6 +6,7 @@ import { ClassMap, FunctionMap } from "../shared/constants/google-bucket.constan
 import { IETF } from "../shared/constants/ietf.constants";
 import { AirtableRecords } from "../shared/types/airtable.type";
 import { valueof } from "../shared/types/shared.type";
+import { getNavLangAsIETF } from "../shared/utility/language.utility";
 
 
 /** TableListItem based on the gBucket / gFunction setup */
@@ -59,13 +60,7 @@ const loadTables = (dispatch: Dispatch<TableAction>, lang?: IETF): void => {
 			});
 
 			tableList.forEach(({ underscored, type, camelCased }) => {
-				// there's a better way to handle the language change, but here we are.
-				const navLang = lang || navigator.language as IETF;
-				const tableName = navLang === IETF["en-US"] ?
-					underscored :
-					`${navLang}/${underscored}`;
-
-				loadTable(tableName, type, camelCased, dispatch)
+				loadTable(underscored, type, camelCased, dispatch, lang)
 			})
 		},
 		(e) => {
@@ -81,38 +76,52 @@ const loadTables = (dispatch: Dispatch<TableAction>, lang?: IETF): void => {
 };
 
 const loadTable = (
-	tableName: string,
+	rawName: string,
 	type: string,
 	camelCased: string,
-	dispatch: Dispatch<TableAction>
+	dispatch: Dispatch<TableAction>,
+	lang?: IETF,
+	retried = false
 ) => {
-	axiosGet<AirtableRecords<AirtableStaging>>(tableName).then(
-		({ data }) => {
-			if (ClassMap[type]) {
-				data = dataToClass(data, ClassMap[type]);
-			} else if (FunctionMap[type]) {
-				data = FunctionMap[type](data.filter(v => notInStaging(v.fields)));
+	// there's a better way to handle the language change, but here we are.
+	const navLang = lang || getNavLangAsIETF();
+	const tableName = navLang === IETF["en-US"] ? rawName : `${navLang}_${rawName}`;
+
+	axiosGet<AirtableRecords<AirtableStaging>>(tableName)
+		.then(
+			({ data }) => {
+				if (ClassMap[type]) {
+					data = dataToClass(data, ClassMap[type]);
+				} else if (FunctionMap[type]) {
+					data = FunctionMap[type](data.filter(v => notInStaging(v.fields)));
+				}
+
+				dispatch({
+					type: TABLE_ACTIONS.LOAD_TABLE,
+					table: camelCased,
+					data,
+					tableType: type,
+				});
+			},
+			(e) => {
+				// catch for each table's data request
+				console.warn(e);
+
+				if (navLang !== IETF["en-US"] && !retried) {
+					console.warn([
+						"couldn't load table", rawName, "using", navLang, "retrying with en-US"
+					].join(' '));
+					return loadTable(rawName, type, camelCased, dispatch, IETF['en-US'], true);
+				}
+
+				dispatch({
+					type: TABLE_ACTIONS.LOAD_TABLE,
+					table: camelCased,
+					data: { error: true },
+					tableType: type,
+				});
 			}
-
-			dispatch({
-				type: TABLE_ACTIONS.LOAD_TABLE,
-				table: camelCased,
-				data,
-				tableType: type,
-			});
-		},
-		(e) => {
-			// catch for each table's data request
-			console.warn(e);
-
-			dispatch({
-				type: TABLE_ACTIONS.LOAD_TABLE,
-				table: camelCased,
-				data: { error: true },
-				tableType: type,
-			});
-		}
-	);
+		);
 }
 
 export default loadTables;

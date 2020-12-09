@@ -4,6 +4,16 @@
 // The officially supported languages of the UN (*) are:
 // Arabic, Chinese, English, French, Russian and Spanish.
 
+
+export enum IETF_MAIN {
+  "ar-SA" = "ar-SA", // * Arabic     - Saudi Arabia
+  "en-US" = "en-US", // * English    - United States
+  "zh-CN" = "zh-CN", // * Chinese    - China
+  "fr-FR" = "fr-FR", // * French     - France
+  "ru-RU" = "ru-RU", // * Russian    - Russian Federation
+  "es-ES" = "es-ES", // * Spanish    - Spain
+}
+
 export enum IETF {
   "ar-SA" = "ar-SA", // * Arabic     - Saudi Arabia
   "cs-CZ" = "cs-CZ", //   Czech      - Czech Republic
@@ -43,3 +53,5 @@ export enum IETF {
   "zh-HK" = "zh-HK", // * Chinese    - Hong Kong
   "zh-TW" = "zh-TW", // * Chinese    - Taiwan
 }
+
+export type iIETF = IETF_MAIN | IETF;
