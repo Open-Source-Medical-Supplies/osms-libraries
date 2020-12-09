@@ -1,6 +1,6 @@
+import { Dispatch } from 'react';
 import { Action } from 'redux';
 import { IETF } from '../shared/constants/ietf.constants';
-import { Dispatch } from 'react';
 
 export interface LanguageBase {
   [IETF: string]: {
@@ -51,7 +51,7 @@ export const languageReducer = (
         base: action.base || state.base,
       }
     case LANG_ACTIONS.SELECT_LANG:
-      if (!action.selected) return state;
+			if (!action.selected) return state;
       return {
         selected: action.selected || navLang,
         base: state.base,

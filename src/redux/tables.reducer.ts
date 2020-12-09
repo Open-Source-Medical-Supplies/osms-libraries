@@ -3,7 +3,8 @@ import { BasicObject } from "../shared/types/shared.type";
 
 export enum TABLE_ACTIONS {
   LOAD_TABLE = 'LOAD_TABLE',
-  SET_TABLE_LIST = 'SET_TABLE_LIST'
+	SET_TABLE_LIST = 'SET_TABLE_LIST',
+	TABLES_RESET = 'TABLES_RESET'
 }
 export type TableDataError = { error: true };
 export type TableData = any[] | BasicObject<any> | TableDataError;
@@ -78,7 +79,11 @@ export const tablesReducer = (
       return {
         ...state,
         list: action.data 
-      }
+			}
+		case TABLE_ACTIONS.TABLES_RESET:
+			return {
+				...defaultState
+			}
     default:
       return state;
   }

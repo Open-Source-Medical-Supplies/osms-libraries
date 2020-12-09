@@ -51,6 +51,7 @@ const dataToClass = (
 	return acc;
 }, []);
 
+// exported as default
 const loadTables = (dispatch: Dispatch<TableAction>, lang?: IETF): void => {
 	axiosGet<TableList>("table_list").then(
 		({ data: tableList }) => {
